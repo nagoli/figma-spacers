@@ -1,0 +1,108 @@
+<style>
+    *{
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 15px;
+    letter-spacing: 0.005em;
+  }
+  
+  #show {
+    color: #CC00FF;
+    border: 1px solid #CC00FF;
+  } 
+
+  #hide {
+    color:  rgba(0, 0, 0, 0.6);
+    border: 1px solid  rgba(0, 0, 0, 0.6);
+  } 
+
+  button {
+    color: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    background-color: #ffffff;
+    padding: 7px 16px;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 0px 7px;
+  }
+
+#switches, #spacers {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0; 
+    max-width : 270px; 
+}
+
+#switches {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 7px;
+}
+  .spacer-button {
+    width: 60px;
+    font-size: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    color:#CC00FF;
+    text-align: center;
+    vertical-align: middle;
+    margin: 7px;
+  }
+
+  .spacer-button div{
+    background-color: lightgray;
+    vertical-align: middle;
+    width: 100px;
+  }
+
+
+  </style>
+
+<div id="switches">
+  <button id="show">Show all</button>
+  <button id="hide">Hide all</button>
+</div>
+
+<div id="spacers">
+</div>
+
+<script>
+appendSpacer(4);
+appendSpacer(8);
+appendSpacer(16);
+appendSpacer(24);
+appendSpacer(32);
+appendSpacer(40);
+
+function appendSpacer(size){
+  var div = document.createElement("button");
+  div.id="add"+size;
+  div.onclick=function(){add(size)};
+  div.className="spacer-button";
+  var p = document.createElement("p");
+  p.innerHTML=""+size+"px";
+  div.appendChild(p);
+  var spacerView = document.createElement("div");
+  spacerView.style.height=size;
+  spacerView.style.top=(32-size)/2;
+  //div.appendChild(spacerView);
+  document.getElementById("spacers").appendChild(div);
+}
+
+document.getElementById('show').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'show-spacer-infos' } }, '*')
+}
+
+document.getElementById('hide').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'hide-spacer-infos' } }, '*')
+}
+
+function add(size){
+  parent.postMessage({ pluginMessage: { type: 'add-spacer', size: size } }, '*')
+  console.log("add spacer " + size);
+}
+
+
+</script>
