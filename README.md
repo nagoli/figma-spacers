@@ -1,20 +1,22 @@
 # «Spacers» plugin for Figma
 
-
 ## About the plugin 
-Autolayout are great but the constant space between components is sometimes an issue.
-This Figma plugin allows to easily insert spacers in Figma autolayout.
+Figma Autolayout are so great. But the uniformity of spaces between components may be boring :-( .
+
+This Figma plugin enables heteregeneous spaces in autolayout.
+
+Spacer infos can be shown or hidden just as the pilcrow button (¶) of a word processor.
+
 **In this first version only base-8 vertical spacers are available.**
-Spacers infos can be shown or hidden as you do in a word processor with the pilcrow (¶).
 
 
 ## About using spacers 
-Spacers are [not a correct practice in HTML](https://www.w3.org/TR/WCAG20-TECHS/C18.html) since the presentation concerns must be defined in CSS.  
-But Figma is a design tool – Should the HTML-CSS specialization be a concern in Figma?
+Spacers are [not a correct practice in HTML](https://www.w3.org/TR/WCAG20-TECHS/C18.html) since the presentation concerns must be managed in CSS.  
+But Figma is a design tool …
 
-In practice, spacers in autolayout speed up the design. 
-Set vertical autolayout to your main frame and just add components inside. 
-Add spacers to easily adjust the distance between components and keep the magic of autolayout.
+In practice, spacers in autolayout speed up the design. They allow you to put almost everything in autolayout, but limiting the number of stacking frames.   
+
+Set vertical autolayout to your main frames, just add components inside and spacers between them – just simple. 
 
 
 ## About the code

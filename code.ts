@@ -51,6 +51,7 @@ function makeSpacerNode(size : number){ //, label : string){
   frame.name=size+"px "+SpacerName;
   frame.resize(FrameWidth,size);
   frame.fills=[clone(FrameStyle)];
+  frame.layoutAlign='MAX';
   frame.appendChild(text);
   frame.appendChild(line);
 
