@@ -1,102 +1,152 @@
 <style>
-    *{
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 15px;
-    letter-spacing: 0.005em;
+  * {
+      font-family: "Inter", sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 15px;
+      letter-spacing: 0.005em;
   }
   
   #show {
-    color: #CC00FF;
-    border: 1px solid #CC00FF;
-  } 
-
+      color: #CC00FF;
+      border: 1px solid #CC00FF;
+  }
+  
   #hide {
-    color:  rgba(0, 0, 0, 0.6);
-    border: 1px solid  rgba(0, 0, 0, 0.6);
-  } 
-
+      color: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.6);
+  }
+  
   button {
-    color: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    background-color: #ffffff;
-    padding: 7px 16px;
-    border-radius: 6px;
-    display: inline-block;
-    margin: 0px 7px;
+      color: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      background-color: #FFFFFF;
+      padding: 7px 16px;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 0px 7px;
   }
-
-#switches, #spacers {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    flex-shrink: 0; 
-    max-width : 270px; 
-}
-
-#switches {
-  border-bottom: 1px solid #e5e5e5;
-  padding-bottom: 7px;
-}
+  
+  button:hover {
+      cursor: pointer;
+  }
+  
+  #switches,
+  #spacers {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-items: center;
+      flex-shrink: 0;
+      max-width: 284px;
+  }
+  
+  #switches {
+      border-bottom: 1px solid #E5E5E5;
+      padding-bottom: 7px;
+  }
+  
   .spacer-button {
-    width: 60px;
-    font-size: 18px;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    color:#CC00FF;
-    text-align: center;
-    vertical-align: middle;
-    margin: 7px;
+      width: 60px;
+      font-size: 18px;
+      border: 1px solid rgba(222, 222, 222, 0.42);
+      color: #CC00FF;
+      margin: 7px;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0px 3px 12px -1px #00000033;
   }
-
-  .spacer-button div{
-    background-color: lightgray;
-    vertical-align: middle;
-    width: 100px;
+  
+  .spacer-button:hover {
+      transition: all 0.2s;
+      box-shadow: 0px 3px 3px -1px #00000033;
   }
+  
+  .spacer-button div {
+      background-color: lightgray;
+      vertical-align: middle;
+      width: 100px;
+  }
+  
+  button span {
+      font-size: 15px;
+  }
+</style>
 
-
-  </style>
 
 <div id="switches">
-  <button id="show">Show all</button>
-  <button id="hide">Hide all</button>
+  <button id="show" onclick="post('show-spacer-infos')">Show all</button>
+  <button id="hide" onclick="post('hide-spacer-infos')">Hide all</button>
+  <button id="config" onclick="config()">Config</button>
 </div>
 
 <div id="spacers">
 </div>
 
 <script>
-appendSpacer(4);
-appendSpacer(8);
-appendSpacer(16);
-appendSpacer(24);
-appendSpacer(32);
-appendSpacer(40);
+var base8 = [4, 8, 16, 24, 32, 48];
+var spacerValues = base8;
+setSpacers(base8);
 
-function appendSpacer(size){
-  var div = document.createElement("button");
-  div.id="add"+size;
-  div.onclick=function(){add(size)};
-  div.className="spacer-button";
+function setSpacers(spacers){
+  if (!Array.isArray(spacers)) spacers= base8;
+  let div = document.getElementById("spacers");
+  //reset div
+  while(div.firstChild) div.removeChild(div.firstChild);
+  for (let coef of spacers) {
+    if (! isNaN(coef) && coef>0)
+        div.appendChild(createSpacerButton(coef));
+  }
+  //store the spacers value
+  spacerValues = spacers;
+}
+
+function config(){
+  let div = document.getElementById("spacers");
+  //reset div
+  while(div.firstChild) div.removeChild(div.firstChild);
+ 
+ // input
+  var input = document.createElement("input");
+  input.id="values";
+  input.value =  spacerValues.toString();
+  div.appendChild(input);
+ 
+ //button
+  var button = document.createElement("button");
+  button.onclick= function(){setSpacers(input.value.split(',').map(Number));};
+  button.innerHTML = "ok";
+  div.appendChild(button);
+
+//cancel
+var cancel = document.createElement("button");
+  cancel.onclick= function(){setSpacers(spacerValues);};
+  cancel.innerHTML = "cancel";
+  div.appendChild(cancel);
+
+
+//reset
+var link = document.createElement("button");
+  link.onclick= function(){setSpacers(base8);};
+  link.innerHTML = "reset";
+  div.appendChild(link);
+}
+
+
+function createSpacerButton(size){
+  var button = document.createElement("button");
+  button.id="add"+size;
+  button.onclick=function(){add(size)};
+  button.className="spacer-button";
   var p = document.createElement("p");
   p.innerHTML=""+size+"px";
-  div.appendChild(p);
-  var spacerView = document.createElement("div");
-  spacerView.style.height=size;
-  spacerView.style.top=(32-size)/2;
-  //div.appendChild(spacerView);
-  document.getElementById("spacers").appendChild(div);
+  button.appendChild(p);
+  return button;
 }
 
-document.getElementById('show').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'show-spacer-infos' } }, '*')
-}
-
-document.getElementById('hide').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'hide-spacer-infos' } }, '*')
+function post(msg){
+  parent.postMessage({ pluginMessage: { type: msg } }, '*');
 }
 
 function add(size){
