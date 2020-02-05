@@ -10,13 +10,12 @@ figma.showUI(__html__);
 
 const LabelStyle = {type: 'SOLID', color: {r: 0.8, g: 0, b: 1}};
 const FrameStyle = {type: 'SOLID', color: {r: 0.98, g: 0.89, b: 1}};
-const FontSize = 8;
-const FrameWidth = 40;
 
 //names of the layers considered as spacers
 const SpacerName = "spacer_";
 const LabelName = 'label_';
-const ArrowName = 'arrow_';
+const HLineName = 'hline_';
+const VLineName = 'vline_';
 
 const SizeProperty = 'size';
 // this state is stored in the page to know if showing or not the infos in a new spacer
@@ -28,32 +27,44 @@ function makeSpacerNode(size : number){ //, label : string){
   text.name=LabelName;
   text.locked=true;
   figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
-    text.fontSize=FontSize; 
-    text.characters=size+"px";;
+    text.fontSize=size; 
+    text.x=1;
+    text.y=0;
+    text.textAlignHorizontal = 'LEFT';
+    text.textAlignVertical = 'TOP';
+    text.characters=String(size);
     text.fills = [clone(LabelStyle)];
-    text.textAlignHorizontal = 'CENTER'
-    text.textAlignVertical = 'BOTTOM'
-    text.x=12;
-    if (size>FontSize) text.y=(size-FontSize)/2;
+    text.letterSpacing = {unit:"PERCENT", value:-15 };
   });
   
-  const line = figma.createLine();
-  line.name=ArrowName;
-  line.strokes=[clone(LabelStyle)];
-  line.resize(size,0);
-  line.rotation=-90;
-  line.strokeCap="ARROW_LINES";
-  line.locked=true;
-  line.x=4;
+  function styleLine(line : LineNode, size : number){
+    line.strokes=[clone(LabelStyle)];
+    line.resize(size,0);
+    line.locked=true;
+    line.x=0;
+    line.y=0;
+  }
 
+  const hline = figma.createLine();
+  hline.name=HLineName;
+  styleLine(hline,size);
+  hline.y=1;
+ 
+  const vline = figma.createLine();
+  vline.name=VLineName;
+  styleLine(vline,size);
+  vline.rotation=-90;
+
+ 
   const frame = figma.createFrame();
   frame.setPluginData(SizeProperty, String(size));
   frame.name=size+"px "+SpacerName;
-  frame.resize(FrameWidth,size);
+  frame.resize(size,size);
   frame.fills=[clone(FrameStyle)];
-  frame.layoutAlign='MAX';
+  frame.layoutAlign='MIN';
   frame.appendChild(text);
-  frame.appendChild(line);
+  frame.appendChild(hline);
+  frame.appendChild(vline);
 
   let showInfo=true;
   showSpacerInfos(frame, figma.currentPage.getPluginData(SpacerInfoState)!="0");
@@ -62,7 +73,7 @@ function makeSpacerNode(size : number){ //, label : string){
 
 function showSpacerInfos(spacer:FrameNode, isShow : boolean){
   spacer.children.forEach(child => {
-    if (child.name===ArrowName || child.name===LabelName) 
+    if (child.name===HLineName || child.name===VLineName || child.name===LabelName) 
     child.visible=isShow;
   });
   if (isShow) spacer.fills=[clone(FrameStyle)]; else spacer.fills=[];
@@ -95,12 +106,24 @@ figma.ui.onmessage = msg => {
   };
 
   if (msg.type === 'add-spacer'){
-    let spacer = makeSpacerNode(msg.size);
     if (figma.currentPage.selection.length!=0){
+      let spacer = makeSpacerNode(msg.size);
       let selection = figma.currentPage.selection[0];
-      let position = selection.parent.children.indexOf(selection);
-      selection.parent.insertChild(position+1,spacer);
-    } else  figma.currentPage.appendChild(spacer);
+      // add as first child if selection is an empty autolayout
+      if (selection.type === "FRAME" && selection.children.length===0 && selection.layoutMode!="NONE" ){
+        selection.insertChild(0,spacer);
+      }
+      else{
+        let position = selection.parent.children.indexOf(selection);
+        selection.parent.insertChild(position+1,spacer);
+        if (selection.parent.type != "FRAME" || selection.parent.layoutMode==="NONE"){
+          //console.log("positionning : "+ selection.x + " "+ selection.y); 
+          spacer.x = selection.x;
+          spacer.y = selection.y+selection.height;
+        }
+        figma.currentPage.selection=[spacer];
+      }
+    } else  figma.notify("Please select one element");
   }
 };
 
