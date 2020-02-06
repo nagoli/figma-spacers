@@ -32,7 +32,7 @@
   }
   
   #switches,
-  #spacers {
+  #spacers, #config {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
@@ -83,10 +83,24 @@
 <div id="spacers">
 </div>
 
+<div id="configDiv">
+    <input id="values"></input>
+    <button onclick="setSpacers(arrayFrom(valueInput.value))">ok</button>
+    <button onclick="setSpacers(spacerValues)">cancel</button>
+    <button onclick="setSpacers(base8)">reset</button>
+</div>
+
+
+
 <script>
 var base8 = [4, 8, 16, 24, 32, 48];
 var isShown;
 var showToggle = document.getElementById("showToggle");
+var configDiv = document.getElementById("configDiv");
+var spacersDiv = document.getElementById("spacers");
+var valueInput = document.getElementById("values");
+
+var spacerValues; 
 
 // receive plugin properties
 onmessage = (event) => {
@@ -97,21 +111,20 @@ onmessage = (event) => {
   }
 }
 
-var spacerValues; 
-
 //change ui to show the spacers button in parameter
 function setSpacers(spacers){
+  configDiv.style.display = "none";
   if (!Array.isArray(spacers)) spacers= base8;
-  let div = document.getElementById("spacers");
   //reset div
-  while(div.firstChild) div.removeChild(div.firstChild);
+  while(spacersDiv.firstChild) spacersDiv.removeChild(spacersDiv.firstChild);
   for (let coef of spacers) {
     if (! isNaN(coef) && coef>0)
-        div.appendChild(createSpacerButton(coef));
+        spacersDiv.appendChild(createSpacerButton(coef));
   }
   //store the spacers value
   spacerValues = spacers;
   setSpacerPropertiesInPage(spacers);
+  spacersDiv.style.display = "flex";
 }
 
 function switchShow(){
@@ -139,34 +152,9 @@ function arrayFrom(string){
 
 // change ui to show configuration mode
 function config(){
-  let div = document.getElementById("spacers");
-  //reset div
-  while(div.firstChild) div.removeChild(div.firstChild);
- 
- // input
-  var input = document.createElement("input");
-  input.id="values";
-  input.value =  spacerValues.toString();
-  div.appendChild(input);
- 
- //button
-  var button = document.createElement("button");
-  button.onclick= function(){setSpacers(arrayFrom(input.value));};
-  button.innerHTML = "ok";
-  div.appendChild(button);
-
-//cancel
-var cancel = document.createElement("button");
-  cancel.onclick= function(){setSpacers(spacerValues);};
-  cancel.innerHTML = "cancel";
-  div.appendChild(cancel);
-
-
-//reset
-var link = document.createElement("button");
-  link.onclick= function(){setSpacers(base8);};
-  link.innerHTML = "reset";
-  div.appendChild(link);
+  spacersDiv.style.display = "none";
+  valueInput.value =  spacerValues.toString();
+  configDiv.style.display = "flex";
 }
 
 // create a spacer button for a specific size
