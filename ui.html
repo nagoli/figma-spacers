@@ -76,8 +76,8 @@
 
 
 <div id="switches">
-  <button id="show" onclick="post('show-spacer-infos')">Show all</button>
-  <button id="hide" onclick="post('hide-spacer-infos')">Hide all</button>
+  <input type="checkbox" id="showToggle" checked onchange="switchShow()"> show </input>
+  <button id="hide" onclick="hide()">Hide all</button>
   <button id="config" onclick="config()">Config</button>
 </div>
 
@@ -86,9 +86,21 @@
 
 <script>
 var base8 = [4, 8, 16, 24, 32, 48];
-var spacerValues = base8;
-setSpacers(base8);
+var isShown;
+var showToggle = document.getElementById("showToggle");
 
+// receive plugin properties
+onmessage = (event) => {
+  console.log("UI get message" );
+  if (event.data.pluginMessage.type === "set-properties-from-page"){
+    setSpacers(event.data.pluginMessage.spacers);
+    if (event.data.pluginMessage.hide) hide(); else show(); 
+  }
+}
+
+var spacerValues; 
+
+//change ui to show the spacers button in parameter
 function setSpacers(spacers){
   if (!Array.isArray(spacers)) spacers= base8;
   let div = document.getElementById("spacers");
@@ -100,8 +112,33 @@ function setSpacers(spacers){
   }
   //store the spacers value
   spacerValues = spacers;
+  setSpacerPropertiesInPage(spacers);
 }
 
+function switchShow(){
+  if (showToggle.checked) show();
+  else hide();
+}
+
+
+//show spacers
+function show(){
+  showToggle.checked = true;
+  post('show-spacer-infos');
+}
+
+//hide spacers
+function hide(){
+  showToggle.checked = false;
+  post('hide-spacer-infos');
+}
+
+//util
+function arrayFrom(string){
+  return string.split(',').map(Number);
+}
+
+// change ui to show configuration mode
 function config(){
   let div = document.getElementById("spacers");
   //reset div
@@ -115,7 +152,7 @@ function config(){
  
  //button
   var button = document.createElement("button");
-  button.onclick= function(){setSpacers(input.value.split(',').map(Number));};
+  button.onclick= function(){setSpacers(arrayFrom(input.value));};
   button.innerHTML = "ok";
   div.appendChild(button);
 
@@ -133,7 +170,7 @@ var link = document.createElement("button");
   div.appendChild(link);
 }
 
-
+// create a spacer button for a specific size
 function createSpacerButton(size){
   var button = document.createElement("button");
   button.id="add"+size;
@@ -145,13 +182,21 @@ function createSpacerButton(size){
   return button;
 }
 
+//util
 function post(msg){
   parent.postMessage({ pluginMessage: { type: msg } }, '*');
 }
 
+// call code for adding a specific spacer in figma element
 function add(size){
   parent.postMessage({ pluginMessage: { type: 'add-spacer', size: size } }, '*')
 }
 
+function setSpacerPropertiesInPage(spacers){
+  parent.postMessage({ pluginMessage: { type: 'set-spacers-in-page', spacers: spacers } }, '*');
+}
+
+//ask for plugin properties at startup
+post("get-properties-in-page");
 
 </script>

@@ -11,6 +11,9 @@ figma.showUI(__html__);
 const LabelStyle = {type: 'SOLID', color: {r: 0.8, g: 0, b: 1}};
 const FrameStyle = {type: 'SOLID', color: {r: 0.98, g: 0.89, b: 1}};
 
+const SpacersProperty = 'spacers';
+const HideProperty = 'hide';
+
 //names of the layers considered as spacers
 const SpacerName = "spacer_";
 const LabelName = 'label_';
@@ -97,12 +100,29 @@ function showAllSpacerInfos(isShow){
 figma.ui.onmessage = msg => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
+ 
+  //get properties from project
+  if (msg.type === 'get-properties-in-page') {    
+    console.log('get-properties-in-page called');
+    //get Spacers In Page Properties
+    var spacers = figma.root.getPluginData(SpacersProperty);
+    var hide = figma.root.getPluginData(HideProperty);
+    figma.ui.postMessage({type: "set-properties-from-page", spacers : spacers?arrayFrom(spacers):false, hide : Boolean(hide) });
+  };
+  
+  //get properties from project
+  if (msg.type === 'set-spacers-in-page') {    
+    figma.root.setPluginData(SpacersProperty, msg.spacers.toString());
+  };
+
   if (msg.type === 'show-spacer-infos') {
     showAllSpacerInfos(true);
+    figma.root.setPluginData(HideProperty, "");
   };
 
   if (msg.type === 'hide-spacer-infos') {
     showAllSpacerInfos(false);
+    figma.root.setPluginData(HideProperty, "1");
   };
 
   if (msg.type === 'add-spacer'){
@@ -127,6 +147,10 @@ figma.ui.onmessage = msg => {
   }
 };
 
+//util
+function arrayFrom(str : string){
+  return str.split(',').map(Number);
+}
 
 
 function clone(val) {
