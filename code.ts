@@ -64,7 +64,7 @@ function makeSpacerNode(size : number){ //, label : string){
   frame.name=size+"px "+SpacerName;
   frame.resize(size,size);
   frame.fills=[clone(FrameStyle)];
-  frame.layoutAlign='MIN';
+  frame.layoutAlign='CENTER';
   frame.appendChild(text);
   frame.appendChild(hline);
   frame.appendChild(vline);
@@ -143,7 +143,7 @@ figma.ui.onmessage = msg => {
         }
         figma.currentPage.selection=[spacer];
       }
-    } else  figma.notify("Please select one element");
+    } else  figma.notify("Please select an element to add a spacer after");
   }
 };
 

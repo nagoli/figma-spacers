@@ -51,7 +51,7 @@ function makeSpacerNode(size) {
     frame.name = size + "px " + SpacerName;
     frame.resize(size, size);
     frame.fills = [clone(FrameStyle)];
-    frame.layoutAlign = 'MIN';
+    frame.layoutAlign = 'CENTER';
     frame.appendChild(text);
     frame.appendChild(hline);
     frame.appendChild(vline);
@@ -127,7 +127,7 @@ figma.ui.onmessage = msg => {
             }
         }
         else
-            figma.notify("Please select one element");
+            figma.notify("Please select an element to add a spacer after");
     }
 };
 //util
