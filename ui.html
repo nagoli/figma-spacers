@@ -404,6 +404,8 @@
               type: msg
           }
       }, '*');
+      //release focus
+      parent.focus();
   }
 
   // call code for adding a specific spacer in figma element
@@ -413,7 +415,9 @@
               type: 'add-spacer',
               size: size
           }
-      }, '*')
+      }, '*');
+      //release focus
+      parent.focus();
   }
 
   function setSpacerPropertiesInPage(spacers) {
@@ -423,6 +427,8 @@
               spacers: spacers
           }
       }, '*');
+      //release focus
+      parent.focus();
   }
 
   //ask for plugin properties at startup

@@ -123,6 +123,9 @@ figma.ui.onmessage = msg => {
                     spacer.x = selection.x;
                     spacer.y = selection.y + selection.height;
                 }
+                //trick to improve undo
+                figma.currentPage.selection = [figma.currentPage.selection[0]];
+                console.log(figma.currentPage.selection[0]);
                 figma.currentPage.selection = [spacer];
             }
         }
