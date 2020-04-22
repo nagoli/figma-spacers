@@ -70,7 +70,7 @@ function makeSpacerNode(size : number){ //, label : string){
   frame.appendChild(vline);
 
   let showInfo=true;
-  showSpacerInfos(frame, figma.currentPage.getPluginData(SpacerInfoState)!="0");
+  showSpacerInfos(frame, figma.root.getPluginData(SpacerInfoState)!="0");
   return frame;
 }
 
@@ -88,8 +88,8 @@ function showSpacerInfos(spacer:FrameNode, isShow : boolean){
 
 
 function showAllSpacerInfos(isShow){
-  figma.currentPage.setPluginData(SpacerInfoState, isShow? "1":"0");
-  var spacers = figma.currentPage.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
+  figma.root.setPluginData(SpacerInfoState, isShow? "1":"0");
+  var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
   (<FrameNode[]>spacers).forEach(spacer => showSpacerInfos(spacer, isShow));
 }
 

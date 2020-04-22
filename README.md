@@ -22,7 +22,8 @@ Tips : in case your spacer is too high for your horizontal layout just change is
 ## About using spacers 
 Spacers are [not a correct practice in HTML](https://www.w3.org/TR/WCAG20-TECHS/C18.html) since the presentation concerns must be managed in CSS. But Figma is a presentation tool, isn’t it ?
 
-
+## Logo contributions : 
+replace by kreationspace from Noun Project 
 
  
 

@@ -56,7 +56,7 @@ function makeSpacerNode(size) {
     frame.appendChild(hline);
     frame.appendChild(vline);
     let showInfo = true;
-    showSpacerInfos(frame, figma.currentPage.getPluginData(SpacerInfoState) != "0");
+    showSpacerInfos(frame, figma.root.getPluginData(SpacerInfoState) != "0");
     return frame;
 }
 function showSpacerInfos(spacer, isShow) {
@@ -73,8 +73,8 @@ function showSpacerInfos(spacer, isShow) {
     //if (size) spacer.resize(spacer.width,Number(size));
 }
 function showAllSpacerInfos(isShow) {
-    figma.currentPage.setPluginData(SpacerInfoState, isShow ? "1" : "0");
-    var spacers = figma.currentPage.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
+    figma.root.setPluginData(SpacerInfoState, isShow ? "1" : "0");
+    var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
     spacers.forEach(spacer => showSpacerInfos(spacer, isShow));
 }
 // Calls to "parent.postMessage" from within the HTML page will trigger this
