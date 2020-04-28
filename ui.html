@@ -326,7 +326,9 @@
   </div>
 </div>
 
-
+<div>
+    <button onclick="post('remove-lone-child-frame')" class="ok">clean lone child frame</button>
+</div>
 
 <script>
   var base8 = [4, 8, 16, 24, 32, 48];
@@ -340,7 +342,7 @@
 
   // receive plugin properties
   onmessage = (event) => {
-      console.log("UI get message");
+      //console.log("UI get message");
       if (event.data.pluginMessage.type === "set-properties-from-page") {
           setSpacers(event.data.pluginMessage.spacers);
           if (event.data.pluginMessage.hide) hide();
@@ -458,4 +460,7 @@ function place(position) {
 
   //ask for plugin properties at startup
   post("get-properties-in-page");
+  //check every 30s if properties have changed
+  window.setInterval(post, 30000, "get-properties-in-page");
+
 </script>

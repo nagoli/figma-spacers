@@ -33,7 +33,7 @@ const SizeProperty = 'size';
 const SpacerInfoStateProperty = 'spacer-info-state';
 
 
-function makeSpacerNode(size : number){ //, label : string){
+function makeSpacerNode(size : number) : FrameNode{ //, label : string){
   
   const text = figma.createText();
   text.name=LabelName;
@@ -68,7 +68,7 @@ function makeSpacerNode(size : number){ //, label : string){
   vline.rotation=-90;
 
  
-  const frame = figma.createFrame();
+  const frame: FrameNode = figma.createFrame();
   frame.setPluginData(SizeProperty, String(size));
   frame.name=size+"px "+SpacerName;
   frame.resize(size,size);
@@ -112,7 +112,7 @@ figma.ui.onmessage = msg => {
  
   //get properties from project
   if (msg.type === 'get-properties-in-page') {    
-    console.log('get-properties-in-page called');
+    //console.log('get-properties-in-page called');
     //get Spacers In Page Properties
     var spacers = figma.root.getPluginData(SpacersProperty);
     var hide = figma.root.getPluginData(HideProperty);
@@ -134,13 +134,36 @@ figma.ui.onmessage = msg => {
     figma.root.setPluginData(HideProperty, "1");
   };
 
+  if (msg.type === 'remove-lone-child-frame') {
+      // clone the properties of the frame
+      let selection = figma.currentPage.selection[0];
+      if (!selection) 
+        return figma.notify("Please select a frame to remove inner frame child");
+      if ((selection.type != "FRAME" && selection.type != "COMPONENT") || selection.children.length!=1 ) 
+        return figma.notify("Please select a frame or component with only 1 frame as child");
+      let parentFrame : DefaultFrameMixin = selection;    
+      if (parentFrame.children[0].type != "FRAME" ) 
+         return figma.notify("Please select a frame with only a frame as child");
+      
+      let child : DefaultFrameMixin = parentFrame.children[0];
+      cloneAutolayoutProperties(child, parentFrame);
+      cloneBlendProperties(child, parentFrame);
+      cloneCornerProperties(child, parentFrame);
+      cloneGeometryProperties(child, parentFrame);
+      child.children.forEach(element => {
+        parentFrame.appendChild(element);
+      });
+      child.remove();
+  };
+
+
   if (msg.type === 'place-spacer') {
     positionVar= msg.position;
   };
 
   if (msg.type === 'add-spacer'){
     if (figma.currentPage.selection.length!=0){
-      let spacer = makeSpacerNode(msg.size);
+      let spacer:FrameNode = makeSpacerNode(msg.size);
       let selection = figma.currentPage.selection[0];
 
       // add as first child if selection is an empty autolayout
@@ -278,6 +301,8 @@ figma.ui.onmessage = msg => {
           figma.currentPage.selection=[figma.currentPage.selection[0]];
         //console.log(figma.currentPage.selection[0]);
         figma.currentPage.selection=[spacer];
+        
+        //TODO make spacer not expanded in layer panel
       }
     } else  figma.notify("Please select an element to add a spacer after");
   }
@@ -314,3 +339,36 @@ function clone(val) {
   }
   throw 'unknown'
 };
+
+function cloneAutolayoutProperties(source: DefaultFrameMixin , destination: DefaultFrameMixin){
+    destination.layoutMode=source.layoutMode;
+    destination.counterAxisSizingMode=source.counterAxisSizingMode;
+    destination.horizontalPadding = source.horizontalPadding;
+    destination.verticalPadding = source.verticalPadding;
+    destination.itemSpacing = source.itemSpacing;
+}
+
+function cloneGeometryProperties(source: DefaultFrameMixin , destination: DefaultFrameMixin){
+  destination.fills=clone(source.fills);
+  destination.strokes=clone(source.strokes);
+  destination.strokeWeight=source.strokeWeight;
+  destination.strokeAlign = source.strokeAlign;
+  destination.strokeCap = source.strokeCap;
+  destination.strokeJoin = source.strokeJoin;
+  destination.dashPattern = clone(source.dashPattern);
+  destination.fillStyleId = source.fillStyleId;
+  destination.strokeStyleId= source.strokeStyleId;
+}
+
+function cloneCornerProperties(source: DefaultFrameMixin , destination: DefaultFrameMixin){
+  destination.cornerRadius=source.cornerRadius;
+  destination.cornerSmoothing=source.cornerSmoothing;
+}
+
+function cloneBlendProperties(source: DefaultFrameMixin , destination: DefaultFrameMixin){
+  destination.opacity=source.opacity;
+  destination.blendMode=source.blendMode;
+  destination.isMask=source.isMask;
+  destination.effects=clone(source.effects);
+  destination.effectStyleId = source.effectStyleId;
+}

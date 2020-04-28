@@ -91,7 +91,7 @@ figma.ui.onmessage = msg => {
     // your HTML page is to use an object with a "type" property like this.
     //get properties from project
     if (msg.type === 'get-properties-in-page') {
-        console.log('get-properties-in-page called');
+        //console.log('get-properties-in-page called');
         //get Spacers In Page Properties
         var spacers = figma.root.getPluginData(SpacersProperty);
         var hide = figma.root.getPluginData(HideProperty);
@@ -111,6 +111,27 @@ figma.ui.onmessage = msg => {
     if (msg.type === 'hide-spacer-infos') {
         showAllSpacerInfos(false);
         figma.root.setPluginData(HideProperty, "1");
+    }
+    ;
+    if (msg.type === 'remove-lone-child-frame') {
+        // clone the properties of the frame
+        let selection = figma.currentPage.selection[0];
+        if (!selection)
+            return figma.notify("Please select a frame to remove inner frame child");
+        if ((selection.type != "FRAME" && selection.type != "COMPONENT") || selection.children.length != 1)
+            return figma.notify("Please select a frame or component with only 1 frame as child");
+        let parentFrame = selection;
+        if (parentFrame.children[0].type != "FRAME")
+            return figma.notify("Please select a frame with only a frame as child");
+        let child = parentFrame.children[0];
+        cloneAutolayoutProperties(child, parentFrame);
+        cloneBlendProperties(child, parentFrame);
+        cloneCornerProperties(child, parentFrame);
+        cloneGeometryProperties(child, parentFrame);
+        child.children.forEach(element => {
+            parentFrame.appendChild(element);
+        });
+        child.remove();
     }
     ;
     if (msg.type === 'place-spacer') {
@@ -257,6 +278,7 @@ figma.ui.onmessage = msg => {
                     figma.currentPage.selection = [figma.currentPage.selection[0]];
                 //console.log(figma.currentPage.selection[0]);
                 figma.currentPage.selection = [spacer];
+                //TODO make spacer not expanded in layer panel
             }
         }
         else
@@ -294,3 +316,32 @@ function clone(val) {
     throw 'unknown';
 }
 ;
+function cloneAutolayoutProperties(source, destination) {
+    destination.layoutMode = source.layoutMode;
+    destination.counterAxisSizingMode = source.counterAxisSizingMode;
+    destination.horizontalPadding = source.horizontalPadding;
+    destination.verticalPadding = source.verticalPadding;
+    destination.itemSpacing = source.itemSpacing;
+}
+function cloneGeometryProperties(source, destination) {
+    destination.fills = clone(source.fills);
+    destination.strokes = clone(source.strokes);
+    destination.strokeWeight = source.strokeWeight;
+    destination.strokeAlign = source.strokeAlign;
+    destination.strokeCap = source.strokeCap;
+    destination.strokeJoin = source.strokeJoin;
+    destination.dashPattern = clone(source.dashPattern);
+    destination.fillStyleId = source.fillStyleId;
+    destination.strokeStyleId = source.strokeStyleId;
+}
+function cloneCornerProperties(source, destination) {
+    destination.cornerRadius = source.cornerRadius;
+    destination.cornerSmoothing = source.cornerSmoothing;
+}
+function cloneBlendProperties(source, destination) {
+    destination.opacity = source.opacity;
+    destination.blendMode = source.blendMode;
+    destination.isMask = source.isMask;
+    destination.effects = clone(source.effects);
+    destination.effectStyleId = source.effectStyleId;
+}
