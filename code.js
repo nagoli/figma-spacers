@@ -57,7 +57,7 @@ function makeSpacerNode(size) {
     frame.name = size + "px " + SpacerName;
     frame.resize(size, size);
     frame.fills = [clone(FrameStyle)];
-    frame.layoutAlign = 'CENTER';
+    frame.layoutAlign = 'MIN';
     frame.appendChild(text);
     frame.appendChild(hline);
     frame.appendChild(vline);
@@ -152,6 +152,9 @@ figma.ui.onmessage = msg => {
                     else
                         selection.layoutMode = "HORIZONTAL";
                     selection.counterAxisSizingMode = "FIXED";
+                    selection.itemSpacing = 0;
+                    selection.horizontalPadding = 0;
+                    selection.verticalPadding = 0;
                 }
                 selection.insertChild(0, spacer);
             }
@@ -172,6 +175,9 @@ figma.ui.onmessage = msg => {
                             let newFrame = figma.createFrame();
                             newFrame.layoutMode = "VERTICAL";
                             newFrame.counterAxisSizingMode = "AUTO";
+                            newFrame.itemSpacing = 0;
+                            newFrame.horizontalPadding = 0;
+                            newFrame.verticalPadding = 0;
                             parentFrame.insertChild(positionInFrame + 1, newFrame);
                             newFrame.insertChild(0, spacer);
                         }
@@ -195,6 +201,9 @@ figma.ui.onmessage = msg => {
                             let newFrame = figma.createFrame();
                             newFrame.layoutMode = "VERTICAL";
                             newFrame.counterAxisSizingMode = "AUTO";
+                            newFrame.itemSpacing = 0;
+                            newFrame.horizontalPadding = 0;
+                            newFrame.verticalPadding = 0;
                             parentFrame.insertChild(positionInFrame, newFrame);
                             newFrame.insertChild(0, spacer);
                         }
@@ -218,6 +227,9 @@ figma.ui.onmessage = msg => {
                             let newFrame = figma.createFrame();
                             newFrame.layoutMode = "HORIZONTAL";
                             newFrame.counterAxisSizingMode = "AUTO";
+                            newFrame.itemSpacing = 0;
+                            newFrame.horizontalPadding = 0;
+                            newFrame.verticalPadding = 0;
                             parentFrame.insertChild(positionInFrame + 1, newFrame);
                             newFrame.insertChild(0, spacer);
                         }
@@ -241,6 +253,9 @@ figma.ui.onmessage = msg => {
                             let newFrame = figma.createFrame();
                             newFrame.layoutMode = "HORIZONTAL";
                             newFrame.counterAxisSizingMode = "AUTO";
+                            newFrame.itemSpacing = 0;
+                            newFrame.horizontalPadding = 0;
+                            newFrame.verticalPadding = 0;
                             parentFrame.insertChild(positionInFrame, newFrame);
                             newFrame.insertChild(0, spacer);
                         }
@@ -259,17 +274,7 @@ figma.ui.onmessage = msg => {
                         spacer.y = selection.y;
                     }
                     else {
-                        //create a new vertical autolayout if parent is horizontal
-                        if (parentFrame.layoutMode === "VERTICAL") {
-                            let newFrame = figma.createFrame();
-                            newFrame.layoutMode = "HORIZONTAL";
-                            newFrame.counterAxisSizingMode = "AUTO";
-                            parentFrame.insertChild(positionInFrame + 1, newFrame);
-                            newFrame.insertChild(0, spacer);
-                        }
-                        else {
-                            parentFrame.insertChild(positionInFrame + 1, spacer);
-                        }
+                        parentFrame.insertChild(positionInFrame + 1, spacer);
                     }
                     selection.remove();
                 }
