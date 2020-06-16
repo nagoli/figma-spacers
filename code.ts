@@ -7,7 +7,7 @@
 
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
-//figma.ui.resize(80,500);
+figma.ui.resize(128,500);
 
 
 const LabelStyle = {type: 'SOLID', color: {r: 0.8, g: 0, b: 1}};

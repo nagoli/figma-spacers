@@ -5,6 +5,7 @@
         font-size: 13px;
         line-height: 15px;
         letter-spacing: 0.005em;
+        text-align:center;
     }
     
     *:focus {
@@ -47,8 +48,7 @@
     }
     
     #spacers {
-        margin-top: -2px;
-        width: 62%;
+        margin-top: 18px;
         display: inline-flex;
     }
     
@@ -57,6 +57,7 @@
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         margin-top: 18px;
+        margin-left: -8px; 
     }
     
     #position-buttons div {
@@ -89,11 +90,11 @@
     }
     
     .spacer-button {
-        width: 49px;
+        width: 40px;
         font-size: 18px;
         border: 1px solid rgba(222, 222, 222, 0.42);
         color: #CC00FF;
-        margin: 7px 3px;
+        margin: 10px 8px;
         display: flex;
         justify-content: center;
         box-shadow: 0px 3px 12px -1px #00000033;
@@ -113,7 +114,10 @@
         vertical-align: middle;
         width: 100px;
     }
-    
+    .spacer-button p {
+        line-height: 0px;
+    }
+
     button span {
         font-size: 15px;
     }
@@ -189,7 +193,7 @@
     #position-buttons {
         width: 99px;
         height: 99px;
-        float: right;
+        margin-top: 30px;
     }
     
     #position-buttons label {
@@ -282,12 +286,11 @@
     #config {
         padding: 9px 0px 2px 0px;
         margin: 0;
+        margin-top: 18px;
         color: #CC00FF;
         border: none;
-        display: flex;
         align-items: center;
         border-radius: 0;
-        margin-right: 9px;
         border-bottom: 2px solid transparent;
     }
     
@@ -304,12 +307,6 @@
         fill: #CC00FF;
     }
     
-    .configbuttons {
-        display: flex;
-        margin-top: 15px;
-        justify-content: space-between;
-        align-items: center;
-    }
     
     #configDiv .cancel {
         margin-left: 0;
@@ -321,7 +318,7 @@
         flex-direction: column;
         margin-bottom: 10px;
         margin-top: 20px;
-        width: 206px;
+       
         margin: 20px auto;
     }
     
@@ -329,21 +326,22 @@
         padding: 0;
         line-height: 0px;
         height: 24px;
+        margin-top: 6px;
     }
     
     #configDiv input {
         padding: 4px 6px;
-    }
+    } 
     
     #configDiv .ok {
-        order: 3;
         background-color: #CC00FF;
         color: white;
         border: none;
         box-shadow: 0 2px 7px #6d0f6a8a;
         font-size: 14px;
-        padding: 18px 18px;
-        margin-right: 0;
+        padding: 10px 10px;
+        margin-top: 10px;
+        margin-bottom: 6px;
         transition: all 0.2s;
     }
     
@@ -358,8 +356,6 @@
         border: 0;
         color: #CC00FF;
         border: none;
-        display: flex;
-        align-items: center;
         border-radius: 0;
         margin: 0;
         border-bottom: 2px solid transparent;
@@ -367,7 +363,7 @@
     }
 </style>
 
-<div class="top">
+<div id="main">
     <div id="switches">
         <svg width="26" height="26" viewBox="0 0 34 36" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M30.3038 12.2998V9.04448H27.0853V6.79595H24.0353V3.54061H26.4113V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V23.2405H8.16166V25.791H14.1606V22.1498H10.049V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038ZM12.2059 14.3638H8.97051V8.96058H12.189V14.3638H12.2059ZM23.6646 14.3638H20.446V8.96058H23.6646V14.3638Z" fill="#CC00FF"/>
@@ -414,8 +410,6 @@
 
 
     </div>
-    <button id="config" onclick="config()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14" height="14"><path d="M502.6 389.5L378.2 265c-15.6-15.6-36.1-23.4-56.6-23.4-15.4 0-30.8 4.4-44.1 13.3L192 169.4V96L64 0 0 64l96 128h73.4l85.5 85.5c-20.6 31.1-17.2 73.3 10.2 100.7l124.5 124.5c6.2 6.2 14.4 9.4 22.6 9.4 8.2 0 16.4-3.1 22.6-9.4l67.9-67.9c12.4-12.6 12.4-32.8-.1-45.3zM160 158.1v1.9h-48L42.3 67 67 42.3l93 69.7v46.1zM412.1 480L287.7 355.5c-9.1-9.1-14.1-21.1-14.1-33.9 0-12.8 5-24.9 14.1-33.9 9.1-9.1 21.1-14.1 33.9-14.1 12.8 0 24.9 5 33.9 14.1L480 412.1 412.1 480zM64 432c0 8.8 7.2 16 16 16s16-7.2 16-16-7.2-16-16-16-16 7.2-16 16zM276.8 66.9C299.5 44.2 329.4 32 360.6 32c6.9 0 13.8.6 20.7 1.8L312 103.2l13.8 83 83.1 13.8 69.3-69.3c6.7 38.2-5.3 76.8-33.1 104.5-8.9 8.9-19.1 16-30 21.5l23.6 23.6c10.4-6.2 20.2-13.6 29-22.5 37.8-37.8 52.7-91.4 39.7-143.3-2.3-9.5-9.7-17-19.1-19.6-9.5-2.6-19.7 0-26.7 7l-63.9 63.9-44.2-7.4-7.4-44.2L410 50.3c6.9-6.9 9.6-17.1 7-26.5-2.6-9.5-10.2-16.8-19.7-19.2C345.6-8.3 292 6.5 254.1 44.3c-12.9 12.9-22.9 27.9-30.1 44v67.8l22.1 22.1c-9.6-40.4 1.6-82.2 30.7-111.3zM107 467.1c-16.6 16.6-45.6 16.6-62.2 0-17.1-17.1-17.1-45.1 0-62.2l146.1-146.1-22.6-22.6L22.2 382.3c-29.6 29.6-29.6 77.8 0 107.5C36.5 504.1 55.6 512 75.9 512c20.3 0 39.4-7.9 53.7-22.3L231.4 388c-6.7-9.2-11.8-19.3-15.5-29.8L107 467.1z"/></svg>Config</button>
-</div>
 
 
 <div id="spacers">
@@ -427,17 +421,18 @@
     <div class="rbottom"><input type="radio" id="idbottom" class="position" onclick="place('BOTTOM')" name="position" checked="checked"><label for="idbottom"></label></div>
     <div class="rright"><input type="radio" id="idright" class="position" onclick="place('RIGHT')" name="position"><label for="idright"></label></div>
     <div class="rtop"><input type="radio" class="idposition" id="idtop" onclick="place('TOP')" name="position"><label for="idtop"></label></div>
-    <div class="rreplace"><input type="radio" id="idreplace" class="position" onclick="place('REPLACE')" name="position"><label for="idreplace"></label></div>
 </div>
+
+</div>
+
+<button id="config" onclick="config()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14" height="14"><path d="M502.6 389.5L378.2 265c-15.6-15.6-36.1-23.4-56.6-23.4-15.4 0-30.8 4.4-44.1 13.3L192 169.4V96L64 0 0 64l96 128h73.4l85.5 85.5c-20.6 31.1-17.2 73.3 10.2 100.7l124.5 124.5c6.2 6.2 14.4 9.4 22.6 9.4 8.2 0 16.4-3.1 22.6-9.4l67.9-67.9c12.4-12.6 12.4-32.8-.1-45.3zM160 158.1v1.9h-48L42.3 67 67 42.3l93 69.7v46.1zM412.1 480L287.7 355.5c-9.1-9.1-14.1-21.1-14.1-33.9 0-12.8 5-24.9 14.1-33.9 9.1-9.1 21.1-14.1 33.9-14.1 12.8 0 24.9 5 33.9 14.1L480 412.1 412.1 480zM64 432c0 8.8 7.2 16 16 16s16-7.2 16-16-7.2-16-16-16-16 7.2-16 16zM276.8 66.9C299.5 44.2 329.4 32 360.6 32c6.9 0 13.8.6 20.7 1.8L312 103.2l13.8 83 83.1 13.8 69.3-69.3c6.7 38.2-5.3 76.8-33.1 104.5-8.9 8.9-19.1 16-30 21.5l23.6 23.6c10.4-6.2 20.2-13.6 29-22.5 37.8-37.8 52.7-91.4 39.7-143.3-2.3-9.5-9.7-17-19.1-19.6-9.5-2.6-19.7 0-26.7 7l-63.9 63.9-44.2-7.4-7.4-44.2L410 50.3c6.9-6.9 9.6-17.1 7-26.5-2.6-9.5-10.2-16.8-19.7-19.2C345.6-8.3 292 6.5 254.1 44.3c-12.9 12.9-22.9 27.9-30.1 44v67.8l22.1 22.1c-9.6-40.4 1.6-82.2 30.7-111.3zM107 467.1c-16.6 16.6-45.6 16.6-62.2 0-17.1-17.1-17.1-45.1 0-62.2l146.1-146.1-22.6-22.6L22.2 382.3c-29.6 29.6-29.6 77.8 0 107.5C36.5 504.1 55.6 512 75.9 512c20.3 0 39.4-7.9 53.7-22.3L231.4 388c-6.7-9.2-11.8-19.3-15.5-29.8L107 467.1z"/></svg>Config</button>
 
 
 <div id="configDiv">
     <input id="values" placeholder="2, 4, 60"></input>
-    <div class="configbuttons">
-        <button onclick="setSpacers(arrayFrom(valueInput.value))" class="ok">ok</button>
-        <button onclick="setSpacers(spacerValues)" class="cancel"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="10" height="10"><path d="M231.536 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L60.113 273H436c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H60.113L238.607 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z"/></svg>cancel</button>
-        <button onclick="setSpacers(base8)" class="reset"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="10" height="10"><path d="M492 8h-10c-6.627 0-12 5.373-12 12v110.627C426.929 57.261 347.224 8 256 8 123.228 8 14.824 112.338 8.31 243.493 7.971 250.311 13.475 256 20.301 256h10.016c6.353 0 11.646-4.949 11.977-11.293C48.157 132.216 141.097 42 256 42c82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12zm-.301 248h-10.015c-6.352 0-11.647 4.949-11.977 11.293C463.841 380.158 370.546 470 256 470c-82.608 0-154.672-46.952-190.299-116H180c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H20c-6.627 0-12 5.373-12 12v160c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V381.373C85.071 454.739 164.777 504 256 504c132.773 0 241.176-104.338 247.69-235.493.339-6.818-5.165-12.507-11.991-12.507z"/></svg>reset</button>
-    </div>
+    <button onclick="setSpacers(arrayFrom(valueInput.value))" class="ok">ok</button>
+    <button onclick="setSpacers(spacerValues)" class="cancel"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="10" height="10"><path d="M231.536 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L60.113 273H436c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H60.113L238.607 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z"/></svg>cancel</button>
+    <button onclick="setSpacers(base8)" class="reset"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="10" height="10"><path d="M492 8h-10c-6.627 0-12 5.373-12 12v110.627C426.929 57.261 347.224 8 256 8 123.228 8 14.824 112.338 8.31 243.493 7.971 250.311 13.475 256 20.301 256h10.016c6.353 0 11.646-4.949 11.977-11.293C48.157 132.216 141.097 42 256 42c82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12zm-.301 248h-10.015c-6.352 0-11.647 4.949-11.977 11.293C463.841 380.158 370.546 470 256 470c-82.608 0-154.672-46.952-190.299-116H180c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H20c-6.627 0-12 5.373-12 12v160c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V381.373C85.071 454.739 164.777 504 256 504c132.773 0 241.176-104.338 247.69-235.493.339-6.818-5.165-12.507-11.991-12.507z"/></svg>reset</button> 
 </div>
 
 
@@ -448,6 +443,7 @@
     var showToggle = document.getElementById("showToggle");
     var configDiv = document.getElementById("configDiv");
     var spacersDiv = document.getElementById("spacers");
+    var mainDiv = document.getElementById("main");
     var valueInput = document.getElementById("values");
 
     var spacerValues;
@@ -475,7 +471,7 @@
         //store the spacers value
         spacerValues = spacers;
         setSpacerPropertiesInPage(spacers);
-        spacersDiv.style.display = "inline-flex";
+        mainDiv.style.display = "block";
     }
 
     function switchShow() {
@@ -504,7 +500,7 @@
 
     // change ui to show configuration mode
     function config() {
-        spacersDiv.style.display = "none";
+        mainDiv.style.display = "none";
         valueInput.value = spacerValues.toString();
         configDiv.style.display = "flex";
     }
@@ -573,5 +569,5 @@
     //ask for plugin properties at startup
     post("get-properties-in-page");
     //check every 30s if properties have changed
-    window.setInterval(post, 30000, "get-properties-in-page");
+    //window.setInterval(post, 30000, "get-properties-in-page");
 </script>
