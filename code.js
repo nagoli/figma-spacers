@@ -5,9 +5,9 @@
 // full browser enviroment (see documentation).
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
-figma.ui.resize(128, 500);
+figma.ui.resize(128, 408);
 const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
-const FrameStyle = { type: 'SOLID', color: { r: 0.98, g: 0.89, b: 1 } };
+const ContainerStyle = { type: 'SOLID', color: { r: 0.98, g: 0.89, b: 1 } };
 const SpacersProperty = 'spacers';
 const HideProperty = 'hide';
 //names of the layers considered as spacers
@@ -25,18 +25,33 @@ const SizeProperty = 'size';
 // this state is stored in the document to know if showing or not the infos in a new spacer
 const SpacerInfoStateProperty = 'spacer-info-state';
 function makeSpacerNode(size) {
-    const text = figma.createText();
+    //customize
+    const diamondShape = false;
+    const withCorner = false;
+    var containerSize = size;
+    if (diamondShape)
+        containerSize = Math.round(Math.sqrt(size * size / 2));
+    const frame = figma.createFrame();
+    var text = figma.createText();
     text.name = LabelName;
-    text.locked = true;
     figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
-        text.fontSize = size;
-        text.x = 1;
+        if (containerSize < 16) {
+            text.fontSize = containerSize - Math.round(containerSize * 0.2);
+        }
+        else {
+            text.fontSize = 14;
+        }
+        text.x = 0;
         text.y = 0;
         text.textAlignHorizontal = 'LEFT';
         text.textAlignVertical = 'TOP';
         text.characters = String(size);
         text.fills = [clone(LabelStyle)];
-        text.letterSpacing = { unit: "PERCENT", value: -15 };
+        text.letterSpacing = { unit: "PERCENT", value: -5 };
+        var vector = figma.flatten([text], frame);
+        vector.x = (size - vector.width) / 2;
+        vector.y = (size - vector.height) / 2;
+        vector.locked = true;
     });
     function styleLine(line, size) {
         line.strokes = [clone(LabelStyle)];
@@ -45,36 +60,86 @@ function makeSpacerNode(size) {
         line.x = 0;
         line.y = 0;
     }
-    const hline = figma.createLine();
-    hline.name = HLineName;
-    styleLine(hline, size);
-    hline.y = 1;
-    const vline = figma.createLine();
-    vline.name = VLineName;
-    styleLine(vline, size);
-    vline.rotation = -90;
-    const frame = figma.createFrame();
+    const linesize = Math.round(size / 5);
+    //up left corner 
+    const hline1 = figma.createLine();
+    hline1.name = HLineName + 1;
+    styleLine(hline1, linesize);
+    hline1.y = 1;
+    const vline1 = figma.createLine();
+    vline1.name = VLineName + 1;
+    styleLine(vline1, linesize);
+    vline1.rotation = -90;
+    //up right corner
+    const hline2 = figma.createLine();
+    hline2.name = HLineName + 2;
+    styleLine(hline2, linesize);
+    hline2.x = containerSize - linesize;
+    hline2.y = 1;
+    const vline2 = figma.createLine();
+    vline2.name = VLineName + 2;
+    styleLine(vline2, linesize);
+    vline2.x = containerSize - 1;
+    vline2.rotation = -90;
+    //down left corner
+    const hline3 = figma.createLine();
+    hline3.name = HLineName + 3;
+    styleLine(hline3, linesize);
+    hline3.y = containerSize;
+    const vline3 = figma.createLine();
+    vline3.name = VLineName + 3;
+    styleLine(vline3, linesize);
+    vline3.y = containerSize - linesize;
+    vline3.rotation = -90;
+    //down right corner
+    const hline4 = figma.createLine();
+    hline4.name = HLineName + 4;
+    styleLine(hline4, linesize);
+    hline4.x = containerSize - linesize;
+    hline4.y = containerSize;
+    const vline4 = figma.createLine();
+    vline4.name = VLineName + 4;
+    styleLine(vline4, linesize);
+    vline4.x = containerSize - 1;
+    vline4.y = containerSize - linesize;
+    vline4.rotation = -90;
+    const container = figma.createFrame();
+    container.resize(containerSize, containerSize);
+    container.fills = [clone(ContainerStyle)];
+    container.layoutAlign = 'MIN';
+    if (withCorner) {
+        container.appendChild(hline1);
+        container.appendChild(vline1);
+        container.appendChild(hline2);
+        container.appendChild(vline2);
+        container.appendChild(hline3);
+        container.appendChild(vline3);
+        container.appendChild(hline4);
+        container.appendChild(vline4);
+    }
+    if (diamondShape) {
+        container.rotation = -45;
+        container.x = size / 2;
+    }
+    container.locked = true;
+    //store the property in spacer frame 
     frame.setPluginData(SizeProperty, String(size));
     frame.name = size + "px " + SpacerName;
     frame.resize(size, size);
-    frame.fills = [clone(FrameStyle)];
     frame.layoutAlign = 'MIN';
     frame.appendChild(text);
-    frame.appendChild(hline);
-    frame.appendChild(vline);
+    frame.appendChild(container);
+    frame.opacity = 1;
     let showInfo = true;
     showSpacerInfos(frame, figma.root.getPluginData(SpacerInfoStateProperty) != "0");
     return frame;
 }
 function showSpacerInfos(spacer, isShow) {
     spacer.children.forEach(child => {
-        if (child.name === HLineName || child.name === VLineName || child.name === LabelName)
-            child.visible = isShow;
+        child.visible = isShow;
     });
-    if (isShow)
-        spacer.fills = [clone(FrameStyle)];
-    else
-        spacer.fills = [];
+    //TODO recreate spacer if not on right version
+    //if (isShow) spacer.fills=[clone(FrameStyle)]; else spacer.fills=[];
     //update size in case it was manually changed
     //let size = spacer.getPluginData(SizeProperty);
     //if (size) spacer.resize(spacer.width,Number(size));
