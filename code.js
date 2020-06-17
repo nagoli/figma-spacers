@@ -22,9 +22,12 @@
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
 figma.ui.resize(128, 408);
-const VERSION = 1.1;
+const VERSION = '1.1';
+//styles
 const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
 const ContainerStyle = { type: 'SOLID', color: { r: 0.98, g: 0.89, b: 1 } };
+const Alignement = "CENTER";
+//property names
 const SpacersProperty = 'spacers';
 const HideProperty = 'hide';
 const VersionProperty = 'version';
@@ -37,51 +40,37 @@ const LabelName = 'label_';
 const ContainerName = 'shape_';
 const HLineName = 'hline_';
 const VLineName = 'vline_';
+//positions name
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
 const BOTTOM = 'BOTTOM';
 const TOP = 'TOP';
 const REPLACE = 'REPLACE';
-var positionVar = BOTTOM;
+var positionState = BOTTOM;
 /**
  * ******************
  * 1- the shape/ creation of the spacers
  * ******************
  */
-function makeSpacerNode(size) {
+function shapeSpacerNode(frame, size) {
     //customize
     const diamondShape = false;
     const withCorner = false;
+    const flattenText = false;
     var containerSize = size;
     if (diamondShape)
         containerSize = Math.round(Math.sqrt(size * size / 2));
-    const frame = figma.createFrame();
-    var text = figma.createText();
-    text.name = LabelName;
-    figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
-        if (containerSize < 16) {
-            text.fontSize = containerSize - Math.round(containerSize * 0.2);
-        }
-        else {
-            text.fontSize = 14;
-        }
-        text.x = 0;
-        text.y = 0;
-        text.textAlignHorizontal = 'LEFT';
-        text.textAlignVertical = 'TOP';
-        text.characters = String(size);
-        text.fills = [clone(LabelStyle)];
-        text.letterSpacing = { unit: "PERCENT", value: -5 };
-        var vector = figma.flatten([text], frame);
-        vector.x = (size - vector.width) / 2;
-        vector.y = (size - vector.height) / 2;
-        vector.locked = true;
-    });
+    frame.children.forEach(child => child.remove());
+    frame.name = size + "px " + SpacerName;
+    frame.resize(size, size);
+    frame.fills = [];
+    frame.opacity = 1;
+    //CONTAINER 
     const container = figma.createFrame();
+    frame.appendChild(container);
     container.name = ContainerName;
     container.resize(containerSize, containerSize);
     container.fills = [clone(ContainerStyle)];
-    container.layoutAlign = 'MIN';
     if (withCorner) {
         function styleLine(line, size) {
             line.strokes = [clone(LabelStyle)];
@@ -147,15 +136,34 @@ function makeSpacerNode(size) {
         container.x = size / 2;
     }
     container.locked = true;
-    //store the property in spacer frame 
-    frame.setPluginData(SizeProperty, String(size));
-    frame.name = size + "px " + SpacerName;
-    frame.resize(size, size);
-    frame.layoutAlign = 'MIN';
+    //TEXT
+    var text = figma.createText();
     frame.appendChild(text);
-    frame.appendChild(container);
-    frame.fills = [];
-    frame.opacity = 0.8;
+    text.name = LabelName;
+    figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
+        if (containerSize < 16) {
+            text.fontSize = containerSize - Math.round(containerSize * 0.2);
+        }
+        else {
+            text.fontSize = 14;
+        }
+        text.x = 0;
+        text.y = 0;
+        text.textAlignHorizontal = 'LEFT';
+        text.textAlignVertical = 'TOP';
+        text.characters = String(size);
+        text.fills = [clone(LabelStyle)];
+        text.letterSpacing = { unit: "PERCENT", value: -5 };
+        text.locked = true;
+        text.x = (size - text.width) / 2;
+        text.y = (size - text.height) / 2;
+        if (flattenText) {
+            var vector = figma.flatten([text], frame);
+            vector.x = (size - vector.width) / 2;
+            vector.y = (size - vector.height) / 2;
+            vector.locked = true;
+        }
+    });
     setSpacerVisibility(frame, Boolean(figma.root.getPluginData(HideProperty)));
     return frame;
 }
@@ -168,15 +176,18 @@ function setSpacerVisibility(spacer, isHidden) {
     spacer.children.forEach(child => {
         child.visible = !isHidden;
     });
-    //TODO recreate spacer if not on right version
-    //if (isShow) spacer.fills=[clone(FrameStyle)]; else spacer.fills=[];
-    //update size in case it was manually changed
-    //let size = spacer.getPluginData(SizeProperty);
-    //if (size) spacer.resize(spacer.width,Number(size));
 }
 function setAllSpacersVisibility(isHidden) {
     var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
     spacers.forEach(spacer => setSpacerVisibility(spacer, isHidden));
+}
+function reshapeAllSpacers() {
+    console.log("reshape all spacers");
+    var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
+    spacers.forEach(spacer => {
+        let size = spacer.getPluginData(SizeProperty);
+        shapeSpacerNode(spacer, Number(size));
+    });
 }
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
@@ -188,6 +199,15 @@ figma.ui.onmessage = msg => {
         var spacers = figma.root.getPluginData(SpacersProperty);
         var hide = figma.root.getPluginData(HideProperty);
         figma.ui.postMessage({ type: "set-properties-from-page", spacers: spacers ? arrayFrom(spacers) : false, hide: Boolean(hide) });
+        var knownVersion = figma.root.getPluginData(VersionProperty);
+        if (knownVersion != VERSION) {
+            console.log("Change in spacers versions :");
+            console.log("Document = " + knownVersion);
+            console.log("Plugin = " + VERSION);
+            figma.root.setPluginData(VersionProperty, VERSION);
+            //update all spacers with new version
+            reshapeAllSpacers();
+        }
     }
     ;
     //get properties from project
@@ -211,19 +231,22 @@ figma.ui.onmessage = msg => {
      * ***********************
      */
     if (msg.type === 'place-spacer') {
-        positionVar = msg.position;
+        positionState = msg.position;
     }
     ;
     if (msg.type === 'add-spacer') {
         if (figma.currentPage.selection.length != 0) {
-            let spacer = makeSpacerNode(msg.size);
+            let spacer = figma.createFrame();
+            spacer.setPluginData(SizeProperty, String(msg.size));
+            shapeSpacerNode(spacer, msg.size);
+            spacer.layoutAlign = Alignement;
             let selection = figma.currentPage.selection[0];
             // add as first child if selection is an empty autolayout
             if (selection.type === "FRAME" && selection.children.length === 0) {
                 //if not autolyout the frame is set autolayer according to the spacer direction
                 if (selection.layoutMode === "NONE") {
                     console.log("set autolayout mode to empty frame");
-                    if (positionVar === BOTTOM || positionVar === TOP)
+                    if (positionState === BOTTOM || positionState === TOP)
                         selection.layoutMode = "VERTICAL";
                     else
                         selection.layoutMode = "HORIZONTAL";
@@ -236,7 +259,7 @@ figma.ui.onmessage = msg => {
             }
             else {
                 let positionInFrame = selection.parent.children.indexOf(selection);
-                if (positionVar === BOTTOM) {
+                if (positionState === BOTTOM) {
                     let parentFrame = selection.parent;
                     //position at bottom if not a autolayout
                     if (parentFrame.type != "FRAME" || parentFrame.layoutMode === "NONE") {
@@ -262,7 +285,7 @@ figma.ui.onmessage = msg => {
                         }
                     }
                 }
-                if (positionVar === TOP) {
+                if (positionState === TOP) {
                     let parentFrame = selection.parent;
                     //position at top if not a autolayout
                     if (parentFrame.type != "FRAME" || parentFrame.layoutMode === "NONE") {
@@ -288,7 +311,7 @@ figma.ui.onmessage = msg => {
                         }
                     }
                 }
-                if (positionVar === RIGHT) {
+                if (positionState === RIGHT) {
                     let parentFrame = selection.parent;
                     //position at bottom if not a autolayout
                     if (parentFrame.type != "FRAME" || parentFrame.layoutMode === "NONE") {
@@ -314,7 +337,7 @@ figma.ui.onmessage = msg => {
                         }
                     }
                 }
-                if (positionVar === LEFT) {
+                if (positionState === LEFT) {
                     let parentFrame = selection.parent;
                     //position at top if not a autolayout
                     if (parentFrame.type != "FRAME" || parentFrame.layoutMode === "NONE") {
@@ -340,7 +363,7 @@ figma.ui.onmessage = msg => {
                         }
                     }
                 }
-                if (positionVar === REPLACE) {
+                if (positionState === REPLACE) {
                     let parentFrame = selection.parent;
                     //position at bottom if not a autolayout
                     if (parentFrame.type != "FRAME" || parentFrame.layoutMode === "NONE") {
@@ -355,7 +378,7 @@ figma.ui.onmessage = msg => {
                     selection.remove();
                 }
                 //trick to improve undo
-                if (positionVar != REPLACE)
+                if (positionState != REPLACE)
                     figma.currentPage.selection = [figma.currentPage.selection[0]];
                 //console.log(figma.currentPage.selection[0]);
                 figma.currentPage.selection = [spacer];

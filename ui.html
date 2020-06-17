@@ -458,13 +458,16 @@
     *  change state if necessary 
     */
     onmessage = (event) => {
-        console.log("UI get message");
+        //console.log("refresh UI if necessary");
         if (event.data.pluginMessage.type === "set-properties-from-page") {
             var spacers = event.data.pluginMessage.spacers;
-            if (spacers!=spacerValues) setSpacers(event.data.pluginMessage.spacers);
-            
+            if (String(spacers)!==String(spacerValues)) {
+                console.log("diff in spacers list : doc property="+spacers+" plugin="+spacerValues);
+                setSpacers(event.data.pluginMessage.spacers);
+            }
             var hidden = event.data.pluginMessage.hide;
             if (hidden!=hiddenState){
+                console.log("hidden state different : doc property="+hidden+" plugin="+hiddenState);
                 if (hidden) hide(); else show();
             }
         }
