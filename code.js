@@ -156,7 +156,7 @@ function makeSpacerNode(size) {
     frame.appendChild(container);
     frame.fills = [];
     frame.opacity = 0.8;
-    setSpacerVisibility(frame, figma.root.getPluginData(HideProperty) == "1");
+    setSpacerVisibility(frame, Boolean(figma.root.getPluginData(HideProperty)));
     return frame;
 }
 /**
@@ -182,11 +182,8 @@ function setAllSpacersVisibility(isHidden) {
 // callback. The callback will be passed the "pluginMessage" property of the
 // posted message.
 figma.ui.onmessage = msg => {
-    // One way of distinguishing between different types of messages sent from
-    // your HTML page is to use an object with a "type" property like this.
     //get properties from project
     if (msg.type === 'get-properties-in-page') {
-        //console.log('get-properties-in-page called');
         //get Spacers In Page Properties
         var spacers = figma.root.getPluginData(SpacersProperty);
         var hide = figma.root.getPluginData(HideProperty);

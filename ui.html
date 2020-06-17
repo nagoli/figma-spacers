@@ -438,30 +438,42 @@
 
 
 <script>
-    var base8 = [4, 8, 16, 24, 32, 48];
-    var isShown;
+    var Base8 = [4, 8, 16, 24, 32, 48];
+    
+    //state
+    var hiddenState;
+    var spacerValues;
+
+    //HTML elements
     var showToggle = document.getElementById("showToggle");
     var configDiv = document.getElementById("configDiv");
     var spacersDiv = document.getElementById("spacers");
     var mainDiv = document.getElementById("main");
     var valueInput = document.getElementById("values");
 
-    var spacerValues;
 
-    // receive plugin properties
+
+    /**
+    *  receive plugin properties
+    *  change state if necessary 
+    */
     onmessage = (event) => {
         console.log("UI get message");
         if (event.data.pluginMessage.type === "set-properties-from-page") {
-            setSpacers(event.data.pluginMessage.spacers);
-            if (event.data.pluginMessage.hide) hide();
-            else show();
+            var spacers = event.data.pluginMessage.spacers;
+            if (spacers!=spacerValues) setSpacers(event.data.pluginMessage.spacers);
+            
+            var hidden = event.data.pluginMessage.hide;
+            if (hidden!=hiddenState){
+                if (hidden) hide(); else show();
+            }
         }
     }
 
     //change ui to show the spacers button in parameter
     function setSpacers(spacers) {
         configDiv.style.display = "none";
-        if (!Array.isArray(spacers)) spacers = base8;
+        if (!Array.isArray(spacers)) spacers = Base8;
         //reset div
         while (spacersDiv.firstChild) spacersDiv.removeChild(spacersDiv.firstChild);
         for (let coef of spacers) {
@@ -483,12 +495,14 @@
     //show spacers
     function show() {
         showToggle.checked = true;
+        hiddenState = false;
         post('show-spacer-infos');
     }
 
     //hide spacers
     function hide() {
         showToggle.checked = false;
+        hiddenState = true;
         post('hide-spacer-infos');
     }
 
@@ -569,5 +583,5 @@
     //ask for plugin properties at startup
     post("get-properties-in-page");
     //check every 30s if properties have changed
-    //window.setInterval(post, 30000, "get-properties-in-page");
-</script>
+    window.setInterval(post, 30000, "get-properties-in-page");
+</script> 
