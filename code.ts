@@ -23,7 +23,7 @@
 
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
-figma.ui.resize(128,408);
+figma.ui.resize(128,470);
 
 const VERSION:string = '1.1';
 
@@ -289,7 +289,7 @@ figma.ui.onmessage = msg => {
           if (positionState === BOTTOM || positionState===TOP )
             selection.layoutMode="VERTICAL";
           else selection.layoutMode="HORIZONTAL";
-          selection.counterAxisSizingMode="FIXED";
+          selection.counterAxisSizingMode="AUTO";
           selection.itemSpacing = 0;
           selection.horizontalPadding=0;
           selection.verticalPadding=0;
@@ -299,120 +299,48 @@ figma.ui.onmessage = msg => {
       }
 
       else{
-        let positionInFrame = selection.parent.children.indexOf(selection);
-        if (positionState===BOTTOM){
-          let parentFrame = selection.parent;
-          //position at bottom if not a autolayout
-          if (parentFrame.type != "FRAME" || parentFrame.layoutMode==="NONE"){
-            //console.log("positionning : "+ selection.x + " "+ selection.y); 
-            parentFrame.insertChild(positionInFrame+1,spacer);
-            spacer.x = selection.x;
-            spacer.y = selection.y+selection.height;
-          } else{
-            //create a new vertical autolayout if parent is horizontal
-            if (parentFrame.layoutMode==="HORIZONTAL"){
-              let newFrame =  figma.createFrame();
-              newFrame.layoutMode = "VERTICAL";
-              newFrame.counterAxisSizingMode="AUTO";
-              newFrame.itemSpacing = 0;
-              newFrame.horizontalPadding=0;
-              newFrame.verticalPadding=0;
-              parentFrame.insertChild(positionInFrame+1,newFrame);
-              newFrame.insertChild(0,spacer);
-            } else {
-              parentFrame.insertChild(positionInFrame+1,spacer);
+        let parentFrame = selection.parent;
+        let positionInFrame = parentFrame.children.indexOf(selection);
+       
+        //add adequate autolayout around the selection if the parent is not autolayout
+        //then add spacer in correct order
+        function addSpacer(mode:"VERTICAL"|"HORIZONTAL",order:"BEFORE"|"AFTER"){
+          let addToIndex = (order=="BEFORE")?0:1;
+          if (parentFrame.type != "FRAME" || parentFrame.layoutMode!=mode){
+            let newParent: FrameNode = createEmptyAutolayout(mode);
+            parentFrame.insertChild(positionInFrame, newParent);
+            newParent.x=selection.x; 
+            newParent.y=selection.y; 
+            newParent.appendChild(selection);
+            {
+              newParent.insertChild(addToIndex,spacer);
             }
-          } 
-        } 
-
-        if (positionState===TOP){
-          let parentFrame = selection.parent;
-          //position at top if not a autolayout
-          if (parentFrame.type != "FRAME" || parentFrame.layoutMode==="NONE"){
-            //console.log("positionning : "+ selection.x + " "+ selection.y); 
-            parentFrame.insertChild(positionInFrame,spacer);
-            spacer.x = selection.x;
-            spacer.y = selection.y-selection.height-spacer.height;
-          } else{
-            //create a new vertical autolayout if parent is horizontal
-            if (parentFrame.layoutMode==="HORIZONTAL"){
-              let newFrame =  figma.createFrame();
-              newFrame.layoutMode = "VERTICAL";
-              newFrame.counterAxisSizingMode="AUTO";
-              newFrame.itemSpacing = 0;
-              newFrame.horizontalPadding=0;
-              newFrame.verticalPadding=0;
-              parentFrame.insertChild(positionInFrame,newFrame);
-              newFrame.insertChild(0,spacer);
-            } else {
-              parentFrame.insertChild(positionInFrame,spacer);
-            }
+          }  else {
+              parentFrame.insertChild(positionInFrame+addToIndex,spacer);
           } 
         }
 
-        if (positionState===RIGHT){
-          let parentFrame = selection.parent;
-          //position at bottom if not a autolayout
-          if (parentFrame.type != "FRAME" || parentFrame.layoutMode==="NONE"){
-            //console.log("positionning : "+ selection.x + " "+ selection.y); 
-            parentFrame.insertChild(positionInFrame+1,spacer);
-            spacer.x = selection.x+selection.height;
-            spacer.y = selection.y;
-          } else{
-            //create a new vertical autolayout if parent is horizontal
-            if (parentFrame.layoutMode==="VERTICAL"){
-              let newFrame =  figma.createFrame();
-              newFrame.layoutMode = "HORIZONTAL";
-              newFrame.counterAxisSizingMode="AUTO";
-              newFrame.itemSpacing = 0;
-              newFrame.horizontalPadding=0;
-              newFrame.verticalPadding=0;
-              parentFrame.insertChild(positionInFrame+1,newFrame);
-              newFrame.insertChild(0,spacer);
-            } else {
-              parentFrame.insertChild(positionInFrame+1,spacer);
-            }
-          } 
-        }
 
-        if (positionState===LEFT){
-          let parentFrame = selection.parent;
-          //position at top if not a autolayout
-          if (parentFrame.type != "FRAME" || parentFrame.layoutMode==="NONE"){
-            //console.log("positionning : "+ selection.x + " "+ selection.y); 
-            parentFrame.insertChild(positionInFrame,spacer);
-            spacer.x = selection.x-selection.width-spacer.width;
-            spacer.y = selection.y;
-          } else{
-            //create a new vertical autolayout if parent is horizontal
-            if (parentFrame.layoutMode==="VERTICAL"){
-              let newFrame =  figma.createFrame();
-              newFrame.layoutMode = "HORIZONTAL";
-              newFrame.counterAxisSizingMode="AUTO";
-              newFrame.itemSpacing = 0;
-              newFrame.horizontalPadding=0;
-              newFrame.verticalPadding=0;
-              parentFrame.insertChild(positionInFrame,newFrame);
-              newFrame.insertChild(0,spacer);
-            } else {
-              parentFrame.insertChild(positionInFrame,spacer);
-            }
-          } 
-        }
-        
+        if (positionState===BOTTOM) addSpacer("VERTICAL","AFTER");
+        if (positionState===TOP) addSpacer("VERTICAL","BEFORE");
+        if (positionState===RIGHT) addSpacer("HORIZONTAL","AFTER");
+        if (positionState===LEFT) addSpacer("HORIZONTAL","BEFORE");
 
         if (positionState===REPLACE){
-          let parentFrame = selection.parent;
-          //position at bottom if not a autolayout
-          if (parentFrame.type != "FRAME" || parentFrame.layoutMode==="NONE"){
-            //console.log("positionning : "+ selection.x + " "+ selection.y); 
-            parentFrame.insertChild(positionInFrame+1,spacer);
-            spacer.x = selection.x;
-            spacer.y = selection.y;
-          } else{
-            parentFrame.insertChild(positionInFrame+1,spacer);
-          } 
-          selection.remove();
+          if (! selection.name.endsWith(SpacerName))
+            figma.notify("Please select a spacer to be replaced");
+          else {
+
+            let parentFrame = selection.parent;
+            
+            //position at bottom if not a autolayout
+            if (parentFrame.type != "FRAME" || parentFrame.layoutMode==="NONE"){
+              figma.notify("Please select a spacer that is inside an autolayout…");
+            } else{
+              parentFrame.insertChild(positionInFrame+1,spacer);
+            } 
+            selection.remove();
+         }
         }
 
 
@@ -528,4 +456,15 @@ function cloneBlendProperties(source: DefaultFrameMixin , destination: DefaultFr
   destination.isMask=source.isMask;
   destination.effects=clone(source.effects);
   destination.effectStyleId = source.effectStyleId;
+}
+
+
+function createEmptyAutolayout(direction:"HORIZONTAL" | "VERTICAL"):FrameNode{
+  let frame: FrameNode = figma.createFrame();
+  frame.layoutMode=direction;
+  frame.counterAxisSizingMode="AUTO";
+  frame.itemSpacing = 0;
+  frame.horizontalPadding=0;
+  frame.verticalPadding=0;
+  return frame;
 }
