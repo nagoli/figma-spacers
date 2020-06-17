@@ -1,7 +1,21 @@
-// This plugin will open a modal to prompt the user to enter a number, and
-// it will then create that many rectangles on the screen.
-
-import { cpus } from "os";
+/**
+ * Spacers is a figma plugin
+ * It adds some spacers inside autolayout hat can all be hidden or shown at once
+ * with a simple switch.
+ * 
+ * This code concerns mainly 
+ *  1- the shape/ creation of the spacers
+ *  2- shape version and display state management
+ *  3- spacers positionning
+ *  4- plugin additional functionalities
+ *  5- utils
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+//import { cpus } from "os";
 
 // This file holds the main code for the plugins. It has access to the *document*.
 // You can access browser APIs in the <script> tag inside "ui.html" which has a
@@ -11,16 +25,24 @@ import { cpus } from "os";
 figma.showUI(__html__);
 figma.ui.resize(128,408);
 
+const VERSION = 1.1;
+
 
 const LabelStyle = {type: 'SOLID', color: {r: 0.8, g: 0, b: 1}};
 const ContainerStyle = {type: 'SOLID', color: {r: 0.98, g: 0.89, b: 1}};
 
 const SpacersProperty = 'spacers';
 const HideProperty = 'hide';
+const VersionProperty = 'version';
+const SizeProperty = 'size';
+// this state is stored in the document to know if showing or not the infos in a new spacer
+//const SpacerInfoStateProperty = 'spacer-info-state';
 
 //names of the layers considered as spacers
 const SpacerName = "spacer_";
 const LabelName = 'label_';
+const ContainerName = 'shape_';
+
 const HLineName = 'hline_';
 const VLineName = 'vline_';
 
@@ -32,10 +54,13 @@ const TOP = 'TOP';
 const REPLACE = 'REPLACE';
 var positionVar = BOTTOM;
 
-const SizeProperty = 'size';
-// this state is stored in the document to know if showing or not the infos in a new spacer
-const SpacerInfoStateProperty = 'spacer-info-state';
 
+
+/**
+ * ******************
+ * 1- the shape/ creation of the spacers
+ * ******************
+ */
 
 function makeSpacerNode(size : number) : FrameNode{ //, label : string){
   //customize
@@ -67,78 +92,85 @@ function makeSpacerNode(size : number) : FrameNode{ //, label : string){
     vector.y=(size-vector.height)/2;
     vector.locked=true;
   });
+    
   
-  function styleLine(line : LineNode, size : number){
-    line.strokes=[clone(LabelStyle)];
-    line.resize(size,0);
-    line.locked=true;
-    line.x=0;
-    line.y=0;
-  }
-
-  const linesize = Math.round(size/5);
-
-  //up left corner 
-  const hline1 = figma.createLine();
-  hline1.name=HLineName+1;
-  styleLine(hline1,linesize);
-  hline1.y=1;
-  const vline1 = figma.createLine();
-  vline1.name=VLineName+1;
-  styleLine(vline1,linesize);
-  vline1.rotation=-90;
-
-  //up right corner
-  const hline2 = figma.createLine();
-  hline2.name=HLineName+2;
-  styleLine(hline2,linesize);
-  hline2.x=containerSize-linesize;
-  hline2.y=1;
-  const vline2 = figma.createLine();
-  vline2.name=VLineName+2;
-  styleLine(vline2,linesize);
-  vline2.x=containerSize-1;
-  vline2.rotation=-90;
 
 
-  //down left corner
-  const hline3 = figma.createLine();
-  hline3.name=HLineName+3;
-  styleLine(hline3,linesize);
-  hline3.y=containerSize;
-  const vline3 = figma.createLine();
-  vline3.name=VLineName+3;
-  styleLine(vline3,linesize);
-  vline3.y=containerSize-linesize;
-  vline3.rotation=-90;
-
-  //down right corner
-  const hline4 = figma.createLine();
-  hline4.name=HLineName+4;
-  styleLine(hline4,linesize);
-  hline4.x=containerSize-linesize;
-  hline4.y=containerSize;
-  const vline4 = figma.createLine();
-  vline4.name=VLineName+4;
-  styleLine(vline4,linesize);
-  vline4.x=containerSize-1;
-  vline4.y=containerSize-linesize;
-  vline4.rotation=-90;
- 
   const container: FrameNode = figma.createFrame();
+  container.name = ContainerName;
   container.resize(containerSize,containerSize);
   container.fills=[clone(ContainerStyle)];
   container.layoutAlign='MIN';
+
   if (withCorner){
-  container.appendChild(hline1);
-  container.appendChild(vline1);
-  container.appendChild(hline2);
-  container.appendChild(vline2);
-  container.appendChild(hline3);
-  container.appendChild(vline3);
-  container.appendChild(hline4);
-  container.appendChild(vline4);
+
+    function styleLine(line : LineNode, size : number){
+      line.strokes=[clone(LabelStyle)];
+      line.resize(size,0);
+      line.locked=true;
+      line.x=0;
+      line.y=0;
+    }
+
+    const linesize = Math.round(size/5);
+
+    //up left corner 
+    const hline1 = figma.createLine();
+    hline1.name=HLineName+1;
+    styleLine(hline1,linesize);
+    hline1.y=1;
+    const vline1 = figma.createLine();
+    vline1.name=VLineName+1;
+    styleLine(vline1,linesize);
+    vline1.rotation=-90;
+
+    //up right corner
+    const hline2 = figma.createLine();
+    hline2.name=HLineName+2;
+    styleLine(hline2,linesize);
+    hline2.x=containerSize-linesize;
+    hline2.y=1;
+    const vline2 = figma.createLine();
+    vline2.name=VLineName+2;
+    styleLine(vline2,linesize);
+    vline2.x=containerSize-1;
+    vline2.rotation=-90;
+
+
+    //down left corner
+    const hline3 = figma.createLine();
+    hline3.name=HLineName+3;
+    styleLine(hline3,linesize);
+    hline3.y=containerSize;
+    const vline3 = figma.createLine();
+    vline3.name=VLineName+3;
+    styleLine(vline3,linesize);
+    vline3.y=containerSize-linesize;
+    vline3.rotation=-90;
+
+    //down right corner
+    const hline4 = figma.createLine();
+    hline4.name=HLineName+4;
+    styleLine(hline4,linesize);
+    hline4.x=containerSize-linesize;
+    hline4.y=containerSize;
+    const vline4 = figma.createLine();
+    vline4.name=VLineName+4;
+    styleLine(vline4,linesize);
+    vline4.x=containerSize-1;
+    vline4.y=containerSize-linesize;
+    vline4.rotation=-90;
+
+    container.appendChild(hline1);
+    container.appendChild(vline1);
+    container.appendChild(hline2);
+    container.appendChild(vline2);
+    container.appendChild(hline3);
+    container.appendChild(vline3);
+    container.appendChild(hline4);
+    container.appendChild(vline4);
   }
+  
   if (diamondShape) {
     container.rotation=-45;
     container.x= size/2
@@ -152,15 +184,23 @@ function makeSpacerNode(size : number) : FrameNode{ //, label : string){
   frame.layoutAlign='MIN';
   frame.appendChild(text);
   frame.appendChild(container);
-  frame.opacity=1;
-  let showInfo=true;
-  showSpacerInfos(frame, figma.root.getPluginData(SpacerInfoStateProperty)!="0");
+  frame.fills=[];
+  frame.opacity=0.8;
+  setSpacerVisibility(frame, figma.root.getPluginData(HideProperty)=="1");
   return frame;
 }
 
-function showSpacerInfos(spacer:FrameNode, isShow : boolean){
+
+/**
+ * ************************
+ * 2- shape version and display state management 
+ * ************************
+ */
+
+
+function setSpacerVisibility(spacer:FrameNode, isHidden : boolean){
   spacer.children.forEach(child => {
-    child.visible=isShow;
+    child.visible=!isHidden;
   });
   //TODO recreate spacer if not on right version
   //if (isShow) spacer.fills=[clone(FrameStyle)]; else spacer.fills=[];
@@ -172,10 +212,9 @@ function showSpacerInfos(spacer:FrameNode, isShow : boolean){
 
 
 
-function showAllSpacerInfos(isShow){
-  figma.root.setPluginData(SpacerInfoStateProperty, isShow? "1":"0");
+function setAllSpacersVisibility(isHidden){
   var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
-  (<FrameNode[]>spacers).forEach(spacer => showSpacerInfos(spacer, isShow));
+  (<FrameNode[]>spacers).forEach(spacer => setSpacerVisibility(spacer, isHidden));
 }
 
 
@@ -201,37 +240,22 @@ figma.ui.onmessage = msg => {
   };
 
   if (msg.type === 'show-spacer-infos') {
-    showAllSpacerInfos(true);
+    setAllSpacersVisibility(false);
     figma.root.setPluginData(HideProperty, "");
   };
 
   if (msg.type === 'hide-spacer-infos') {
-    showAllSpacerInfos(false);
+    setAllSpacersVisibility(true);
     figma.root.setPluginData(HideProperty, "1");
   };
 
-  if (msg.type === 'remove-lone-child-frame') {
-      // clone the properties of the frame
-      let selection = figma.currentPage.selection[0];
-      if (!selection) 
-        return figma.notify("Please select a frame to remove inner frame child");
-      if ((selection.type != "FRAME" && selection.type != "COMPONENT") || selection.children.length!=1 ) 
-        return figma.notify("Please select a frame or component with only 1 frame as child");
-      let parentFrame : DefaultFrameMixin = selection;    
-      if (parentFrame.children[0].type != "FRAME" ) 
-         return figma.notify("Please select a frame with only a frame as child");
-      
-      let child : DefaultFrameMixin = parentFrame.children[0];
-      cloneAutolayoutProperties(child, parentFrame);
-      cloneBlendProperties(child, parentFrame);
-      cloneCornerProperties(child, parentFrame);
-      cloneGeometryProperties(child, parentFrame);
-      child.children.forEach(element => {
-        parentFrame.appendChild(element);
-      });
-      child.remove();
-  };
+ 
 
+  /**
+   * ***********************
+   * 3- spacers positionning
+   * ***********************
+   */
 
   if (msg.type === 'place-spacer') {
     positionVar= msg.position;
@@ -388,12 +412,49 @@ figma.ui.onmessage = msg => {
       }
     } else  figma.notify("Please select an element to add a spacer after");
   }
+
+  /**
+   ************************* 
+   *  4- plugin additional functionalities
+   * ***********************
+   */
+
+  if (msg.type === 'remove-lone-child-frame') {
+    // clone the properties of the frame
+    let selection = figma.currentPage.selection[0];
+    if (!selection) 
+      return figma.notify("Please select a frame to remove inner frame child");
+    if ((selection.type != "FRAME" && selection.type != "COMPONENT") || selection.children.length!=1 ) 
+      return figma.notify("Please select a frame or component with only 1 frame as child");
+    let parentFrame : DefaultFrameMixin = selection;    
+    if (parentFrame.children[0].type != "FRAME" ) 
+       return figma.notify("Please select a frame with only a frame as child");
+    
+    let child : DefaultFrameMixin = parentFrame.children[0];
+    cloneAutolayoutProperties(child, parentFrame);
+    cloneBlendProperties(child, parentFrame);
+    cloneCornerProperties(child, parentFrame);
+    cloneGeometryProperties(child, parentFrame);
+    child.children.forEach(element => {
+      parentFrame.appendChild(element);
+    });
+    child.remove();
 };
 
 
 
 
-//util
+};
+
+
+
+/**
+ * *************************
+ * 5- Utils
+ * *************************
+ * 
+ */
+
 function arrayFrom(str : string){
   return str.split(',').map(Number);
 }
