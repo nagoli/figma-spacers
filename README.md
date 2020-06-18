@@ -1,32 +1,32 @@
 # «Spacers» plugin for Figma
 
-Spacers in autolayouts enable free gaps between components. And its very simple.\
+Manual spaces and Smarter Autolayouts  
+
+> Add custom spaces between component
+> Hide and show spacers in one clic
+> Create new autolayouts in seconds 
+
+Try it, you will be addict.
 
 A plugin by the UX 82 Team > Elsa, Arnaud, Bertrand, Christophe, Guillaume, Olivier
 
-## About the plugin 
 
+> Add custom spaces between component
 
-Figma Autolayouts are great but the uniformity of gap between components may be a problem.
-This Figma plugin enables heteregeneous gaps in autolayout.\
+Select the component where to add a spacer.
+Choose your direction 
+Choose your spacer size
+And the spacer is added to your design 
 
-In practice, spacers in autolayout speed up the design. They allow you to put almost everything in autolayout, but limiting the number of stacking frames. \
+> Hide and show spacers in one clic
 
-Spacers can be shown or hidden just as the pilcrow button (¶) of a word processor.\
+Just switch to see spacers or not 
+The state is saved in the document so you can share it clean. Anyone with the plugin can show them back. 
 
-Autolayout your main frames : set vertical autolayout to your main frames, just add components inside and spacers between them – it is just simple.\
+> Create new autolayouts in seconds 
 
-Tips : in case your spacer is too high for your horizontal layout just change is height : the important is the width.
+If you add a spacer in a direction that does not fit with the parent autolayout, Spacers plugin smartly adds you a new autolayout. 
 
-
-## About using spacers 
-Spacers are [not a correct practice in HTML](https://www.w3.org/TR/WCAG20-TECHS/C18.html) since the presentation concerns must be managed in CSS. But Figma is a presentation tool, isn’t it ?
-
-## Logo contributions : 
-replace by kreationspace from Noun Project 
-
- 
-
-
+It also works with multi selection in a same frame : select at least the first and last element you need to move with a spacer and a inner autolayout will be created.
 
 
