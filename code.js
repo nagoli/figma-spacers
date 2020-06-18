@@ -22,6 +22,7 @@
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
 figma.ui.resize(128, 470);
+// version must change if spacer shape changes
 const VERSION = '1.1';
 //styles
 const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
@@ -52,6 +53,11 @@ var positionState = BOTTOM;
  * 1- the shape/ creation of the spacers
  * ******************
  */
+/**
+ * reshape a frame internal element but the size of the frame is not touched
+ * @param frame
+ * @param size
+ */
 function shapeSpacerNode(frame, size) {
     //customize
     const diamondShape = false;
@@ -62,7 +68,6 @@ function shapeSpacerNode(frame, size) {
         containerSize = Math.round(Math.sqrt(size * size / 2));
     frame.children.forEach(child => child.remove());
     frame.name = size + "px " + SpacerName;
-    frame.resize(size, size);
     frame.fills = [];
     frame.opacity = 1;
     //CONTAINER 
@@ -236,81 +241,130 @@ figma.ui.onmessage = msg => {
     ;
     if (msg.type === 'add-spacer') {
         if (figma.currentPage.selection.length != 0) {
-            let spacer = figma.createFrame();
-            spacer.setPluginData(SizeProperty, String(msg.size));
-            shapeSpacerNode(spacer, msg.size);
-            spacer.layoutAlign = Alignement;
-            let selection = figma.currentPage.selection[0];
-            // add as first child if selection is an empty autolayout
-            if (selection.type === "FRAME" && selection.children.length === 0) {
-                //if not autolyout the frame is set autolayer according to the spacer direction
-                if (selection.layoutMode === "NONE") {
-                    console.log("set autolayout mode to empty frame");
-                    if (positionState === BOTTOM || positionState === TOP)
-                        selection.layoutMode = "VERTICAL";
+            let spacerFrame;
+            //lazy creation of the spacer frame
+            function getSpacer() {
+                if (!spacerFrame) {
+                    let spacer = figma.createFrame();
+                    spacer.setPluginData(SizeProperty, String(msg.size));
+                    let size = msg.size;
+                    spacer.resize(size, size);
+                    shapeSpacerNode(spacer, size);
+                    spacer.layoutAlign = Alignement;
+                    spacerFrame = spacer;
+                }
+                return spacerFrame;
+            }
+            let selection = figma.currentPage.selection;
+            let parentFrame = selection[0].parent;
+            if (parentFrame.type == "INSTANCE") {
+                figma.notify("Spacers cannot be added to instances of components");
+                return;
+            }
+            //check that the whole selection avec the parent
+            let hasUniqueParent = true;
+            selection.forEach(element => {
+                hasUniqueParent = hasUniqueParent && (element.parent == parentFrame);
+            });
+            if (!hasUniqueParent) {
+                figma.notify("Please select only elements having the same parent");
+                return;
+            }
+            //add adequate autolayout around the selection if the parent is not autolayout
+            //then add spacer in correct order
+            function addSpacer(mode, order) {
+                let boundaries = getMinAndMaxIndexesInParent(parentFrame.children, selection);
+                if (!boundaries) {
+                    figma.notify("Invalid selection…");
+                    return;
+                }
+                if (parentFrame.layoutMode != mode) {
+                    //CASE parent is not correct autolayout
+                    if (selection.length == 1 && selection[0].type != "INSTANCE" && selection[0].layoutMode == mode) {
+                        //CASE unique selection is correct autolayout then adds in selection
+                        if (order == "AFTER")
+                            selection[0].appendChild(getSpacer());
+                        else
+                            selection[0].insertChild(0, getSpacer());
+                        return;
+                    }
+                    //CASE of additional autolayout necessary 
+                    let newParent = createEmptyAutolayout(mode);
+                    const firstChildInSelection = parentFrame.children[boundaries.min];
+                    newParent.x = firstChildInSelection.x;
+                    newParent.y = firstChildInSelection.y;
+                    if (selection.length == 1) {
+                        newParent.appendChild(selection[0]);
+                    }
+                    else {
+                        //encapsulate the multi selection in a internal frame
+                        let innerParent = createEmptyAutolayout((mode == "VERTICAL") ? "HORIZONTAL" : "VERTICAL");
+                        for (let i = boundaries.min; i <= boundaries.max; i++) {
+                            //since we remove the previous child at each loop the index remains equal
+                            innerParent.appendChild(parentFrame.children[boundaries.min]);
+                        }
+                        newParent.appendChild(innerParent);
+                        figma.currentPage.selection = [innerParent];
+                    }
+                    if (order == "BEFORE")
+                        newParent.insertChild(0, getSpacer());
                     else
-                        selection.layoutMode = "HORIZONTAL";
-                    selection.counterAxisSizingMode = "AUTO";
-                    selection.itemSpacing = 0;
-                    selection.horizontalPadding = 0;
-                    selection.verticalPadding = 0;
+                        newParent.appendChild(getSpacer());
+                    parentFrame.insertChild(boundaries.min, newParent);
+                    //console.log("05");
                 }
-                selection.insertChild(0, spacer);
+                else {
+                    //CASE parent is correct autolayout
+                    let positionInFrame;
+                    if (order == "AFTER")
+                        positionInFrame = boundaries.max + 1;
+                    else
+                        positionInFrame = boundaries.min;
+                    parentFrame.insertChild(positionInFrame, getSpacer());
+                    //console.log("05 normal");
+                }
             }
-            else {
-                let parentFrame = selection.parent;
-                let positionInFrame = parentFrame.children.indexOf(selection);
-                //add adequate autolayout around the selection if the parent is not autolayout
-                //then add spacer in correct order
-                function addSpacer(mode, order) {
-                    let addToIndex = (order == "BEFORE") ? 0 : 1;
-                    if (parentFrame.type != "FRAME" || parentFrame.layoutMode != mode) {
-                        let newParent = createEmptyAutolayout(mode);
-                        parentFrame.insertChild(positionInFrame, newParent);
-                        newParent.x = selection.x;
-                        newParent.y = selection.y;
-                        newParent.appendChild(selection);
-                        {
-                            newParent.insertChild(addToIndex, spacer);
-                        }
+            //console.log("00");
+            if (positionState === BOTTOM)
+                addSpacer("VERTICAL", "AFTER");
+            if (positionState === TOP)
+                addSpacer("VERTICAL", "BEFORE");
+            if (positionState === RIGHT)
+                addSpacer("HORIZONTAL", "AFTER");
+            if (positionState === LEFT)
+                addSpacer("HORIZONTAL", "BEFORE");
+            //console.log("10");
+            if (positionState === REPLACE) {
+                if (selection.length > 1) {
+                    figma.notify("Please select only one spacer tp be replaced");
+                    return;
+                }
+                if (!selection[0].name.endsWith(SpacerName)) {
+                    figma.notify("Please select a spacer to be replaced");
+                    return;
+                }
+                else {
+                    if (parentFrame.layoutMode === "NONE") {
+                        figma.notify("The spacer to be replaced must be inside an autolayout");
+                        return;
                     }
                     else {
-                        parentFrame.insertChild(positionInFrame + addToIndex, spacer);
+                        parentFrame.insertChild(parentFrame.children.indexOf(selection[0]) + 1, getSpacer());
+                        selection[0].remove();
                     }
                 }
-                if (positionState === BOTTOM)
-                    addSpacer("VERTICAL", "AFTER");
-                if (positionState === TOP)
-                    addSpacer("VERTICAL", "BEFORE");
-                if (positionState === RIGHT)
-                    addSpacer("HORIZONTAL", "AFTER");
-                if (positionState === LEFT)
-                    addSpacer("HORIZONTAL", "BEFORE");
-                if (positionState === REPLACE) {
-                    if (!selection.name.endsWith(SpacerName))
-                        figma.notify("Please select a spacer to be replaced");
-                    else {
-                        let parentFrame = selection.parent;
-                        //position at bottom if not a autolayout
-                        if (parentFrame.type != "FRAME" || parentFrame.layoutMode === "NONE") {
-                            figma.notify("Please select a spacer that is inside an autolayout…");
-                        }
-                        else {
-                            parentFrame.insertChild(positionInFrame + 1, spacer);
-                        }
-                        selection.remove();
-                    }
-                }
-                //trick to improve undo
-                if (positionState != REPLACE)
-                    figma.currentPage.selection = [figma.currentPage.selection[0]];
-                //console.log(figma.currentPage.selection[0]);
-                figma.currentPage.selection = [spacer];
-                //TODO make spacer not expanded in layer panel
             }
+            //console.log("15");
+            //trick to improve undo
+            let oldSelect = figma.currentPage.selection[0];
+            if (spacerFrame)
+                figma.currentPage.selection = [spacerFrame];
+            if (positionState != REPLACE)
+                figma.currentPage.selection = [oldSelect];
         }
-        else
-            figma.notify("Please select an element to add a spacer after");
+        else {
+            figma.notify("Please select at least an element to add a spacer");
+        }
     }
     /**
      *************************
@@ -412,4 +466,26 @@ function createEmptyAutolayout(direction) {
     frame.horizontalPadding = 0;
     frame.verticalPadding = 0;
     return frame;
+}
+/**
+ * extract the smallest and biggest index of component in array
+ * @param parentArray
+ * @param componentArray
+ */
+function getMinAndMaxIndexesInParent(parentArray, componentArray) {
+    let minIndex = parentArray.length;
+    let maxIndex = 0;
+    componentArray.forEach(element => {
+        let index = parentArray.indexOf(element);
+        if (index != -1) {
+            if (index < minIndex)
+                minIndex = index;
+            if (index > maxIndex)
+                maxIndex = index;
+        }
+        //console.log("index="+index+" min="+minIndex+" max"+maxIndex);
+    });
+    if (minIndex > maxIndex)
+        return null;
+    return { 'min': minIndex, 'max': maxIndex };
 }
