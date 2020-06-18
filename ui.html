@@ -5,27 +5,27 @@
         font-size: 13px;
         line-height: 15px;
         letter-spacing: 0.005em;
-        text-align:center;
+        text-align: center;
     }
-    
+
     *:focus {
         outline-color: #D56CEC;
     }
 
-    body{
+    body {
         max-width: 120px;
     }
-    
+
     #show {
         color: #CC00FF;
         border: 1px solid #CC00FF;
     }
-    
+
     #hide {
         color: rgba(0, 0, 0, 0.6);
         border: 1px solid rgba(0, 0, 0, 0.6);
     }
-    
+
     button {
         color: rgba(0, 0, 0, 0.8);
         border: 1px solid rgba(0, 0, 0, 0.8);
@@ -35,11 +35,11 @@
         display: inline-block;
         margin: 0px 7px;
     }
-    
+
     button:hover {
         cursor: pointer;
     }
-    
+
     #switches,
     #spacers {
         display: flex;
@@ -50,49 +50,49 @@
         flex-shrink: 0;
         max-width: 284px;
     }
-    
+
     #spacers {
         margin-top: 18px;
         display: inline-flex;
     }
-    
+
     #position-buttons {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         margin-top: 18px;
-        margin-left: -8px; 
+        margin-left: -8px;
     }
-    
+
     #position-buttons div {
         position: relative;
     }
-    
+
     .rtop {
         grid-column-start: 2;
         grid-row-start: 1;
     }
-    
+
     .rleft {
         grid-column-start: 1;
         grid-row-start: 2;
     }
-    
+
     .rright {
         grid-column-start: 3;
         grid-row-start: 2;
     }
-    
+
     .rbottom {
         grid-column-start: 2;
         grid-row-start: 3;
     }
-    
+
     .rreplace {
         grid-column-start: 2;
         grid-row-start: 2;
     }
-    
+
     .spacer-button {
         width: 40px;
         font-size: 18px;
@@ -104,7 +104,7 @@
         box-shadow: 0px 3px 12px -1px #00000033;
         margin-bottom: 0px;
     }
-    
+
     .spacer-button:hover {
         transition: all 0.2s;
         box-shadow: 0px 3px 3px -1px #00000033;
@@ -112,12 +112,13 @@
         margin-bottom: 1px;
         background-color: rgba(240, 240, 240, 0.1);
     }
-    
+
     .spacer-button div {
         background-color: lightgray;
         vertical-align: middle;
         width: 100px;
     }
+
     .spacer-button p {
         line-height: 0px;
     }
@@ -125,7 +126,7 @@
     button span {
         font-size: 15px;
     }
-    
+
     #switches {
         display: inline-flex;
         justify-content: flex-start;
@@ -135,18 +136,18 @@
         align-items: center;
         position: relative;
     }
-    
+
     .top input:hover,
     .top label:hover {
         cursor: pointer;
     }
-    
+
     #switches label {
         margin-right: 51px;
         display: inline-flex;
         align-items: center;
     }
-    
+
     #switches label:after {
         content: "";
         width: 18px;
@@ -157,19 +158,19 @@
         transition: all 0.3s;
         position: absolute;
     }
-    
+
     #switches input:checked+label:after {
         position: absolute;
         transform: translateX(-20px);
         transition: all 0.3s;
         background-color: #CC00FF;
     }
-    
+
     #switches input:checked+label:before {
         background-color: #c3c2c2;
         transition: all 0.2s ease;
     }
-    
+
     #switches label:before {
         content: "";
         width: 40px;
@@ -193,17 +194,17 @@
         position: absolute;
         left: 23px;
     }
-    
+
     #position-buttons {
         width: 99px;
         height: 99px;
         margin-top: 30px;
     }
-    
+
     #position-buttons label {
         position: relative;
     }
-    
+
     #position-buttons label {
         width: 30px;
         height: 30px;
@@ -221,47 +222,47 @@
         background-repeat: no-repeat;
         background-size: 24px auto;
     }
-    
+
     .rtop label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='rgba(204, 0, 255, 1)'%3E%3Cpath d='M4.465 366.475l7.07 7.071c4.686 4.686 12.284 4.686 16.971 0L224 178.053l195.494 195.493c4.686 4.686 12.284 4.686 16.971 0l7.07-7.071c4.686-4.686 4.686-12.284 0-16.97l-211.05-211.051c-4.686-4.686-12.284-4.686-16.971 0L4.465 349.505c-4.687 4.686-4.687 12.284 0 16.97z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rright label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='rgba(204, 0, 255, 1)'%3E%3Cpath d='M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rbottom label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='rgba(204, 0, 255, 1)'%3E%3Cpath d='M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rleft label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='rgba(204, 0, 255, 1)'%3E%3Cpath d='M238.475 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L50.053 256 245.546 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L10.454 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rreplace label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='rgba(204, 0, 255, 1)'%3E%3Cpath d='M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM352 32.491a15.88 15.88 0 0 1 7.431 4.195l51.882 51.883A15.885 15.885 0 0 1 415.508 96H352V32.491zM288 464c0 8.822-7.178 16-16 16H48c-8.822 0-16-7.178-16-16V144c0-8.822 7.178-16 16-16h80v240c0 26.51 21.49 48 48 48h112v48zm128-96c0 8.822-7.178 16-16 16H176c-8.822 0-16-7.178-16-16V48c0-8.822 7.178-16 16-16h144v72c0 13.2 10.8 24 24 24h72v240z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rtop input:checked+label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='white'%3E%3Cpath d='M4.465 366.475l7.07 7.071c4.686 4.686 12.284 4.686 16.971 0L224 178.053l195.494 195.493c4.686 4.686 12.284 4.686 16.971 0l7.07-7.071c4.686-4.686 4.686-12.284 0-16.97l-211.05-211.051c-4.686-4.686-12.284-4.686-16.971 0L4.465 349.505c-4.687 4.686-4.687 12.284 0 16.97z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rright input:checked+label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='white'%3E%3Cpath d='M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rbottom input:checked+label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='white'%3E%3Cpath d='M443.5 162.6l-7.1-7.1c-4.7-4.7-12.3-4.7-17 0L224 351 28.5 155.5c-4.7-4.7-12.3-4.7-17 0l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l211 211.1c4.7 4.7 12.3 4.7 17 0l211-211.1c4.8-4.7 4.8-12.3.1-17z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rleft input:checked+label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='white'%3E%3Cpath d='M238.475 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L50.053 256 245.546 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L10.454 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z'/%3E%3C/svg%3E") !important;
     }
-    
+
     .rreplace input:checked+label {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' fill='white'%3E%3Cpath d='M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM352 32.491a15.88 15.88 0 0 1 7.431 4.195l51.882 51.883A15.885 15.885 0 0 1 415.508 96H352V32.491zM288 464c0 8.822-7.178 16-16 16H48c-8.822 0-16-7.178-16-16V144c0-8.822 7.178-16 16-16h80v240c0 26.51 21.49 48 48 48h112v48zm128-96c0 8.822-7.178 16-16 16H176c-8.822 0-16-7.178-16-16V48c0-8.822 7.178-16 16-16h144v72c0 13.2 10.8 24 24 24h72v240z'/%3E%3C/svg%3E") !important;
     }
-    
+
     #switches input,
     #position-buttons input {
         position: absolute;
@@ -269,24 +270,24 @@
         opacity: 0;
         height: 100%;
     }
-    
+
     #position-buttons input+label:hover {
         background-color: #832d9838;
         box-shadow: 0 -1px 0px #3b004a24;
     }
-    
+
     #position-buttons input:checked+label {
         background-color: #CC00FF;
         box-shadow: 0 -1px 0px grey;
     }
-    
+
     .top {
         display: flex;
         justify-content: space-between;
         margin: 10px 31px 9px 40px;
         align-items: center
     }
-    
+
     #config {
         padding: 9px 0px 2px 0px;
         margin: 0;
@@ -297,46 +298,46 @@
         border-radius: 0;
         border-bottom: 2px solid transparent;
     }
-    
+
     #config:hover,
     .cancel:hover,
     .reset:hover {
         border-bottom: 2px solid #E1A0EF;
     }
-    
+
     #config svg,
     .reset svg,
     .cancel svg {
         margin-right: 5px;
         fill: #CC00FF;
     }
-    
-    
+
+
     #configDiv .cancel {
         margin-left: 0;
         padding-left: 0;
     }
-    
+
     #configDiv {
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
         margin-top: 20px;
-       
+
         margin: 20px auto;
     }
-    
+
     #configDiv button {
         padding: 0;
         line-height: 0px;
         height: 24px;
         margin-top: 6px;
     }
-    
+
     #configDiv input {
         padding: 4px 4px;
-    } 
-    
+    }
+
     #configDiv .ok {
         background-color: #CC00FF;
         color: white;
@@ -348,13 +349,13 @@
         margin-bottom: 6px;
         transition: all 0.2s;
     }
-    
+
     #configDiv .ok:hover {
         background-color: rgb(191, 4, 238);
         box-shadow: 0 1px 2px #6d0f6a8a;
         transition: all 0.2s;
     }
-    
+
     .cancel,
     .reset {
         border: 0;
@@ -370,81 +371,108 @@
 <div id="main">
     <div id="switches">
         <svg width="26" height="26" viewBox="0 0 34 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M30.3038 12.2998V9.04448H27.0853V6.79595H24.0353V3.54061H26.4113V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V23.2405H8.16166V25.791H14.1606V22.1498H10.049V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038ZM12.2059 14.3638H8.97051V8.96058H12.189V14.3638H12.2059ZM23.6646 14.3638H20.446V8.96058H23.6646V14.3638Z" fill="#CC00FF"/>
-  <path d="M0.361328 31.6709L1.76758 31.5342C1.85221 32.0062 2.02311 32.3529 2.28027 32.5742C2.54069 32.7956 2.89062 32.9062 3.33008 32.9062C3.79557 32.9062 4.14551 32.8086 4.37988 32.6133C4.61751 32.4147 4.73633 32.1836 4.73633 31.9199C4.73633 31.7507 4.68587 31.6074 4.58496 31.4902C4.4873 31.3698 4.31478 31.2656 4.06738 31.1777C3.89811 31.1191 3.51237 31.015 2.91016 30.8652C2.13542 30.6732 1.5918 30.4372 1.2793 30.1572C0.839844 29.7633 0.620117 29.2832 0.620117 28.7168C0.620117 28.3522 0.722656 28.012 0.927734 27.6963C1.13607 27.3773 1.43392 27.1348 1.82129 26.9688C2.21191 26.8027 2.68229 26.7197 3.23242 26.7197C4.13086 26.7197 4.80632 26.9167 5.25879 27.3105C5.71452 27.7044 5.95378 28.2301 5.97656 28.8877L4.53125 28.9512C4.4694 28.5833 4.33594 28.3197 4.13086 28.1602C3.92904 27.9974 3.62467 27.916 3.21777 27.916C2.79785 27.916 2.46908 28.0023 2.23145 28.1748C2.07845 28.2855 2.00195 28.4336 2.00195 28.6191C2.00195 28.7884 2.07357 28.9333 2.2168 29.0537C2.39909 29.2067 2.8418 29.3662 3.54492 29.5322C4.24805 29.6982 4.76725 29.8708 5.10254 30.0498C5.44108 30.2256 5.70475 30.4681 5.89355 30.7773C6.08561 31.0833 6.18164 31.4626 6.18164 31.915C6.18164 32.3252 6.06771 32.7093 5.83984 33.0674C5.61198 33.4255 5.28971 33.6924 4.87305 33.8682C4.45638 34.0407 3.93717 34.127 3.31543 34.127C2.41048 34.127 1.71549 33.9186 1.23047 33.502C0.745443 33.082 0.455729 32.4717 0.361328 31.6709ZM8.30234 34V26.8418H9.74766V29.6592H12.5797V26.8418H14.025V34H12.5797V30.8701H9.74766V34H8.30234ZM16.1311 30.4648C16.1311 29.7357 16.2401 29.1237 16.4582 28.6289C16.621 28.2643 16.8423 27.9372 17.1223 27.6475C17.4055 27.3577 17.7147 27.1429 18.05 27.0029C18.496 26.8141 19.0103 26.7197 19.593 26.7197C20.6477 26.7197 21.4908 27.0469 22.1223 27.7012C22.757 28.3555 23.0744 29.2653 23.0744 30.4307C23.0744 31.5863 22.7603 32.4912 22.132 33.1455C21.5038 33.7965 20.6639 34.1221 19.6125 34.1221C18.548 34.1221 17.7017 33.7982 17.0734 33.1504C16.4452 32.4993 16.1311 31.6042 16.1311 30.4648ZM17.6203 30.416C17.6203 31.2266 17.8075 31.8418 18.1818 32.2617C18.5562 32.6784 19.0314 32.8867 19.6076 32.8867C20.1838 32.8867 20.6558 32.68 21.0236 32.2666C21.3947 31.8499 21.5803 31.2266 21.5803 30.3965C21.5803 29.5762 21.3996 28.9642 21.0383 28.5605C20.6802 28.1569 20.2033 27.9551 19.6076 27.9551C19.0119 27.9551 18.5318 28.1602 18.1672 28.5703C17.8026 28.9772 17.6203 29.5924 17.6203 30.416ZM26.1229 34L24.4139 26.8418H25.8934L26.9725 31.7588L28.2811 26.8418H29.9998L31.2547 31.8418L32.3533 26.8418H33.8084L32.0701 34H30.5369L29.1111 28.6484L27.6902 34H26.1229Z" fill="#CC00FF"/>
-  </svg>
+            <path
+                d="M30.3038 12.2998V9.04448H27.0853V6.79595H24.0353V3.54061H26.4113V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V23.2405H8.16166V25.791H14.1606V22.1498H10.049V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038ZM12.2059 14.3638H8.97051V8.96058H12.189V14.3638H12.2059ZM23.6646 14.3638H20.446V8.96058H23.6646V14.3638Z"
+                fill="#CC00FF" />
+            <path
+                d="M0.361328 31.6709L1.76758 31.5342C1.85221 32.0062 2.02311 32.3529 2.28027 32.5742C2.54069 32.7956 2.89062 32.9062 3.33008 32.9062C3.79557 32.9062 4.14551 32.8086 4.37988 32.6133C4.61751 32.4147 4.73633 32.1836 4.73633 31.9199C4.73633 31.7507 4.68587 31.6074 4.58496 31.4902C4.4873 31.3698 4.31478 31.2656 4.06738 31.1777C3.89811 31.1191 3.51237 31.015 2.91016 30.8652C2.13542 30.6732 1.5918 30.4372 1.2793 30.1572C0.839844 29.7633 0.620117 29.2832 0.620117 28.7168C0.620117 28.3522 0.722656 28.012 0.927734 27.6963C1.13607 27.3773 1.43392 27.1348 1.82129 26.9688C2.21191 26.8027 2.68229 26.7197 3.23242 26.7197C4.13086 26.7197 4.80632 26.9167 5.25879 27.3105C5.71452 27.7044 5.95378 28.2301 5.97656 28.8877L4.53125 28.9512C4.4694 28.5833 4.33594 28.3197 4.13086 28.1602C3.92904 27.9974 3.62467 27.916 3.21777 27.916C2.79785 27.916 2.46908 28.0023 2.23145 28.1748C2.07845 28.2855 2.00195 28.4336 2.00195 28.6191C2.00195 28.7884 2.07357 28.9333 2.2168 29.0537C2.39909 29.2067 2.8418 29.3662 3.54492 29.5322C4.24805 29.6982 4.76725 29.8708 5.10254 30.0498C5.44108 30.2256 5.70475 30.4681 5.89355 30.7773C6.08561 31.0833 6.18164 31.4626 6.18164 31.915C6.18164 32.3252 6.06771 32.7093 5.83984 33.0674C5.61198 33.4255 5.28971 33.6924 4.87305 33.8682C4.45638 34.0407 3.93717 34.127 3.31543 34.127C2.41048 34.127 1.71549 33.9186 1.23047 33.502C0.745443 33.082 0.455729 32.4717 0.361328 31.6709ZM8.30234 34V26.8418H9.74766V29.6592H12.5797V26.8418H14.025V34H12.5797V30.8701H9.74766V34H8.30234ZM16.1311 30.4648C16.1311 29.7357 16.2401 29.1237 16.4582 28.6289C16.621 28.2643 16.8423 27.9372 17.1223 27.6475C17.4055 27.3577 17.7147 27.1429 18.05 27.0029C18.496 26.8141 19.0103 26.7197 19.593 26.7197C20.6477 26.7197 21.4908 27.0469 22.1223 27.7012C22.757 28.3555 23.0744 29.2653 23.0744 30.4307C23.0744 31.5863 22.7603 32.4912 22.132 33.1455C21.5038 33.7965 20.6639 34.1221 19.6125 34.1221C18.548 34.1221 17.7017 33.7982 17.0734 33.1504C16.4452 32.4993 16.1311 31.6042 16.1311 30.4648ZM17.6203 30.416C17.6203 31.2266 17.8075 31.8418 18.1818 32.2617C18.5562 32.6784 19.0314 32.8867 19.6076 32.8867C20.1838 32.8867 20.6558 32.68 21.0236 32.2666C21.3947 31.8499 21.5803 31.2266 21.5803 30.3965C21.5803 29.5762 21.3996 28.9642 21.0383 28.5605C20.6802 28.1569 20.2033 27.9551 19.6076 27.9551C19.0119 27.9551 18.5318 28.1602 18.1672 28.5703C17.8026 28.9772 17.6203 29.5924 17.6203 30.416ZM26.1229 34L24.4139 26.8418H25.8934L26.9725 31.7588L28.2811 26.8418H29.9998L31.2547 31.8418L32.3533 26.8418H33.8084L32.0701 34H30.5369L29.1111 28.6484L27.6902 34H26.1229Z"
+                fill="#CC00FF" />
+        </svg>
 
         <input type="checkbox" id="showToggle" checked onchange="switchShow()" /> <label for="showToggle"></label>
         <svg width="26" height="36" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0)">
-    <path d="M0.732422 34V26.8418H2.17773V29.6592H5.00977V26.8418H6.45508V34H5.00977V30.8701H2.17773V34H0.732422ZM11.1102 34V26.8418H12.5555V34H11.1102ZM17.1324 26.8418H19.774C20.3697 26.8418 20.8238 26.8874 21.1363 26.9785C21.5562 27.1022 21.916 27.3219 22.2154 27.6377C22.5149 27.9535 22.7428 28.3408 22.899 28.7998C23.0553 29.2555 23.1334 29.8187 23.1334 30.4893C23.1334 31.0785 23.0602 31.5863 22.9137 32.0127C22.7346 32.5335 22.4791 32.9551 22.1471 33.2773C21.8964 33.5215 21.5579 33.7119 21.1314 33.8486C20.8124 33.9495 20.386 34 19.8521 34H17.1324V26.8418ZM18.5777 28.0527V32.7939H19.6568C20.0605 32.7939 20.3518 32.7712 20.5309 32.7256C20.7652 32.667 20.9589 32.5677 21.1119 32.4277C21.2682 32.2878 21.3951 32.0583 21.4928 31.7393C21.5904 31.417 21.6393 30.9792 21.6393 30.4258C21.6393 29.8724 21.5904 29.4476 21.4928 29.1514C21.3951 28.8551 21.2584 28.624 21.0826 28.458C20.9068 28.292 20.6839 28.1797 20.4137 28.1211C20.2118 28.0755 19.8163 28.0527 19.2271 28.0527H18.5777ZM27.5639 34V26.8418H32.8715V28.0527H29.0092V29.6396H32.6029V30.8457H29.0092V32.7939H33.0082V34H27.5639Z" fill="#969696"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M26.4113 2V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V22H7V21H8V20H9V19H10V18H11V17H12V16H13V15H14V14H15V13H16V12H17V11H18V10H19V9H20V8H21V7H22V6H23V5H24V4H24.0353V3.54061H25V3H26V2H26.4113ZM27 6.79595V7H26V8H25V9H24V10H23.6646V14.3638H20.446V13H20V14H19V15H18V16H17V17H16V18H15V19H14V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038V9.04448H27.0853V6.79595H27ZM11 22.1498V23H10V24H9V25H8.16166V25.791H14.1606V22.1498H11ZM8.97051 14.3638H12.189V8.96058H8.97051V14.3638Z" fill="#969696"/>
-    <path d="M5 25H6V26H5V25Z" fill="#CC00FF"/>
-    <path d="M6 24H7V25H6V24Z" fill="#CC00FF"/>
-    <path d="M7 23H8V24H7V23Z" fill="#CC00FF"/>
-    <path d="M8 22H9V23H8V22Z" fill="#CC00FF"/>
-    <path d="M9 21H10V22H9V21Z" fill="#CC00FF"/>
-    <path d="M10 20H11V21H10V20Z" fill="#CC00FF"/>
-    <path d="M11 19H12V20H11V19Z" fill="#CC00FF"/>
-    <path d="M12 18H13V19H12V18Z" fill="#CC00FF"/>
-    <path d="M13 17H14V18H13V17Z" fill="#CC00FF"/>
-    <path d="M14 16H15V17H14V16Z" fill="#CC00FF"/>
-    <path d="M15 15H16V16H15V15Z" fill="#CC00FF"/>
-    <path d="M16 14H17V15H16V14Z" fill="#CC00FF"/>
-    <path d="M17 13H18V14H17V13Z" fill="#CC00FF"/>
-    <path d="M18 12H19V13H18V12Z" fill="#CC00FF"/>
-    <path d="M19 11H20V12H19V11Z" fill="#CC00FF"/>
-    <path d="M20 10H21V11H20V10Z" fill="#CC00FF"/>
-    <path d="M21 9H22V10H21V9Z" fill="#CC00FF"/>
-    <path d="M22 8H23V9H22V8Z" fill="#CC00FF"/>
-    <path d="M23 7H24V8H23V7Z" fill="#CC00FF"/>
-    <path d="M24 6H25V7H24V6Z" fill="#CC00FF"/>
-    <path d="M25 5H26V6H25V5Z" fill="#CC00FF"/>
-    <path d="M26 4H27V5H26V4Z" fill="#CC00FF"/>
-    <path d="M27 3H28V4H27V3Z" fill="#CC00FF"/>
-    <path d="M28 2H29V3H28V2Z" fill="#CC00FF"/>
-    </g>
-    <defs>
-    <clipPath id="clip0">
-    <rect width="34" height="34" fill="white"/>
-    </clipPath>
-    </defs>
-    </svg>
+            <g clip-path="url(#clip0)">
+                <path
+                    d="M0.732422 34V26.8418H2.17773V29.6592H5.00977V26.8418H6.45508V34H5.00977V30.8701H2.17773V34H0.732422ZM11.1102 34V26.8418H12.5555V34H11.1102ZM17.1324 26.8418H19.774C20.3697 26.8418 20.8238 26.8874 21.1363 26.9785C21.5562 27.1022 21.916 27.3219 22.2154 27.6377C22.5149 27.9535 22.7428 28.3408 22.899 28.7998C23.0553 29.2555 23.1334 29.8187 23.1334 30.4893C23.1334 31.0785 23.0602 31.5863 22.9137 32.0127C22.7346 32.5335 22.4791 32.9551 22.1471 33.2773C21.8964 33.5215 21.5579 33.7119 21.1314 33.8486C20.8124 33.9495 20.386 34 19.8521 34H17.1324V26.8418ZM18.5777 28.0527V32.7939H19.6568C20.0605 32.7939 20.3518 32.7712 20.5309 32.7256C20.7652 32.667 20.9589 32.5677 21.1119 32.4277C21.2682 32.2878 21.3951 32.0583 21.4928 31.7393C21.5904 31.417 21.6393 30.9792 21.6393 30.4258C21.6393 29.8724 21.5904 29.4476 21.4928 29.1514C21.3951 28.8551 21.2584 28.624 21.0826 28.458C20.9068 28.292 20.6839 28.1797 20.4137 28.1211C20.2118 28.0755 19.8163 28.0527 19.2271 28.0527H18.5777ZM27.5639 34V26.8418H32.8715V28.0527H29.0092V29.6396H32.6029V30.8457H29.0092V32.7939H33.0082V34H27.5639Z"
+                    fill="#969696" />
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M26.4113 2V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V22H7V21H8V20H9V19H10V18H11V17H12V16H13V15H14V14H15V13H16V12H17V11H18V10H19V9H20V8H21V7H22V6H23V5H24V4H24.0353V3.54061H25V3H26V2H26.4113ZM27 6.79595V7H26V8H25V9H24V10H23.6646V14.3638H20.446V13H20V14H19V15H18V16H17V17H16V18H15V19H14V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038V9.04448H27.0853V6.79595H27ZM11 22.1498V23H10V24H9V25H8.16166V25.791H14.1606V22.1498H11ZM8.97051 14.3638H12.189V8.96058H8.97051V14.3638Z"
+                    fill="#969696" />
+                <path d="M5 25H6V26H5V25Z" fill="#CC00FF" />
+                <path d="M6 24H7V25H6V24Z" fill="#CC00FF" />
+                <path d="M7 23H8V24H7V23Z" fill="#CC00FF" />
+                <path d="M8 22H9V23H8V22Z" fill="#CC00FF" />
+                <path d="M9 21H10V22H9V21Z" fill="#CC00FF" />
+                <path d="M10 20H11V21H10V20Z" fill="#CC00FF" />
+                <path d="M11 19H12V20H11V19Z" fill="#CC00FF" />
+                <path d="M12 18H13V19H12V18Z" fill="#CC00FF" />
+                <path d="M13 17H14V18H13V17Z" fill="#CC00FF" />
+                <path d="M14 16H15V17H14V16Z" fill="#CC00FF" />
+                <path d="M15 15H16V16H15V15Z" fill="#CC00FF" />
+                <path d="M16 14H17V15H16V14Z" fill="#CC00FF" />
+                <path d="M17 13H18V14H17V13Z" fill="#CC00FF" />
+                <path d="M18 12H19V13H18V12Z" fill="#CC00FF" />
+                <path d="M19 11H20V12H19V11Z" fill="#CC00FF" />
+                <path d="M20 10H21V11H20V10Z" fill="#CC00FF" />
+                <path d="M21 9H22V10H21V9Z" fill="#CC00FF" />
+                <path d="M22 8H23V9H22V8Z" fill="#CC00FF" />
+                <path d="M23 7H24V8H23V7Z" fill="#CC00FF" />
+                <path d="M24 6H25V7H24V6Z" fill="#CC00FF" />
+                <path d="M25 5H26V6H25V5Z" fill="#CC00FF" />
+                <path d="M26 4H27V5H26V4Z" fill="#CC00FF" />
+                <path d="M27 3H28V4H27V3Z" fill="#CC00FF" />
+                <path d="M28 2H29V3H28V2Z" fill="#CC00FF" />
+            </g>
+            <defs>
+                <clipPath id="clip0">
+                    <rect width="34" height="34" fill="white" />
+                </clipPath>
+            </defs>
+        </svg>
 
 
 
     </div>
 
 
-<div id="spacers">
+    <div id="position-buttons">
+        <div class="rleft"><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
+                name="position"><label for="idleft"></label></div>
+        <div class="rbottom"><input type="radio" id="idbottom" class="position" onclick="place('BOTTOM')"
+                name="position" checked="checked"><label for="idbottom"></label></div>
+        <div class="rright"><input type="radio" id="idright" class="position" onclick="place('RIGHT')"
+                name="position"><label for="idright"></label></div>
+        <div class="rtop"><input type="radio" class="idposition" id="idtop" onclick="place('TOP')"
+                name="position"><label for="idtop"></label></div>
+        <div class="rreplace"><input type="radio" id="idreplace" class="position" onclick="place('REPLACE')"
+                name="position"><label for="idreplace"></label></div>
+    </div>
+
+    <div id="spacers">
+    </div>
+
+
+
+
 </div>
 
-
-<div id="position-buttons">
-    <div class="rleft"><input type="radio" id="idleft" class="position" onclick="place('LEFT')" name="position"><label for="idleft"></label></div>
-    <div class="rbottom"><input type="radio" id="idbottom" class="position" onclick="place('BOTTOM')" name="position" checked="checked"><label for="idbottom"></label></div>
-    <div class="rright"><input type="radio" id="idright" class="position" onclick="place('RIGHT')" name="position"><label for="idright"></label></div>
-    <div class="rtop"><input type="radio" class="idposition" id="idtop" onclick="place('TOP')" name="position"><label for="idtop"></label></div>
-    <div class="rreplace"><input type="radio" id="idreplace" class="position" onclick="place('REPLACE')" name="position"><label for="idreplace"></label></div>
-</div>
-
-</div>
-
-<button id="config" onclick="config()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14" height="14"><path d="M502.6 389.5L378.2 265c-15.6-15.6-36.1-23.4-56.6-23.4-15.4 0-30.8 4.4-44.1 13.3L192 169.4V96L64 0 0 64l96 128h73.4l85.5 85.5c-20.6 31.1-17.2 73.3 10.2 100.7l124.5 124.5c6.2 6.2 14.4 9.4 22.6 9.4 8.2 0 16.4-3.1 22.6-9.4l67.9-67.9c12.4-12.6 12.4-32.8-.1-45.3zM160 158.1v1.9h-48L42.3 67 67 42.3l93 69.7v46.1zM412.1 480L287.7 355.5c-9.1-9.1-14.1-21.1-14.1-33.9 0-12.8 5-24.9 14.1-33.9 9.1-9.1 21.1-14.1 33.9-14.1 12.8 0 24.9 5 33.9 14.1L480 412.1 412.1 480zM64 432c0 8.8 7.2 16 16 16s16-7.2 16-16-7.2-16-16-16-16 7.2-16 16zM276.8 66.9C299.5 44.2 329.4 32 360.6 32c6.9 0 13.8.6 20.7 1.8L312 103.2l13.8 83 83.1 13.8 69.3-69.3c6.7 38.2-5.3 76.8-33.1 104.5-8.9 8.9-19.1 16-30 21.5l23.6 23.6c10.4-6.2 20.2-13.6 29-22.5 37.8-37.8 52.7-91.4 39.7-143.3-2.3-9.5-9.7-17-19.1-19.6-9.5-2.6-19.7 0-26.7 7l-63.9 63.9-44.2-7.4-7.4-44.2L410 50.3c6.9-6.9 9.6-17.1 7-26.5-2.6-9.5-10.2-16.8-19.7-19.2C345.6-8.3 292 6.5 254.1 44.3c-12.9 12.9-22.9 27.9-30.1 44v67.8l22.1 22.1c-9.6-40.4 1.6-82.2 30.7-111.3zM107 467.1c-16.6 16.6-45.6 16.6-62.2 0-17.1-17.1-17.1-45.1 0-62.2l146.1-146.1-22.6-22.6L22.2 382.3c-29.6 29.6-29.6 77.8 0 107.5C36.5 504.1 55.6 512 75.9 512c20.3 0 39.4-7.9 53.7-22.3L231.4 388c-6.7-9.2-11.8-19.3-15.5-29.8L107 467.1z"/></svg>Config</button>
+<button id="config" onclick="config()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14"
+        height="14">
+        <path
+            d="M502.6 389.5L378.2 265c-15.6-15.6-36.1-23.4-56.6-23.4-15.4 0-30.8 4.4-44.1 13.3L192 169.4V96L64 0 0 64l96 128h73.4l85.5 85.5c-20.6 31.1-17.2 73.3 10.2 100.7l124.5 124.5c6.2 6.2 14.4 9.4 22.6 9.4 8.2 0 16.4-3.1 22.6-9.4l67.9-67.9c12.4-12.6 12.4-32.8-.1-45.3zM160 158.1v1.9h-48L42.3 67 67 42.3l93 69.7v46.1zM412.1 480L287.7 355.5c-9.1-9.1-14.1-21.1-14.1-33.9 0-12.8 5-24.9 14.1-33.9 9.1-9.1 21.1-14.1 33.9-14.1 12.8 0 24.9 5 33.9 14.1L480 412.1 412.1 480zM64 432c0 8.8 7.2 16 16 16s16-7.2 16-16-7.2-16-16-16-16 7.2-16 16zM276.8 66.9C299.5 44.2 329.4 32 360.6 32c6.9 0 13.8.6 20.7 1.8L312 103.2l13.8 83 83.1 13.8 69.3-69.3c6.7 38.2-5.3 76.8-33.1 104.5-8.9 8.9-19.1 16-30 21.5l23.6 23.6c10.4-6.2 20.2-13.6 29-22.5 37.8-37.8 52.7-91.4 39.7-143.3-2.3-9.5-9.7-17-19.1-19.6-9.5-2.6-19.7 0-26.7 7l-63.9 63.9-44.2-7.4-7.4-44.2L410 50.3c6.9-6.9 9.6-17.1 7-26.5-2.6-9.5-10.2-16.8-19.7-19.2C345.6-8.3 292 6.5 254.1 44.3c-12.9 12.9-22.9 27.9-30.1 44v67.8l22.1 22.1c-9.6-40.4 1.6-82.2 30.7-111.3zM107 467.1c-16.6 16.6-45.6 16.6-62.2 0-17.1-17.1-17.1-45.1 0-62.2l146.1-146.1-22.6-22.6L22.2 382.3c-29.6 29.6-29.6 77.8 0 107.5C36.5 504.1 55.6 512 75.9 512c20.3 0 39.4-7.9 53.7-22.3L231.4 388c-6.7-9.2-11.8-19.3-15.5-29.8L107 467.1z" />
+        </svg>Config</button>
 
 
 <div id="configDiv">
     <input id="values" placeholder="2, 4, 60"></input>
     <button onclick="setSpacers(arrayFrom(valueInput.value))" class="ok">ok</button>
-    <button onclick="setSpacers(spacerValues)" class="cancel"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="10" height="10"><path d="M231.536 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L60.113 273H436c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H60.113L238.607 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z"/></svg>cancel</button>
-    <button onclick="valueInput.value = Base8.toString();" class="reset"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="10" height="10"><path d="M492 8h-10c-6.627 0-12 5.373-12 12v110.627C426.929 57.261 347.224 8 256 8 123.228 8 14.824 112.338 8.31 243.493 7.971 250.311 13.475 256 20.301 256h10.016c6.353 0 11.646-4.949 11.977-11.293C48.157 132.216 141.097 42 256 42c82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12zm-.301 248h-10.015c-6.352 0-11.647 4.949-11.977 11.293C463.841 380.158 370.546 470 256 470c-82.608 0-154.672-46.952-190.299-116H180c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H20c-6.627 0-12 5.373-12 12v160c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V381.373C85.071 454.739 164.777 504 256 504c132.773 0 241.176-104.338 247.69-235.493.339-6.818-5.165-12.507-11.991-12.507z"/></svg>base 8</button> 
+    <button onclick="setSpacers(spacerValues)" class="cancel"> <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512" width="10" height="10">
+            <path
+                d="M231.536 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L60.113 273H436c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H60.113L238.607 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z" />
+            </svg>cancel</button>
+    <button onclick="valueInput.value = Base8.toString();" class="reset"><svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512" width="10" height="10">
+            <path
+                d="M492 8h-10c-6.627 0-12 5.373-12 12v110.627C426.929 57.261 347.224 8 256 8 123.228 8 14.824 112.338 8.31 243.493 7.971 250.311 13.475 256 20.301 256h10.016c6.353 0 11.646-4.949 11.977-11.293C48.157 132.216 141.097 42 256 42c82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12zm-.301 248h-10.015c-6.352 0-11.647 4.949-11.977 11.293C463.841 380.158 370.546 470 256 470c-82.608 0-154.672-46.952-190.299-116H180c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H20c-6.627 0-12 5.373-12 12v160c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V381.373C85.071 454.739 164.777 504 256 504c132.773 0 241.176-104.338 247.69-235.493.339-6.818-5.165-12.507-11.991-12.507z" />
+            </svg>base 8</button>
 </div>
 
 
 
 <script>
     var Base8 = [8, 16, 24, 32, 40, 48];
-    
+
     //state
     var hiddenState;
     var spacerValues;
@@ -466,13 +494,13 @@
         //console.log("refresh UI if necessary");
         if (event.data.pluginMessage.type === "set-properties-from-page") {
             var spacers = event.data.pluginMessage.spacers;
-            if (String(spacers)!==String(spacerValues)) {
-                console.log("diff in spacers list : doc property="+spacers+" plugin="+spacerValues);
+            if (String(spacers) !== String(spacerValues)) {
+                console.log("diff in spacers list : doc property=" + spacers + " plugin=" + spacerValues);
                 setSpacers(event.data.pluginMessage.spacers);
             }
             var hidden = event.data.pluginMessage.hide;
-            if (hidden!=hiddenState){
-                console.log("hidden state different : doc property="+hidden+" plugin="+hiddenState);
+            if (hidden != hiddenState) {
+                console.log("hidden state different : doc property=" + hidden + " plugin=" + hiddenState);
                 if (hidden) hide(); else show();
             }
         }
@@ -531,7 +559,7 @@
     function createSpacerButton(size) {
         var button = document.createElement("button");
         button.id = "add" + size;
-        button.onclick = function() {
+        button.onclick = function () {
             add(size)
         };
         button.className = "spacer-button";
@@ -592,4 +620,4 @@
     post("get-properties-in-page");
     //check every 30s if properties have changed
     window.setInterval(post, 30000, "get-properties-in-page");
-</script> 
+</script>
