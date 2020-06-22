@@ -289,7 +289,7 @@ figma.ui.onmessage = msg => {
                         return;
                     }
                     //CASE of additional autolayout necessary 
-                    let newParent = createEmptyAutolayout(mode);
+                    let newParent = createEmptyAutolayout(mode, (selection[0].parent.type === 'PAGE'));
                     const firstChildInSelection = parentFrame.children[boundaries.min];
                     newParent.x = firstChildInSelection.x;
                     newParent.y = firstChildInSelection.y;
