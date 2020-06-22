@@ -507,13 +507,14 @@ function cloneBlendProperties(source: DefaultFrameMixin, destination: DefaultFra
 }
 
 
-function createEmptyAutolayout(direction: "HORIZONTAL" | "VERTICAL"): FrameNode {
+function createEmptyAutolayout(direction: "HORIZONTAL" | "VERTICAL", defaultFill=false): FrameNode {
   let frame: FrameNode = figma.createFrame();
   frame.layoutMode = direction;
   frame.counterAxisSizingMode = "AUTO";
   frame.itemSpacing = 0;
   frame.horizontalPadding = 0;
   frame.verticalPadding = 0;
+  if (!defaultFill) frame.fills=[];
   return frame;
 }
 

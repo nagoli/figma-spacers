@@ -458,13 +458,15 @@ function cloneBlendProperties(source, destination) {
     destination.effects = clone(source.effects);
     destination.effectStyleId = source.effectStyleId;
 }
-function createEmptyAutolayout(direction) {
+function createEmptyAutolayout(direction, defaultFill = false) {
     let frame = figma.createFrame();
     frame.layoutMode = direction;
     frame.counterAxisSizingMode = "AUTO";
     frame.itemSpacing = 0;
     frame.horizontalPadding = 0;
     frame.verticalPadding = 0;
+    if (!defaultFill)
+        frame.fills = [];
     return frame;
 }
 /**
