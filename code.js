@@ -465,6 +465,7 @@ function createEmptyAutolayout(direction, defaultFill = false) {
     frame.itemSpacing = 0;
     frame.horizontalPadding = 0;
     frame.verticalPadding = 0;
+    frame.clipsContent = false;
     if (!defaultFill)
         frame.fills = [];
     return frame;

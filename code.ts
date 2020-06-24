@@ -514,6 +514,7 @@ function createEmptyAutolayout(direction: "HORIZONTAL" | "VERTICAL", defaultFill
   frame.itemSpacing = 0;
   frame.horizontalPadding = 0;
   frame.verticalPadding = 0;
+  frame.clipsContent=false;
   if (!defaultFill) frame.fills=[];
   return frame;
 }
