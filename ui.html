@@ -389,7 +389,7 @@
                 fill="#CC00FF" />
         </svg>
 
-        <input type="checkbox" id="showToggle" checked onchange="switchShow()" /> <label for="showToggle"></label>
+        <input type="checkbox" id="showToggle" checked onchange="switchShow()" title="make spacers visible or not"/> <label for="showToggle"></label>
         <svg width="26" height="36" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0)">
                 <path
@@ -434,16 +434,16 @@
 
 
     <div id="position-buttons">
-        <div class="rleft"><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
-                name="position"><label for="idleft"></label></div>
+        <div class="rleft" ><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
+                name="position"><label for="idleft" title="position spacers on the left of selected element"></label></div>
         <div class="rbottom"><input type="radio" id="idbottom" class="position" onclick="place('BOTTOM')"
-                name="position" checked="checked"><label for="idbottom"></label></div>
+                name="position" checked="checked"><label for="idbottom" title="position spacers at bottom of selected element"></label></div>
         <div class="rright"><input type="radio" id="idright" class="position" onclick="place('RIGHT')"
-                name="position"><label for="idright"></label></div>
+                name="position"><label for="idright" title="position spacers on the right of selected element"></label></div>
         <div class="rtop"><input type="radio" class="idposition" id="idtop" onclick="place('TOP')"
-                name="position"><label for="idtop"></label></div>
+                name="position"><label for="idtop" title="position spacers on top of selected element"></label></div>
         <div class="rreplace"><input type="radio" id="idreplace" class="position" onclick="place('REPLACE')"
-                name="position"><label for="idreplace"></label></div>
+                name="position"><label for="idreplace" title="replace selected spacers by another spacer"></label></div>
     </div>
 
     <div id="spacers">
@@ -465,7 +465,7 @@
         viewBox="0 0 512 512" width="10" height="10">
         <path
             d="M492 8h-10c-6.627 0-12 5.373-12 12v110.627C426.929 57.261 347.224 8 256 8 123.228 8 14.824 112.338 8.31 243.493 7.971 250.311 13.475 256 20.301 256h10.016c6.353 0 11.646-4.949 11.977-11.293C48.157 132.216 141.097 42 256 42c82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12zm-.301 248h-10.015c-6.352 0-11.647 4.949-11.977 11.293C463.841 380.158 370.546 470 256 470c-82.608 0-154.672-46.952-190.299-116H180c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H20c-6.627 0-12 5.373-12 12v160c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V381.373C85.071 454.739 164.777 504 256 504c132.773 0 241.176-104.338 247.69-235.493.339-6.818-5.165-12.507-11.991-12.507z" />
-        </svg>default values</button>
+        </svg>default values (base 8)</button>
     <button onclick="setSpacers(arrayFrom(valueInput.value))" class="ok">ok</button>
     <button onclick="setSpacers(spacerValues)" class="cancel"> <svg xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512" width="10" height="10">
@@ -570,6 +570,7 @@
             add(size)
         };
         button.className = "spacer-button";
+        button.title = "add a "+size+"px spacer beside the selected element";
         var p = document.createElement("p");
         p.innerHTML = "" + size + "px";
         button.appendChild(p);
