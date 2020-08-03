@@ -212,11 +212,18 @@ function setSpacerVisibility(spacer: FrameNode, isHidden: boolean) {
   });
 }
 
-
-
-function setAllSpacersVisibility(isHidden) {
-  var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
+function setSpacersVisibilityInPage(page: PageNode, isHidden : boolean){
+  var spacers = page.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
   (<FrameNode[]>spacers).forEach(spacer => setSpacerVisibility(spacer, isHidden));
+}
+
+
+async function setAllSpacersVisibility(isHidden: boolean) {
+    let active:PageNode = figma.currentPage;
+    setSpacersVisibilityInPage(active,isHidden);
+    figma.root.children.forEach(element => {
+      if (element != active) setSpacersVisibilityInPage(element,isHidden);
+    });
 }
 
 function reshapeAllSpacers() {
@@ -249,6 +256,7 @@ figma.ui.onmessage = msg => {
       //update all spacers with new version
       reshapeAllSpacers();
     }
+    //console.log("Spacers init ok");
   };
 
   //get properties from project
@@ -257,13 +265,16 @@ figma.ui.onmessage = msg => {
   };
 
   if (msg.type === 'show-spacer-infos') {
-    setAllSpacersVisibility(false);
-    figma.root.setPluginData(HideProperty, "");
+    // try to improve perf but the async does not seem to work...
+   setAllSpacersVisibility(false).then(function (){
+      figma.root.setPluginData(HideProperty, ""); 
+    });
   };
 
   if (msg.type === 'hide-spacer-infos') {
-    setAllSpacersVisibility(true);
-    figma.root.setPluginData(HideProperty, "1");
+    setAllSpacersVisibility(true).then(function (){
+      figma.root.setPluginData(HideProperty, "1");
+   });
   };
 
 
@@ -539,3 +550,4 @@ function getMinAndMaxIndexesInParent(parentArray, componentArray): { 'min': numb
   if (minIndex > maxIndex) return null;
   return { 'min': minIndex, 'max': maxIndex };
 }
+

@@ -334,7 +334,7 @@
     }
 
     #configDiv {
-        display: flex;
+        display: none;
         flex-direction: column;
         margin: 50px auto;
     }
@@ -459,7 +459,7 @@
 
 
 
-<div id="configDiv">
+<div id="configDiv" >
     <input id="values" placeholder="2, 4, 60"></input>
     <button onclick="valueInput.value = Base8.toString();" class="reset"><svg xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512" width="10" height="10">
@@ -508,12 +508,18 @@
             var hidden = event.data.pluginMessage.hide;
             if (hidden != hiddenState) {
                 console.log("hidden state different : doc property=" + hidden + " plugin=" + hiddenState);
-                if (hidden) hide(); else show();
+                if (hidden){
+                    showToggle.checked = false;
+                    hiddenState = true;
+                }  else {
+                    showToggle.checked = true;
+                    hiddenState = false;
+                }   
             }
         }
     }
 
-    //change ui to show the spacers button in parameter
+    //change ui to show the spacers buttons in parameter
     function setSpacers(spacers) {
         configDiv.style.display = "none";
         if (!Array.isArray(spacers)) spacers = Base8;
@@ -578,7 +584,7 @@
     }
 
     //util
-    function post(msg) {
+    async function post(msg) {
         parent.postMessage({
             pluginMessage: {
                 type: msg

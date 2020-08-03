@@ -16,6 +16,15 @@
  *
  */
 //import { cpus } from "os";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // This file holds the main code for the plugins. It has access to the *document*.
 // You can access browser APIs in the <script> tag inside "ui.html" which has a
 // full browser enviroment (see documentation).
@@ -182,9 +191,19 @@ function setSpacerVisibility(spacer, isHidden) {
         child.visible = !isHidden;
     });
 }
-function setAllSpacersVisibility(isHidden) {
-    var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
+function setSpacersVisibilityInPage(page, isHidden) {
+    var spacers = page.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
     spacers.forEach(spacer => setSpacerVisibility(spacer, isHidden));
+}
+function setAllSpacersVisibility(isHidden) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let active = figma.currentPage;
+        setSpacersVisibilityInPage(active, isHidden);
+        figma.root.children.forEach(element => {
+            if (element != active)
+                setSpacersVisibilityInPage(element, isHidden);
+        });
+    });
 }
 function reshapeAllSpacers() {
     console.log("reshape all spacers");
@@ -213,6 +232,7 @@ figma.ui.onmessage = msg => {
             //update all spacers with new version
             reshapeAllSpacers();
         }
+        //console.log("Spacers init ok");
     }
     ;
     //get properties from project
@@ -221,13 +241,16 @@ figma.ui.onmessage = msg => {
     }
     ;
     if (msg.type === 'show-spacer-infos') {
-        setAllSpacersVisibility(false);
-        figma.root.setPluginData(HideProperty, "");
+        // try to improve perf but the async does not seem to work...
+        setAllSpacersVisibility(false).then(function () {
+            figma.root.setPluginData(HideProperty, "");
+        });
     }
     ;
     if (msg.type === 'hide-spacer-infos') {
-        setAllSpacersVisibility(true);
-        figma.root.setPluginData(HideProperty, "1");
+        setAllSpacersVisibility(true).then(function () {
+            figma.root.setPluginData(HideProperty, "1");
+        });
     }
     ;
     /**
