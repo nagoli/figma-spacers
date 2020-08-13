@@ -26,7 +26,7 @@ figma.showUI(__html__);
 figma.ui.resize(128, 470);
 
 // version must change if spacer shape changes
-const VERSION: string = '1.1';
+const VERSION: string = '1.2';
 
 //styles
 const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
@@ -35,7 +35,9 @@ const Alignement = "CENTER";
 
 
 //property names
-const SpacersProperty = 'spacers';
+const ComponentIDPropertyPrefix = 'spacer-component-';
+const ComponentUsageListProperty = 'spacer-component-list';
+const SpacerListProperty = 'spacers';
 const HideProperty = 'hide';
 const VersionProperty = 'version';
 const SizeProperty = 'size';
@@ -59,6 +61,11 @@ var positionState = BOTTOM;
 
 
 
+
+
+
+
+
 /**
  * ******************
  * 1- the shape/ creation of the spacers
@@ -66,137 +73,87 @@ var positionState = BOTTOM;
  */
 
 /**
- * reshape a frame internal element but the size of the frame is not touched
- * @param frame 
+ * create spacer component
  * @param size 
  */
-function shapeSpacerNode(frame: FrameNode, size: number): FrameNode { //, label : string){
+function createSpacerComponent(size:number):ComponentNode{
+  var spacerComponent:ComponentNode = figma.createComponent(); 
   //customize
-  const diamondShape = false;
-  const withCorner = false;
-  const flattenText = false;
+   var containerSize = size
+   spacerComponent.name = size + "px " + SpacerName;
+   spacerComponent.fills = [];
+   spacerComponent.opacity = 1;
+ 
+   //CONTAINER 
+ 
+   const shape: FrameNode = figma.createFrame();
+   spacerComponent.appendChild(shape);
+   shape.name = ContainerName;
+   shape.resize(containerSize, containerSize);
+   shape.fills = [clone(ContainerStyle)];
+   shape.locked = true;
+ 
+   //TEXT
+   var text = figma.createText();
+   spacerComponent.appendChild(text);
+   text.name = LabelName;
+   figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
+     if (containerSize < 16) {
+       text.fontSize = containerSize - Math.round(containerSize * 0.2);
+     }
+     else { text.fontSize = 14; }
+     text.x = 0;
+     text.y = 0;
+     text.textAlignHorizontal = 'LEFT';
+     text.textAlignVertical = 'TOP';
+     text.characters = String(size);
+     text.fills = [clone(LabelStyle)];
+     text.letterSpacing = { unit: "PERCENT", value: -5 };
+     text.locked = true;
+     text.x = (size - text.width) / 2;
+     text.y = (size - text.height) / 2;
+   });
 
-  var containerSize = size
-  if (diamondShape) containerSize = Math.round(Math.sqrt(size * size / 2));
-
-  frame.children.forEach(child => child.remove());
-  frame.name = size + "px " + SpacerName;
-  frame.fills = [];
-  frame.opacity = 1;
-
-  //CONTAINER 
-
-  const container: FrameNode = figma.createFrame();
-  frame.appendChild(container);
-  container.name = ContainerName;
-  container.resize(containerSize, containerSize);
-  container.fills = [clone(ContainerStyle)];
-
-  if (withCorner) {
-
-    function styleLine(line: LineNode, size: number) {
-      line.strokes = [clone(LabelStyle)];
-      line.resize(size, 0);
-      line.locked = true;
-      line.x = 0;
-      line.y = 0;
-    }
-
-    const linesize = Math.round(size / 5);
-
-    //up left corner 
-    const hline1 = figma.createLine();
-    hline1.name = HLineName + 1;
-    styleLine(hline1, linesize);
-    hline1.y = 1;
-    const vline1 = figma.createLine();
-    vline1.name = VLineName + 1;
-    styleLine(vline1, linesize);
-    vline1.rotation = -90;
-
-    //up right corner
-    const hline2 = figma.createLine();
-    hline2.name = HLineName + 2;
-    styleLine(hline2, linesize);
-    hline2.x = containerSize - linesize;
-    hline2.y = 1;
-    const vline2 = figma.createLine();
-    vline2.name = VLineName + 2;
-    styleLine(vline2, linesize);
-    vline2.x = containerSize - 1;
-    vline2.rotation = -90;
-
-
-    //down left corner
-    const hline3 = figma.createLine();
-    hline3.name = HLineName + 3;
-    styleLine(hline3, linesize);
-    hline3.y = containerSize;
-    const vline3 = figma.createLine();
-    vline3.name = VLineName + 3;
-    styleLine(vline3, linesize);
-    vline3.y = containerSize - linesize;
-    vline3.rotation = -90;
-
-    //down right corner
-    const hline4 = figma.createLine();
-    hline4.name = HLineName + 4;
-    styleLine(hline4, linesize);
-    hline4.x = containerSize - linesize;
-    hline4.y = containerSize;
-    const vline4 = figma.createLine();
-    vline4.name = VLineName + 4;
-    styleLine(vline4, linesize);
-    vline4.x = containerSize - 1;
-    vline4.y = containerSize - linesize;
-    vline4.rotation = -90;
-
-    container.appendChild(hline1);
-    container.appendChild(vline1);
-    container.appendChild(hline2);
-    container.appendChild(vline2);
-    container.appendChild(hline3);
-    container.appendChild(vline3);
-    container.appendChild(hline4);
-    container.appendChild(vline4);
-  }
-
-  if (diamondShape) {
-    container.rotation = -45;
-    container.x = size / 2
-  }
-  container.locked = true;
-
-  //TEXT
-  var text = figma.createText();
-  frame.appendChild(text);
-  text.name = LabelName;
-  figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
-    if (containerSize < 16) {
-      text.fontSize = containerSize - Math.round(containerSize * 0.2);
-    }
-    else { text.fontSize = 14; }
-    text.x = 0;
-    text.y = 0;
-    text.textAlignHorizontal = 'LEFT';
-    text.textAlignVertical = 'TOP';
-    text.characters = String(size);
-    text.fills = [clone(LabelStyle)];
-    text.letterSpacing = { unit: "PERCENT", value: -5 };
-    text.locked = true;
-    text.x = (size - text.width) / 2;
-    text.y = (size - text.height) / 2;
-    if (flattenText) {
-      var vector = figma.flatten([text], frame);
-      vector.x = (size - vector.width) / 2;
-      vector.y = (size - vector.height) / 2;
-      vector.locked = true;
-    }
-  });
-
-  setSpacerVisibility(frame, Boolean(figma.root.getPluginData(HideProperty)));
-  return frame;
+   spacerComponent.resize(size, size);
+   spacerComponent.setPluginData(SizeProperty,size.toString());
+   setSpacerVisibility(spacerComponent,Boolean(figma.root.getPluginData(HideProperty)));
+   return spacerComponent;
 }
+
+/**
+ * get Sapcer component for this size.
+ * return null if it does not exist
+ * @param size 
+ */
+function getSpacerComponent(size:number):ComponentNode{
+  var spacerID=figma.root.getPluginData(ComponentIDPropertyPrefix+size);
+  if (spacerID) return figma.getNodeById(spacerID) as ComponentNode;
+  return null;
+}
+
+/**
+ * 
+ * getSpacerInstance for this size
+ * @param size 
+ */
+function getSpacerInstance(size:number):InstanceNode{
+  var instance;
+  var component = getSpacerComponent(size);
+  if (!component){
+    component = createSpacerComponent(size);
+    instance = component.createInstance();
+    figma.root.setPluginData(ComponentIDPropertyPrefix+size, component.id);
+    //update component usage list avoiding duplicated
+    var usage:Set<number> = new Set(arrayFrom(figma.root.getPluginData(ComponentUsageListProperty)));
+    usage.add(size);
+    figma.root.setPluginData(ComponentUsageListProperty, Array.from(usage).toString())
+    //WARNING component must be removed after instance creation if not it desappears from page
+    component.remove();    
+  }
+  else instance = component.createInstance();
+  return instance;
+}
+
 
 
 /**
@@ -205,34 +162,55 @@ function shapeSpacerNode(frame: FrameNode, size: number): FrameNode { //, label 
  * ************************
  */
 
+ /**
+  * return an array of all spacer component in used in doc
+  */
+function getSpacerComponentsInUse() : Array<ComponentNode>{
+  var components:Array<ComponentNode>= [];
+  var list = arrayFrom(figma.root.getPluginData(ComponentUsageListProperty))
+  console.log(list);
+  list.forEach(size => { components.push(getSpacerComponent(size))});
+  return components;
+}
 
-function setSpacerVisibility(spacer: FrameNode, isHidden: boolean) {
-  spacer.children.forEach(child => {
+/**
+ * 
+ * @param spacer show or hide any childre of spacer component
+ * @param isHidden 
+ */
+function setSpacerVisibility(spacer: ComponentNode, isHidden: boolean) {
+  if (spacer) spacer.children.forEach(child => {
     child.visible = !isHidden;
   });
 }
-
-function setSpacersVisibilityInPage(page: PageNode, isHidden : boolean){
-  var spacers = page.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
-  (<FrameNode[]>spacers).forEach(spacer => setSpacerVisibility(spacer, isHidden));
-}
-
-
+/**
+ * 
+ * @param isHidden show or hide all spacers
+ */
 async function setAllSpacersVisibility(isHidden: boolean) {
-    let active:PageNode = figma.currentPage;
-    setSpacersVisibilityInPage(active,isHidden);
-    figma.root.children.forEach(element => {
-      if (element != active) setSpacersVisibilityInPage(element,isHidden);
-    });
+  getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
 }
 
-function reshapeAllSpacers() {
+/**
+ * reset all existing spacers as Frame by creating new components and 
+ */
+function resetAllSpacers() {
   console.log("reshape all spacers");
+  //replace old Frame based spacers
   var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
   (<FrameNode[]>spacers).forEach(spacer => {
-    let size = spacer.getPluginData(SizeProperty);
-    shapeSpacerNode(spacer, Number(size));
+    try{
+      let size =Number(spacer.name.substr(0, spacer.name.indexOf('p'))) ;
+      if (size ==0) {
+        console.log('warning spacer with 0 size – id ='+spacer.id ); 
+      }else{
+        let parentFrame = spacer.parent;
+          parentFrame.insertChild(parentFrame.children.indexOf(spacer) + 1, getSpacerInstance(size));
+          spacer.remove();
+        } 
+    }catch(err){console.log(err);}
   });
+  //TODO update components
 }
 
 
@@ -244,7 +222,7 @@ figma.ui.onmessage = msg => {
   //get properties from project
   if (msg.type === 'get-properties-in-page') {
     //get Spacers In Page Properties
-    var spacers = figma.root.getPluginData(SpacersProperty);
+    var spacers = figma.root.getPluginData(SpacerListProperty);
     var hide = figma.root.getPluginData(HideProperty);
     figma.ui.postMessage({ type: "set-properties-from-page", spacers: spacers ? arrayFrom(spacers) : false, hide: Boolean(hide) });
     var knownVersion = figma.root.getPluginData(VersionProperty);
@@ -254,14 +232,14 @@ figma.ui.onmessage = msg => {
       console.log("Plugin = " + VERSION);
       figma.root.setPluginData(VersionProperty, VERSION);
       //update all spacers with new version
-      reshapeAllSpacers();
+      resetAllSpacers();
     }
     //console.log("Spacers init ok");
   };
 
   //get properties from project
   if (msg.type === 'set-spacers-in-page') {
-    figma.root.setPluginData(SpacersProperty, msg.spacers.toString());
+    figma.root.setPluginData(SpacerListProperty, msg.spacers.toString());
   };
 
   if (msg.type === 'show-spacer-infos') {
@@ -291,17 +269,13 @@ figma.ui.onmessage = msg => {
 
   if (msg.type === 'add-spacer') {
     if (figma.currentPage.selection.length != 0) {
-      let spacerFrame: FrameNode;
+      let spacerFrame: InstanceNode;
       //lazy creation of the spacer frame
-      function getSpacer(): FrameNode {
+      function getSpacer(): InstanceNode {
         if (!spacerFrame) {
-          let spacer: FrameNode = figma.createFrame();
-          spacer.setPluginData(SizeProperty, String(msg.size));
           let size = msg.size;
-          spacer.resize(size, size);
-          shapeSpacerNode(spacer, size);
-          spacer.layoutAlign = Alignement;
-          spacerFrame = spacer;
+          spacerFrame=getSpacerInstance(msg.size)
+          spacerFrame.layoutAlign = Alignement;
         }
         return spacerFrame;
       }
