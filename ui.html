@@ -1,11 +1,65 @@
 <style>
+
+    /*  FONTS */
+    @font-face {
+        font-family: 'Inter';
+        font-weight: 400;
+        font-style: normal;
+        src: url('https://rsms.me/inter/font-files/Inter-Regular.woff2?v=3.7') format('woff2'),
+        url('https://rsms.me/inter/font-files/Inter-Regular.woff?v=3.7') format('woff');
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-weight: 500;
+        font-style: normal;
+        src: url('https://rsms.me/inter/font-files/Inter-Medium.woff2?v=3.7') format('woff2'),
+        url('https://rsms.me/inter/font-files/Inter-Medium.woff2?v=3.7') format('woff');
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-weight: 600;
+        font-style: normal;
+        src: url('https://rsms.me/inter/font-files/Inter-SemiBold.woff2?v=3.7') format('woff2'),
+        url('https://rsms.me/inter/font-files/Inter-SemiBold.woff2?v=3.7') format('woff');
+    }
+
+    :root {
+	/* COLORS */
+    /* Basic foreground */
+    --black: #000000;
+    --black8: rgba(0, 0, 0, .8); 
+    --black8-opaque: #333333; 
+    --black3: rgba(0, 0, 0, .3);
+    --black3-opaque: #B3B3B3; 
+    --white: #ffffff; 
+    --white8: rgba(255, 255, 255, .8); 
+    --white4: rgba(255, 255, 255, .4); 
+
+    /* Basic background */
+    --grey: #f0f0f0; 
+    --silver: #e5e5e5; 
+    --hud: #222222;
+    --toolbar: #2c2c2c;
+
+    --purple: #CC00FF;
+
+    }
+
     * {
-        font-family: "Inter", sans-serif;
+        font-family: 'Inter', sans-serif;
         font-weight: 500;
         font-size: 13px;
         line-height: 15px;
         letter-spacing: 0.005em;
         text-align: center;
+    }
+
+    hr{
+        border-top: 0.5px solid var(--silver);
+        margin-top:  16px;
+        margin-bottom: 10px;  
     }
 
     *:focus {
@@ -14,12 +68,13 @@
 
 
     body {
-        max-width: 120px;
+        /*max-width: 120px;*/
+        margin: 0px
     }
 
     #show {
-        color: #CC00FF;
-        border: 1px solid #CC00FF;
+        color: var(--purple) ;
+        border: 1px solid var(--purple) ;
     }
 
     #hide {
@@ -29,25 +84,36 @@
 
 
     .header{
-        position: absolute;
-        left: 8px;
-        right: 8px;
-        top: 8px;
-        bottom: 8px;
-
+        position: relative;
+        margin: 8px;
         /* Pos – UI 11 Bold */
-        font-family: Inter;
+        font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 600;
         font-size: 11px;
         line-height: 16px;
         /* identical to box height, or 145% */
-        display: flex;
-        align-items: center;
-        letter-spacing: 0.005em;
+        display: block;
+        letter-spacing: .02em;
+        text-align: left;
         /* Black 8 */
         color: rgba(0, 0, 0, 0.8);
     }
+
+    .headerTop{
+        font-weight: 600;
+        font-size: 14px;
+        margin-top: 16px;
+        margin-bottom: 8px; 
+        line-height: 24px;
+        /* identical to box height, or 145% */
+        display: block;
+        letter-spacing: .02em;
+        text-align: center;
+        /* Black 8 */
+        color: rgba(0, 0, 0, 0.8);
+    }
+
 
     button {
         color: rgba(0, 0, 0, 0.8);
@@ -75,7 +141,8 @@
     }
 
     #spacers {
-        margin-top: -8px;
+        margin-top: 0px;
+        margin-bottom: 8px;
         display: inline-flex;
     }
 
@@ -83,7 +150,9 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
-        margin: 0px auto;
+        margin: -12px auto;
+        width: 99px;
+        height: 99px;
     }
 
     #position-buttons div {
@@ -218,11 +287,6 @@
         left: 23px;
     }
 
-    #position-buttons {
-        width: 99px;
-        height: 99px;
-        margin-top: 0px;
-    }
 
     #position-buttons label {
         position: relative;
@@ -327,14 +391,8 @@
     }
 
     #config {
-        padding: 9px 0px 2px 0px;
-        margin: 0;
-        margin-top: 18px;
-        /*color: #CC00FF;*/
-        border: none;
-        align-items: center;
-        border-radius: 0;
-        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        text-align: center;
     }
 
     #config:hover,
@@ -350,6 +408,9 @@
         /*fill: #CC00FF;*/
     }
 
+    #config svg{
+        top:0px;
+    }
 
     #configDiv .cancel {
         margin-left: 0;
@@ -359,7 +420,7 @@
     #configDiv {
         display: none;
         flex-direction: column;
-        margin: 50px auto;
+        margin: auto auto;
     }
 
     #configDiv button {
@@ -370,26 +431,40 @@
     }
 
     #configDiv input {
-        padding: 4px 4px;
+        padding: 8px 2px;
+        margin: 0 8px;
+        font-weight: 500;
+        font-size: 12px;
+        max-width: 112px;
+        margin-top: 12px;
+    }
+
+    #configDiv .ok ,    #configDiv .cancel {
+        padding: 10px 10px;
+        margin-bottom: 6px;
+        transition: all 0.2s;
+        display: inline-block;
+        margin: 0px;
+        margin-top:12px
     }
 
     #configDiv .ok {
-        /*background-color: #CC00FF;*/
-        color:#CC00FF;
-        border: 1px solid  black;
+        background-color: var(--purple);
+        color:var(--white);
+        border: 1px solid  var(--purple);
         font-size: 14px;
-        padding: 10px 10px;
-        margin-top: 30px;
-        margin-bottom: 6px;
-        transition: all 0.2s;
+
     }
 
-    #configDiv .ok:hover {
-        box-shadow: 0 1px 2px #6d0f6a8a;
-        transition: all 0.2s;
+    #configDiv .cancel {
+        background-color: transparent;
+        color:var(--black);
+        border: 1px solid  var(--black);
+        font-size: 12px;
+        font-weight: 500;
+        margin-right: 4px;
     }
 
-    .cancel,
     .reset {
         border: 0;
         /*color: #CC00FF;*/
@@ -397,9 +472,26 @@
         border-radius: 0;
         margin: 0;
         border-bottom: 2px solid transparent;
-        padding: 9px 0 0 2px;
+        padding: 0;
+        font-size: 11px;
     }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div id="main">
     <div class="header"> Show </div>
@@ -457,6 +549,8 @@
 
     </div>
 
+    <hr>
+    <div class="header"> Direction </div>
 
     <div id="position-buttons">
         <div class="rleft" ><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
@@ -471,34 +565,58 @@
                 name="position"><label for="idreplace" title="replace selected spacers by another spacer"></label></div>
     </div>
 
+    <hr>
+    <div class="header"> Spacers </div>
     <div id="spacers">
     </div>
 
-    <button id="config" onclick="config()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14"
+    <hr>
+    <div id="config" class="header" onclick="config()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="14"
         height="14">
         <path
             d="M502.6 389.5L378.2 265c-15.6-15.6-36.1-23.4-56.6-23.4-15.4 0-30.8 4.4-44.1 13.3L192 169.4V96L64 0 0 64l96 128h73.4l85.5 85.5c-20.6 31.1-17.2 73.3 10.2 100.7l124.5 124.5c6.2 6.2 14.4 9.4 22.6 9.4 8.2 0 16.4-3.1 22.6-9.4l67.9-67.9c12.4-12.6 12.4-32.8-.1-45.3zM160 158.1v1.9h-48L42.3 67 67 42.3l93 69.7v46.1zM412.1 480L287.7 355.5c-9.1-9.1-14.1-21.1-14.1-33.9 0-12.8 5-24.9 14.1-33.9 9.1-9.1 21.1-14.1 33.9-14.1 12.8 0 24.9 5 33.9 14.1L480 412.1 412.1 480zM64 432c0 8.8 7.2 16 16 16s16-7.2 16-16-7.2-16-16-16-16 7.2-16 16zM276.8 66.9C299.5 44.2 329.4 32 360.6 32c6.9 0 13.8.6 20.7 1.8L312 103.2l13.8 83 83.1 13.8 69.3-69.3c6.7 38.2-5.3 76.8-33.1 104.5-8.9 8.9-19.1 16-30 21.5l23.6 23.6c10.4-6.2 20.2-13.6 29-22.5 37.8-37.8 52.7-91.4 39.7-143.3-2.3-9.5-9.7-17-19.1-19.6-9.5-2.6-19.7 0-26.7 7l-63.9 63.9-44.2-7.4-7.4-44.2L410 50.3c6.9-6.9 9.6-17.1 7-26.5-2.6-9.5-10.2-16.8-19.7-19.2C345.6-8.3 292 6.5 254.1 44.3c-12.9 12.9-22.9 27.9-30.1 44v67.8l22.1 22.1c-9.6-40.4 1.6-82.2 30.7-111.3zM107 467.1c-16.6 16.6-45.6 16.6-62.2 0-17.1-17.1-17.1-45.1 0-62.2l146.1-146.1-22.6-22.6L22.2 382.3c-29.6 29.6-29.6 77.8 0 107.5C36.5 504.1 55.6 512 75.9 512c20.3 0 39.4-7.9 53.7-22.3L231.4 388c-6.7-9.2-11.8-19.3-15.5-29.8L107 467.1z" />
-        </svg>Config</button>
+        </svg>
+        Settings
+    </div>
 
-</div>
+</div> 
+
+
 
 
 
 <div id="configDiv" >
-    <input id="values" placeholder="2, 4, 60"></input>
-    <button onclick="valueInput.value = Base8.toString();" class="reset"><svg xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 512 512" width="10" height="10">
-        <path
-            d="M492 8h-10c-6.627 0-12 5.373-12 12v110.627C426.929 57.261 347.224 8 256 8 123.228 8 14.824 112.338 8.31 243.493 7.971 250.311 13.475 256 20.301 256h10.016c6.353 0 11.646-4.949 11.977-11.293C48.157 132.216 141.097 42 256 42c82.862 0 154.737 47.077 190.289 116H332c-6.627 0-12 5.373-12 12v10c0 6.627 5.373 12 12 12h160c6.627 0 12-5.373 12-12V20c0-6.627-5.373-12-12-12zm-.301 248h-10.015c-6.352 0-11.647 4.949-11.977 11.293C463.841 380.158 370.546 470 256 470c-82.608 0-154.672-46.952-190.299-116H180c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H20c-6.627 0-12 5.373-12 12v160c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V381.373C85.071 454.739 164.777 504 256 504c132.773 0 241.176-104.338 247.69-235.493.339-6.818-5.165-12.507-11.991-12.507z" />
-        </svg>default : base8</button>
-    <button onclick="setSpacers(arrayFrom(valueInput.value))" class="ok">ok</button>
-    <button onclick="setSpacers(spacerValues)" class="cancel"> <svg xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512" width="10" height="10">
-            <path
-                d="M231.536 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L60.113 273H436c6.627 0 12-5.373 12-12v-10c0-6.627-5.373-12-12-12H60.113L238.607 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L3.515 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z" />
-            </svg>cancel</button>
+    <div class="headerTop" >
+        Settings
+    </div>
+    <hr>
+    <div class="header">
+        Spacers list
+    </div>
+    <input id="values" placeholder="8, 16, 24, 32"></input>
+    <button onclick="valueInput.value = Base8.toString();" class="reset">set to default</button>        
+    <hr>
+    <div>
+        <button onclick="setSpacers(spacerValues)" class="cancel"> Cancel</button>
+        <button onclick="setSpacers(arrayFrom(valueInput.value))" class="ok">OK</button>
+    </div>
     
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -590,7 +708,7 @@
     function config() {
         mainDiv.style.display = "none";
         valueInput.value = spacerValues.toString();
-        configDiv.style.display = "flex";
+        configDiv.style.display = "block";
     }
 
     // create a spacer button for a specific size

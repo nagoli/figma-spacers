@@ -15,7 +15,6 @@
  *
  *
  */
-//import { cpus } from "os";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -30,7 +29,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // full browser enviroment (see documentation).
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
-figma.ui.resize(128, 470);
+const baseHeight = 316;
+const spacerHeight = 50;
+const baseWidth = 128;
+figma.ui.resize(baseWidth, baseHeight + 3 * spacerHeight);
 // version must change if spacer shape changes
 //version 1 = spacers as frames
 //version 2 = spacers as components
@@ -294,7 +296,10 @@ figma.ui.onmessage = msg => {
     ;
     //get properties from project
     if (msg.type === 'set-spacers-in-page') {
-        figma.root.setPluginData(SpacerListProperty, msg.spacers.toString());
+        const spacerList = msg.spacers.toString();
+        figma.root.setPluginData(SpacerListProperty, spacerList);
+        const spacersPairs = Math.ceil(arrayOfNumberFrom(spacerList).length / 2);
+        figma.ui.resize(baseWidth, baseHeight + spacersPairs * spacerHeight);
     }
     ;
     if (msg.type === 'show-spacer-infos') {
