@@ -524,10 +524,11 @@
         <div class="rleft" ><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
                 name="position"><label for="idleft" title="position spacers on the left of selected element">
                     <svg class='radio-svg-default' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1.03566 15.9485C0.847138 15.7544 0.84714 15.4456 1.03566 15.2516L14.1235 1.78102C14.4364 1.45904 14.9821 1.68051 14.9821 2.12945L14.9821 29.0706C14.9821 29.5195 14.4364 29.741 14.1235 29.419L1.03566 15.9485Z" 
+                        <path d="M1.97053 16.3484C1.78201 16.1544 1.78201 15.8456 1.97053 15.6516L15.0584 2.18098C15.3712 1.85899 15.917 2.08046 15.917 2.5294L15.917 29.4706C15.917 29.9195 15.3712 30.141 15.0584 29.819L9.03456 23.619L1.97053 16.3484Z" 
                         stroke="var(--black3-opaque)"/>
                         </svg>
                     <svg class='radio-svg-selected' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    
                             <path d="M5.2975 16.6462C4.90138 16.2547 4.90138 15.6151 5.2975 15.2236L12.5891 8.01776C13.2208 7.39354 14.292 7.84098 14.292 8.72904L14.292 23.1407C14.292 24.0288 13.2208 24.4762 12.5891 23.852L9.4349 20.7349L5.2975 16.6462Z" 
                             fill="var(--spacers-fg)"/>
                         </svg>
@@ -536,11 +537,16 @@
 
         <div class="rbottom"><input type="radio" id="idbottom" class="position" onclick="place('BOTTOM')"
                 name="position" checked="checked"><label for="idbottom" title="position spacers at bottom of selected element">
+                    <!--svg  class='radio-svg-default' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 16 L16 0 L32 16 H0 16" stroke="var(--black3-opaque)"/>
+                    </svg-->
+                    
                     <svg class='radio-svg-default' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.9484 15.9643C15.7544 16.1529 15.4456 16.1529 15.2516 15.9643L1.781 2.87647C1.45901 2.56363 1.68049 2.01785 2.12942 2.01785L29.0706 2.01786C29.5195 2.01786 29.741 2.56363 29.419 2.87647L15.9484 15.9643Z" 
+                        <path d="M16.2833 14.9643C16.0893 15.1529 15.7805 15.1529 15.5865 14.9643L2.11585 1.87646C1.79387 1.56363 2.01534 1.01785 2.46428 1.01785L29.4055 1.01786C29.8544 1.01786 30.0759 1.56363 29.7539 1.87647L23.5539 7.90032L16.2833 14.9643Z" 
                         stroke="var(--black3-opaque)"/>
-                        </svg>
+                                            </svg>
                         <svg class='radio-svg-selected' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+
                             <path d="M16.581 11.6374C16.1896 12.0335 15.5499 12.0335 15.1585 11.6374L7.9526 4.34577C7.32838 3.71412 7.77583 2.64286 8.66388 2.64286L23.0756 2.64286C23.9636 2.64286 24.4111 3.71412 23.7869 4.34577L20.6697 7.5L16.581 11.6374Z"
                             fill="var(--spacers-fg)"/>
                             </svg>
@@ -551,10 +557,11 @@
         <div class="rright"><input type="radio" id="idright" class="position" onclick="place('RIGHT')"
                 name="position"><label for="idright" title="position spacers on the right of selected element">
                     <svg class='radio-svg-default' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.9643 16.0515C16.1529 16.2456 16.1529 16.5544 15.9643 16.7484L2.87647 30.219C2.56363 30.541 2.01786 30.3195 2.01786 29.8706L2.01786 2.92938C2.01786 2.48045 2.56363 2.25897 2.87647 2.58096L15.9643 16.0515Z"
+                        <path d="M14.9643 15.5864C15.1529 15.7805 15.1529 16.0893 14.9643 16.2833L1.87646 29.7539C1.56363 30.0759 1.01786 29.8544 1.01786 29.4055L1.01786 2.46428C1.01786 2.01535 1.56363 1.79387 1.87647 2.11586L7.90032 8.31586L14.9643 15.5864Z" 
                         stroke="var(--black3-opaque)"/>
                         </svg>                    
                     <svg class='radio-svg-selected' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        
                         <path d="M11.6374 15.2887C12.0335 15.6802 12.0335 16.3198 11.6374 16.7113L4.34574 23.9171C3.71409 24.5413 2.64283 24.0939 2.64283 23.2058L2.64283 8.79415C2.64283 7.90609 3.71409 7.45865 4.34574 8.08287L7.49997 11.2L11.6374 15.2887Z" 
                         fill="var(--spacers-fg)"/>
                         </svg>
@@ -572,10 +579,11 @@
                     </svg-->     
                     
                     <svg class='radio-svg-default' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.0516 1.03566C16.2456 0.847139 16.5544 0.847141 16.7484 1.03566L30.219 14.1235C30.541 14.4364 30.3195 14.9821 29.8706 14.9821H2.92941C2.48048 14.9821 2.259 14.4364 2.58099 14.1235L16.0516 1.03566Z"
+                        <path d="M15.5864 1.03566C15.7805 0.847139 16.0893 0.847139 16.2833 1.03566L29.7539 14.1235C30.0759 14.4364 29.8544 14.9821 29.4055 14.9821H2.46428C2.01535 14.9821 1.79387 14.4364 2.11586 14.1235L8.31586 8.09968L15.5864 1.03566Z" 
                         stroke="var(--black3-opaque)"/>
                         </svg>
                     <svg class='radio-svg-selected' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   
                         <path d="M15.2887 4.3626C15.6802 3.96648 16.3198 3.96648 16.7113 4.3626L23.9171 11.6542C24.5414 12.2859 24.0939 13.3571 23.2059 13.3571H8.79418C7.90612 13.3571 7.45868 12.2859 8.0829 11.6542L11.2 8.5L15.2887 4.3626Z" 
                         fill="var(--spacers-fg)"/>
                         </svg>
