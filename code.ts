@@ -26,7 +26,9 @@ figma.showUI(__html__);
 figma.ui.resize(128, 470);
 
 // version must change if spacer shape changes
-const VERSION: string = '1.2';
+//version 1 = spacers as frames
+//version 2 = spacers as components
+const VERSION: string = '2.0';
 
 //styles
 const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
@@ -61,11 +63,6 @@ var positionState = BOTTOM;
 
 
 
-
-
-
-
-
 /**
  * ******************
  * 1- the shape/ creation of the spacers
@@ -76,18 +73,20 @@ var positionState = BOTTOM;
  * create spacer component
  * @param size 
  */
-function createSpacerComponent(size:number):ComponentNode{
-  var spacerComponent:ComponentNode = figma.createComponent(); 
+function shapeSpacerComponent(component:ComponentNode,size:number){
+  
+  resetAllProperties(component);
+
   //customize
    var containerSize = size
-   spacerComponent.name = size + "px " + SpacerName;
-   spacerComponent.fills = [];
-   spacerComponent.opacity = 1;
+   component.name = size + "px " + SpacerName;
+   component.fills = [];
+   component.opacity = 1;
  
    //CONTAINER 
  
    const shape: FrameNode = figma.createFrame();
-   spacerComponent.appendChild(shape);
+   component.appendChild(shape);
    shape.name = ContainerName;
    shape.resize(containerSize, containerSize);
    shape.fills = [clone(ContainerStyle)];
@@ -95,7 +94,7 @@ function createSpacerComponent(size:number):ComponentNode{
  
    //TEXT
    var text = figma.createText();
-   spacerComponent.appendChild(text);
+   component.appendChild(text);
    text.name = LabelName;
    figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
      if (containerSize < 16) {
@@ -114,10 +113,9 @@ function createSpacerComponent(size:number):ComponentNode{
      text.y = (size - text.height) / 2;
    });
 
-   spacerComponent.resize(size, size);
-   spacerComponent.setPluginData(SizeProperty,size.toString());
-   setSpacerVisibility(spacerComponent,Boolean(figma.root.getPluginData(HideProperty)));
-   return spacerComponent;
+   component.resize(size, size);
+   component.setPluginData(SizeProperty,size.toString());
+   setSpacerVisibility(component,Boolean(figma.root.getPluginData(HideProperty)));
 }
 
 /**
@@ -140,11 +138,12 @@ function getSpacerInstance(size:number):InstanceNode{
   var instance;
   var component = getSpacerComponent(size);
   if (!component){
-    component = createSpacerComponent(size);
+    component =  figma.createComponent(); 
+    shapeSpacerComponent(component,size);
     instance = component.createInstance();
     figma.root.setPluginData(ComponentIDPropertyPrefix+size, component.id);
     //update component usage list avoiding duplicated
-    var usage:Set<number> = new Set(arrayFrom(figma.root.getPluginData(ComponentUsageListProperty)));
+    var usage:Set<number> = new Set(arrayOfNumberFrom(figma.root.getPluginData(ComponentUsageListProperty)));
     usage.add(size);
     figma.root.setPluginData(ComponentUsageListProperty, Array.from(usage).toString())
     //WARNING component must be removed after instance creation if not it desappears from page
@@ -167,8 +166,8 @@ function getSpacerInstance(size:number):InstanceNode{
   */
 function getSpacerComponentsInUse() : Array<ComponentNode>{
   var components:Array<ComponentNode>= [];
-  var list = arrayFrom(figma.root.getPluginData(ComponentUsageListProperty))
-  console.log(list);
+  var list = arrayOfNumberFrom(figma.root.getPluginData(ComponentUsageListProperty))
+  //console.log(list);
   list.forEach(size => { components.push(getSpacerComponent(size))});
   return components;
 }
@@ -183,6 +182,7 @@ function setSpacerVisibility(spacer: ComponentNode, isHidden: boolean) {
     child.visible = !isHidden;
   });
 }
+
 /**
  * 
  * @param isHidden show or hide all spacers
@@ -191,26 +191,84 @@ async function setAllSpacersVisibility(isHidden: boolean) {
   getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
 }
 
+/**************** OLD way to set visibility*/
+function OLDsetSpacerVisibility(spacer: FrameNode, isHidden: boolean) {
+  if (spacer) spacer.children.forEach(child => {
+    child.visible = !isHidden;
+  });
+}
+function OLDsetSpacersVisibilityInPage(page: PageNode, isHidden : boolean){
+  var spacers = page.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
+  (<FrameNode[]>spacers).forEach(spacer => OLDsetSpacerVisibility(spacer, isHidden));
+}
+async function OLDsetAllSpacersVisibility(isHidden: boolean) {
+  let active:PageNode = figma.currentPage;
+  OLDsetSpacersVisibilityInPage(active,isHidden);
+  figma.root.children.forEach(element => {
+    if (element != active) OLDsetSpacersVisibilityInPage(element,isHidden);
+  });
+}
+/**************** */
+
+
 /**
  * reset all existing spacers as Frame by creating new components and 
  */
 function resetAllSpacers() {
   console.log("reshape all spacers");
-  //replace old Frame based spacers
-  var spacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName));
-  (<FrameNode[]>spacers).forEach(spacer => {
+  
+  //replace component based spacers
+  var componentSpacers = figma.root.findAll(node => node.type === "COMPONENT" && node.name.endsWith(SpacerName));
+  var componentCount=0;
+  (<ComponentNode[]>componentSpacers).forEach(spacer => {
     try{
-      let size =Number(spacer.name.substr(0, spacer.name.indexOf('p'))) ;
-      if (size ==0) {
-        console.log('warning spacer with 0 size – id ='+spacer.id ); 
-      }else{
-        let parentFrame = spacer.parent;
-          parentFrame.insertChild(parentFrame.children.indexOf(spacer) + 1, getSpacerInstance(size));
-          spacer.remove();
+      let size = Number(spacer.name.substr(0, spacer.name.indexOf('p'))) ;
+        if (size == 0) {
+          console.log('warning spacer with 0 size – id ='+spacer.id ); 
+        } else {
+          shapeSpacerComponent(spacer,size);
+          componentCount++;
         } 
     }catch(err){console.log(err);}
   });
-  //TODO update components
+  console.log(componentCount + " spacers based on component were updated");
+
+  //put old Frame based spacers in Instance to OFF (to avoid keeping spacers from library still visibles )
+  var inInstanceSpacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName) && isInInstance(node));
+  var inInstanceCount = 0;
+  (<FrameNode[]>inInstanceSpacers).forEach(spacer => {
+    try{
+      if (spacer) spacer.children.forEach(child => {
+        child.visible = false;
+      });
+      inInstanceCount++;
+    }catch(err){console.log(err);}
+  });
+  console.log(inInstanceCount + " spacers based on frame and in Instances were hidden");
+
+  //replace old Frame based spacers
+  var notInInstanceSpacers = figma.root.findAll(node => node.type === "FRAME" && node.name.endsWith(SpacerName) && !isInInstance(node));
+  var notInInstanceCount = 0;
+  (<FrameNode[]>notInInstanceSpacers).forEach(spacer => {
+    try{
+      let size = Number(spacer.name.substr(0, spacer.name.indexOf('p'))) ;
+        if (size == 0) {
+          console.log('warning spacer with 0 size – id ='+spacer.id ); 
+        } else {
+          let parentFrame = spacer.parent;
+          const newSpacer = getSpacerInstance(size);
+          parentFrame.insertChild(parentFrame.children.indexOf(spacer) + 1, newSpacer);
+          newSpacer.layoutAlign=spacer.layoutAlign;
+          spacer.remove();
+          notInInstanceCount++;
+        } 
+    }catch(err){console.log(err);}
+  });
+  console.log(notInInstanceCount + " spacers based on frame and not in Instances were updated");
+  var total = componentCount + inInstanceCount + notInInstanceCount;
+
+  if (total) figma.notify("Major plugin update : " + total + " spacers were updated.", {timeout:7000});
+  figma.notify("Major plugin update : open spacer plugin in your shared libraries to update them", {timeout:15000});
 }
 
 
@@ -224,7 +282,7 @@ figma.ui.onmessage = msg => {
     //get Spacers In Page Properties
     var spacers = figma.root.getPluginData(SpacerListProperty);
     var hide = figma.root.getPluginData(HideProperty);
-    figma.ui.postMessage({ type: "set-properties-from-page", spacers: spacers ? arrayFrom(spacers) : false, hide: Boolean(hide) });
+    figma.ui.postMessage({ type: "set-properties-from-page", spacers: spacers ? arrayOfNumberFrom(spacers) : false, hide: Boolean(hide) });
     var knownVersion = figma.root.getPluginData(VersionProperty);
     if (knownVersion != VERSION) {
       console.log("Change in spacers versions :");
@@ -282,11 +340,13 @@ figma.ui.onmessage = msg => {
 
       let selection = figma.currentPage.selection;
 
-      let parentFrame = selection[0].parent as DefaultFrameMixin;
-      if ((parentFrame as InstanceNode).type == "INSTANCE") {
+      if (isInInstance(selection[0])) {
         figma.notify("Spacers cannot be added to instances of components");
         return;
       }
+
+      let parentFrame = selection[0].parent as DefaultFrameMixin;
+
 
       //check that the whole selection avec the parent
       let hasUniqueParent = true;
@@ -430,7 +490,13 @@ figma.ui.onmessage = msg => {
  * 
  */
 
-function arrayFrom(str: string) {
+
+/**
+ * return an array of number from a string containing numbers separated by ','
+ * @param str 
+ */
+function arrayOfNumberFrom(str: string) : Array<number>{
+  if (!str) return [];
   return str.split(',').map(Number);
 }
 
@@ -457,6 +523,25 @@ function clone(val) {
   }
   throw 'unknown'
 };
+
+/**
+ * remove all style properties of a frame
+ * @param frame 
+ */
+function resetAllProperties(frame : DefaultFrameMixin){
+  frame.layoutMode="NONE";
+  frame.fills = [];
+  frame.strokes = [];
+  frame.fillStyleId = '';
+  frame.strokeStyleId = '';
+  frame.cornerRadius = 0;
+  frame.opacity = 1;
+  frame.blendMode = "NORMAL";
+  frame.isMask = false;
+  frame.effects = [];
+  frame.effectStyleId = '';
+}
+
 
 function cloneAutolayoutProperties(source: DefaultFrameMixin, destination: DefaultFrameMixin) {
   destination.layoutMode = source.layoutMode;
@@ -525,3 +610,12 @@ function getMinAndMaxIndexesInParent(parentArray, componentArray): { 'min': numb
   return { 'min': minIndex, 'max': maxIndex };
 }
 
+/**
+ * return true if the node is inside an Instance
+ */
+function isInInstance(node : SceneNode | BaseNode ) : boolean {
+  let type = node.parent.type
+  if ( type === "INSTANCE") return true;
+  if (type === "PAGE") return false;
+  return isInInstance(node.parent);
+}

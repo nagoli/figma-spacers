@@ -12,6 +12,7 @@
        /* outline-color: #D56CEC;*/
     }
 
+
     body {
         max-width: 120px;
     }
@@ -24,6 +25,28 @@
     #hide {
         color: rgba(0, 0, 0, 0.6);
         border: 1px solid rgba(0, 0, 0, 0.6);
+    }
+
+
+    .header{
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        top: 8px;
+        bottom: 8px;
+
+        /* Pos – UI 11 Bold */
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 11px;
+        line-height: 16px;
+        /* identical to box height, or 145% */
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.005em;
+        /* Black 8 */
+        color: rgba(0, 0, 0, 0.8);
     }
 
     button {
@@ -379,6 +402,8 @@
 </style>
 
 <div id="main">
+    <div class="header"> Show </div>
+   
     <div id="switches">
         <svg width="26" height="26" viewBox="0 0 34 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
