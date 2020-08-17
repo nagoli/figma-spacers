@@ -5,6 +5,7 @@
 	/* COLORS */
     /* Basic foreground */
     --black: #000000;
+    --black6: rgba(0, 0, 0, .6); 
     --black8: rgba(0, 0, 0, .8); 
     --black8-opaque: #333333; 
     --black3: rgba(0, 0, 0, .3);
@@ -19,7 +20,8 @@
     --hud: #222222;
     --toolbar: #2c2c2c;
 
-    --purple: #CC00FF;
+    --spacers-fg:#CC00FF;
+    --spacers-bg: #FAE3FF;
 
     }
 
@@ -49,13 +51,13 @@
     }
 
     #show {
-        color: var(--purple) ;
-        border: 1px solid var(--purple) ;
+        color: var(--spacers-fg) ;
+        border: 1px solid var(--spacers-fg) ;
     }
 
     #hide {
-        color: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(0, 0, 0, 0.6);
+        color: var(--black8);
+        border: 1px solid var(--black8);
     }
 
 
@@ -73,7 +75,7 @@
         letter-spacing: .02em;
         text-align: left;
         /* Black 8 */
-        color: rgba(0, 0, 0, 0.8);
+        color: var(--black8);
     }
 
     .headerTop{
@@ -87,14 +89,14 @@
         letter-spacing: .02em;
         text-align: center;
         /* Black 8 */
-        color: rgba(0, 0, 0, 0.8);
+        color: var(--black8);
     }
 
 
     button {
-        color: rgba(0, 0, 0, 0.8);
-        border: 1px solid rgba(0, 0, 0, 0.8);
-        background-color: #FFFFFF;
+        color: var(--black8);
+        border: 1px solid var(--black8);
+        background-color: var(--white);
         padding: 7px 16px;
         border-radius: 6px;
         display: inline-block;
@@ -127,8 +129,8 @@
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         margin: -12px auto;
-        width: 99px;
-        height: 99px;
+        width: 98px;
+        height: 98px;
     }
 
     #position-buttons div {
@@ -165,8 +167,8 @@
         height : 40px;
         border: none ;/*1px solid rgba(222, 222, 222, 0.42);*/
         border-radius: 0;
-        color: #CC00FF;
-        background-color: #FAE3FF;
+        color: var(--spacers-fg);
+        background-color: var(--spacers-bg);
         margin: 10px 8px;
         display: flex;
         justify-content: center;
@@ -192,7 +194,7 @@
         transition: all 0.2s;
         border-radius: 0;
         border: none;
-        box-shadow: inset 0px 0px 4px 0px #00000050;
+        box-shadow: inset 0px 0px 4px 0px var(--silver);
     }
 
     .spacer-button div {
@@ -235,7 +237,7 @@
         width: 18px;
         height: 18px;
         border-radius: 20px;
-        background-color: #989898;
+        background-color: var(--black6);
         left: 53px;
         transition: all 0.3s;
         position: absolute;
@@ -245,11 +247,11 @@
         position: absolute;
         transform: translateX(-20px);
         transition: all 0.3s;
-        background-color: #CC00FF;
+        background-color: var(--spacers-fg);
     }
 
     #switches input:checked+label:before {
-        background-color: #c3c2c2;
+        background-color: var(--silver);
         transition: all 0.2s ease;
     }
 
@@ -257,8 +259,8 @@
         content: "";
         width: 40px;
         height: 20px;
-        background-color: #e2dfdf;
-        border: 1px solid #ddd;
+        background-color: var(--silver);
+        border: 1px solid var(--black3);
         display: inline-block;
         vertical-align: middle;
         border-radius: 40px;
@@ -281,11 +283,9 @@
     #position-buttons label {
         position: relative;
         height: 30px;
-        background-color: white;
-        color: white;
+        background-color: transparent;
+        color: var(--white);
         border: none;
-       /* box-shadow: 0 2px 4px #6d0f6a66;*/
-       /* border-radius: 4px;*/
         margin-right: 0;
         transition: all 0.2s;
         cursor: pointer;
@@ -293,65 +293,43 @@
         background-repeat: no-repeat;
         display : block;
     }
-
-    .rtop label {
-        background-image: url("data:image/svg+xml,%3Csvg width='32' height='17' viewBox='0 0 32 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.0516 1.03566C16.2456 0.847139 16.5544 0.847141 16.7484 1.03566L30.219 14.1235C30.541 14.4364 30.3195 14.9821 29.8706 14.9821H2.92941C2.48048 14.9821 2.259 14.4364 2.58099 14.1235L16.0516 1.03566Z' stroke='%23C3C2C2'/%3E%3C/svg%3E%0A");
-        background-position: 100% 100%;
-        background-size: 32px 17px;
+    
+    #position-buttons svg{
+        position: absolute;
     }
 
-    .rright label {
-        background-image: url("data:image/svg+xml,%3Csvg width='17' height='32' viewBox='0 0 17 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.9643 16.7484L2.87647 30.219C2.56363 30.541 2.01786 30.3195 2.01786 29.8706L2.01786 2.92938C2.01786 2.48045 2.56363 2.25897 2.87647 2.58096L15.9643 16.0515C16.1529 16.2456 16.1529 16.5544 15.9643 16.7484Z' stroke='%23C3C2C2'/%3E%3C/svg%3E%0A");
-        background-position: 0% 50%;
-        background-size: 17px 32px;
+    #position-buttons svg.radio-svg-selected{
+        display: none;
+    }
+    
+    #position-buttons input:checked+label svg.radio-svg-default, #position-buttons input+label:hover svg.radio-svg-default{
+       /*display:none;*/
     }
 
-    .rbottom label {
-        background-image: url("data:image/svg+xml,%3Csvg width='32' height='17' viewBox='0 0 32 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.2516 15.9643L1.781 2.87647C1.45901 2.56363 1.68049 2.01785 2.12942 2.01785L29.0706 2.01786C29.5195 2.01786 29.741 2.56363 29.419 2.87647L15.9484 15.9643C15.7544 16.1529 15.4456 16.1529 15.2516 15.9643Z' stroke='%23C3C2C2'/%3E%3C/svg%3E%0A");
-        background-position: 100% 0%;
-        background-size: 32px 17px;
+    #position-buttons input:checked+label svg.radio-svg-selected, #position-buttons input+label:hover svg.radio-svg-selected{
+       display:block;
     }
 
-    .rleft label {
-        background-image: url("data:image/svg+xml,%3Csvg width='17' height='32' viewBox='0 0 17 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.03566 15.2516L14.1235 1.78102C14.4364 1.45904 14.9821 1.68051 14.9821 2.12945L14.9821 29.0706C14.9821 29.5196 14.4364 29.741 14.1235 29.419L1.03566 15.9485C0.847139 15.7544 0.847139 15.4456 1.03566 15.2516Z' stroke='%23C3C2C2'/%3E%3C/svg%3E%0A");
-        background-position: 100% 50%;
-        background-size: 17px 32px;
-    }
 
-    .rreplace label {
-        background-image: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.5' y='0.5' width='21' height='21' stroke='%23C3C2C2'/%3E%3C/svg%3E ");
-        background-position: 50% 50%;
-        background-size: 22px 22px;
+    .rtop svg {
+        bottom: 0px;
+        left: 0px;
     }
-
-    .rtop input:checked+label , .rtop input+label:hover{
-        background-image: url("data:image/svg+xml,%3Csvg width='32' height='17' viewBox='0 0 32 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.4122 0.856352C15.7033 0.573574 16.1665 0.573574 16.4575 0.856352L29.9281 13.9442C30.4111 14.4135 30.0789 15.2321 29.4055 15.2321H2.46428C1.79088 15.2321 1.45867 14.4135 1.94165 13.9442L8.14164 7.92038L15.4122 0.856352Z' stroke='%23C3C2C2' stroke-width='1'/%3E%3Cpath d='M15.2887 4.36263C15.6802 3.96651 16.3198 3.96651 16.7113 4.36263L23.9171 11.6543C24.5414 12.2859 24.0939 13.3572 23.2059 13.3572H8.79418C7.90612 13.3572 7.45868 12.2859 8.0829 11.6543L11.2 8.50003L15.2887 4.36263Z' fill='%23CC00FF'/%3E%3C/svg%3E%0A");
-        background-position: 100% 100%;
-        background-size: 32px 17px;
+    .rleft svg {
+        right: 0px;
+        top: 0px;
     }
-
-    .rright input:checked+label, .rright input+label:hover {
-        background-image: url("data:image/svg+xml,%3Csvg width='17' height='32' viewBox='0 0 17 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.1436 16.4575L2.05577 29.9281C1.58652 30.4111 0.767855 30.0789 0.767855 29.4055L0.767856 2.46428C0.767857 1.79088 1.58652 1.45867 2.05577 1.94165L8.07962 8.14164L15.1436 15.4122C15.4264 15.7033 15.4264 16.1665 15.1436 16.4575Z' stroke='%23C3C2C2' stroke-width='1'/%3E%3Cpath d='M11.6374 15.2887C12.0335 15.6802 12.0335 16.3198 11.6374 16.7113L4.34574 23.9171C3.71409 24.5413 2.64283 24.0939 2.64283 23.2058L2.64283 8.79415C2.64283 7.90609 3.71409 7.45865 4.34574 8.08287L7.49997 11.2L11.6374 15.2887Z' fill='%23CC00FF'/%3E%3C/svg%3E%0A");
-        background-position: 0% 50%;
-        background-size: 17px 32px;
+    .rright svg {
+        left: 0px;
+        top: 0px;
     }
-
-    .rbottom input:checked+label, .rbottom input+label:hover {
-        background-image: url("data:image/svg+xml,%3Csvg width='32' height='17' viewBox='0 0 32 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.4122 15.1436L1.94164 2.05577C1.45867 1.58651 1.79087 0.767854 2.46428 0.767854L29.4055 0.767856C30.0789 0.767856 30.4111 1.58652 29.9281 2.05577L23.7281 8.07962L16.4575 15.1436C16.1665 15.4264 15.7033 15.4264 15.4122 15.1436Z' stroke='%23C3C2C2' stroke-width='1'/%3E%3Cpath d='M16.581 11.6374C16.1896 12.0335 15.5499 12.0335 15.1585 11.6374L7.9526 4.34577C7.32838 3.71412 7.77583 2.64286 8.66388 2.64286L23.0756 2.64286C23.9636 2.64286 24.4111 3.71412 23.7869 4.34577L20.6697 7.5L16.581 11.6374Z' fill='%23CC00FF'/%3E%3C/svg%3E%0A");
-        background-position: 100% 0%;
-        background-size: 32px 17px;
+    .rbottom svg {
+        left: 0px;
+        top: 0px;
     }
-
-    .rleft input:checked+label, .rleft input+label:hover{
-        background-image: url("data:image/svg+xml,%3Csvg width='17' height='32' viewBox='0 0 17 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.79123 15.4774L14.8791 2.00676C15.3484 1.52379 16.167 1.856 16.167 2.5294L16.167 29.4706C16.167 30.144 15.3484 30.4762 14.8791 29.9932L8.85525 23.7932L1.79123 16.5226C1.50845 16.2316 1.50845 15.7684 1.79123 15.4774Z' stroke='%23C3C2C2' stroke-width='1'/%3E%3Cpath d='M5.2975 16.6462C4.90138 16.2547 4.90138 15.6151 5.2975 15.2236L12.5891 8.01776C13.2208 7.39354 14.292 7.84098 14.292 8.72904L14.292 23.1407C14.292 24.0288 13.2208 24.4762 12.5891 23.852L9.4349 20.7349L5.2975 16.6462Z' fill='%23CC00FF'/%3E%3C/svg%3E ");
-        background-position: 100% 50%;
-        background-size: 17px 32px;
-    }
-
-    .rreplace input:checked+label,  .rreplace input+label:hover {
-        background-image: url("data:image/svg+xml,%3Csvg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='3.40479' y='3.41614' width='15.1905' height='15.0311' rx='1' fill='%23CC00FF'/%3E%3Crect x='0.616638' y='0.659912' width='20.7667' height='20.5435' rx='0.75' stroke='%23C3C2C2' stroke-width='1'/%3E%3C/svg%3E ");
-        background-position: 50% 50%;
-        background-size: 22px 22px;
+    .rreplace svg {
+        left: 4px;
+        top: 4px;
     }
 
     #switches input {
@@ -388,14 +366,14 @@
     #config:hover,
     .cancel:hover,
     .reset:hover {
-        border-bottom: 2px solid #E1A0EF;
+        border-bottom: 2px solid var(--spacers-bg);
     }
 
     #config svg,
     .reset svg,
     .cancel svg {
         margin-right: 5px;
-        /*fill: #CC00FF;*/
+        /*fill: var(--spacers-fg);*/
     }
 
     #config svg{
@@ -439,9 +417,9 @@
     }
 
     #configDiv .ok {
-        background-color: var(--purple);
+        background-color: var(--spacers-fg);
         color:var(--white);
-        border: 1px solid  var(--purple);
+        border: 1px solid  var(--spacers-sg);
         font-size: 14px;
 
     }
@@ -457,7 +435,6 @@
 
     .reset {
         border: 0;
-        /*color: #CC00FF;*/
         border: none;
         border-radius: 0;
         margin: 0;
@@ -490,49 +467,50 @@
         <svg width="26" height="26" viewBox="0 0 34 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M30.3038 12.2998V9.04448H27.0853V6.79595H24.0353V3.54061H26.4113V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V23.2405H8.16166V25.791H14.1606V22.1498H10.049V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038ZM12.2059 14.3638H8.97051V8.96058H12.189V14.3638H12.2059ZM23.6646 14.3638H20.446V8.96058H23.6646V14.3638Z"
-                fill="#CC00FF" />
+                fill="var(--spacers-fg)" />
             <path
                 d="M0.361328 31.6709L1.76758 31.5342C1.85221 32.0062 2.02311 32.3529 2.28027 32.5742C2.54069 32.7956 2.89062 32.9062 3.33008 32.9062C3.79557 32.9062 4.14551 32.8086 4.37988 32.6133C4.61751 32.4147 4.73633 32.1836 4.73633 31.9199C4.73633 31.7507 4.68587 31.6074 4.58496 31.4902C4.4873 31.3698 4.31478 31.2656 4.06738 31.1777C3.89811 31.1191 3.51237 31.015 2.91016 30.8652C2.13542 30.6732 1.5918 30.4372 1.2793 30.1572C0.839844 29.7633 0.620117 29.2832 0.620117 28.7168C0.620117 28.3522 0.722656 28.012 0.927734 27.6963C1.13607 27.3773 1.43392 27.1348 1.82129 26.9688C2.21191 26.8027 2.68229 26.7197 3.23242 26.7197C4.13086 26.7197 4.80632 26.9167 5.25879 27.3105C5.71452 27.7044 5.95378 28.2301 5.97656 28.8877L4.53125 28.9512C4.4694 28.5833 4.33594 28.3197 4.13086 28.1602C3.92904 27.9974 3.62467 27.916 3.21777 27.916C2.79785 27.916 2.46908 28.0023 2.23145 28.1748C2.07845 28.2855 2.00195 28.4336 2.00195 28.6191C2.00195 28.7884 2.07357 28.9333 2.2168 29.0537C2.39909 29.2067 2.8418 29.3662 3.54492 29.5322C4.24805 29.6982 4.76725 29.8708 5.10254 30.0498C5.44108 30.2256 5.70475 30.4681 5.89355 30.7773C6.08561 31.0833 6.18164 31.4626 6.18164 31.915C6.18164 32.3252 6.06771 32.7093 5.83984 33.0674C5.61198 33.4255 5.28971 33.6924 4.87305 33.8682C4.45638 34.0407 3.93717 34.127 3.31543 34.127C2.41048 34.127 1.71549 33.9186 1.23047 33.502C0.745443 33.082 0.455729 32.4717 0.361328 31.6709ZM8.30234 34V26.8418H9.74766V29.6592H12.5797V26.8418H14.025V34H12.5797V30.8701H9.74766V34H8.30234ZM16.1311 30.4648C16.1311 29.7357 16.2401 29.1237 16.4582 28.6289C16.621 28.2643 16.8423 27.9372 17.1223 27.6475C17.4055 27.3577 17.7147 27.1429 18.05 27.0029C18.496 26.8141 19.0103 26.7197 19.593 26.7197C20.6477 26.7197 21.4908 27.0469 22.1223 27.7012C22.757 28.3555 23.0744 29.2653 23.0744 30.4307C23.0744 31.5863 22.7603 32.4912 22.132 33.1455C21.5038 33.7965 20.6639 34.1221 19.6125 34.1221C18.548 34.1221 17.7017 33.7982 17.0734 33.1504C16.4452 32.4993 16.1311 31.6042 16.1311 30.4648ZM17.6203 30.416C17.6203 31.2266 17.8075 31.8418 18.1818 32.2617C18.5562 32.6784 19.0314 32.8867 19.6076 32.8867C20.1838 32.8867 20.6558 32.68 21.0236 32.2666C21.3947 31.8499 21.5803 31.2266 21.5803 30.3965C21.5803 29.5762 21.3996 28.9642 21.0383 28.5605C20.6802 28.1569 20.2033 27.9551 19.6076 27.9551C19.0119 27.9551 18.5318 28.1602 18.1672 28.5703C17.8026 28.9772 17.6203 29.5924 17.6203 30.416ZM26.1229 34L24.4139 26.8418H25.8934L26.9725 31.7588L28.2811 26.8418H29.9998L31.2547 31.8418L32.3533 26.8418H33.8084L32.0701 34H30.5369L29.1111 28.6484L27.6902 34H26.1229Z"
-                fill="#CC00FF" />
+                fill="var(--spacers-fg)" />
         </svg>
 
-        <input type="checkbox" id="showToggle" checked onchange="switchShow()" title="make spacers visible or not"/> <label for="showToggle"></label>
+        <input type="checkbox" id="showToggle" checked onchange="switchShow()" title="make spacers visible or not"/> 
+        <label for="showToggle"></label>
         <svg width="26" height="36" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0)">
                 <path
                     d="M0.732422 34V26.8418H2.17773V29.6592H5.00977V26.8418H6.45508V34H5.00977V30.8701H2.17773V34H0.732422ZM11.1102 34V26.8418H12.5555V34H11.1102ZM17.1324 26.8418H19.774C20.3697 26.8418 20.8238 26.8874 21.1363 26.9785C21.5562 27.1022 21.916 27.3219 22.2154 27.6377C22.5149 27.9535 22.7428 28.3408 22.899 28.7998C23.0553 29.2555 23.1334 29.8187 23.1334 30.4893C23.1334 31.0785 23.0602 31.5863 22.9137 32.0127C22.7346 32.5335 22.4791 32.9551 22.1471 33.2773C21.8964 33.5215 21.5579 33.7119 21.1314 33.8486C20.8124 33.9495 20.386 34 19.8521 34H17.1324V26.8418ZM18.5777 28.0527V32.7939H19.6568C20.0605 32.7939 20.3518 32.7712 20.5309 32.7256C20.7652 32.667 20.9589 32.5677 21.1119 32.4277C21.2682 32.2878 21.3951 32.0583 21.4928 31.7393C21.5904 31.417 21.6393 30.9792 21.6393 30.4258C21.6393 29.8724 21.5904 29.4476 21.4928 29.1514C21.3951 28.8551 21.2584 28.624 21.0826 28.458C20.9068 28.292 20.6839 28.1797 20.4137 28.1211C20.2118 28.0755 19.8163 28.0527 19.2271 28.0527H18.5777ZM27.5639 34V26.8418H32.8715V28.0527H29.0092V29.6396H32.6029V30.8457H29.0092V32.7939H33.0082V34H27.5639Z"
-                    fill="#969696" />
+                    fill="var(--black3-opaque)" />
                 <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M26.4113 2V0H23.0916V3.54061H20.7156V6.79595H12.7788V3.54061H10.4028V0H7.10005V3.54061H9.47604V6.79595H6.37546V9.06126H3.59505V12.3166H1V23.9285H4.4039V17.2332H6.37546V22H7V21H8V20H9V19H10V18H11V17H12V16H13V15H14V14H15V13H16V12H17V11H18V10H19V9H20V8H21V7H22V6H23V5H24V4H24.0353V3.54061H25V3H26V2H26.4113ZM27 6.79595V7H26V8H25V9H24V10H23.6646V14.3638H20.446V13H20V14H19V15H18V16H17V17H16V18H15V19H14V19.1965H23.4118V22.1498H19.4687V25.791H25.4676V23.2405H27.0853V17.2332H29.5961V23.9285H33V12.2998H30.3038V9.04448H27.0853V6.79595H27ZM11 22.1498V23H10V24H9V25H8.16166V25.791H14.1606V22.1498H11ZM8.97051 14.3638H12.189V8.96058H8.97051V14.3638Z"
-                    fill="#969696" />
-                <path d="M5 25H6V26H5V25Z" fill="#CC00FF" />
-                <path d="M6 24H7V25H6V24Z" fill="#CC00FF" />
-                <path d="M7 23H8V24H7V23Z" fill="#CC00FF" />
-                <path d="M8 22H9V23H8V22Z" fill="#CC00FF" />
-                <path d="M9 21H10V22H9V21Z" fill="#CC00FF" />
-                <path d="M10 20H11V21H10V20Z" fill="#CC00FF" />
-                <path d="M11 19H12V20H11V19Z" fill="#CC00FF" />
-                <path d="M12 18H13V19H12V18Z" fill="#CC00FF" />
-                <path d="M13 17H14V18H13V17Z" fill="#CC00FF" />
-                <path d="M14 16H15V17H14V16Z" fill="#CC00FF" />
-                <path d="M15 15H16V16H15V15Z" fill="#CC00FF" />
-                <path d="M16 14H17V15H16V14Z" fill="#CC00FF" />
-                <path d="M17 13H18V14H17V13Z" fill="#CC00FF" />
-                <path d="M18 12H19V13H18V12Z" fill="#CC00FF" />
-                <path d="M19 11H20V12H19V11Z" fill="#CC00FF" />
-                <path d="M20 10H21V11H20V10Z" fill="#CC00FF" />
-                <path d="M21 9H22V10H21V9Z" fill="#CC00FF" />
-                <path d="M22 8H23V9H22V8Z" fill="#CC00FF" />
-                <path d="M23 7H24V8H23V7Z" fill="#CC00FF" />
-                <path d="M24 6H25V7H24V6Z" fill="#CC00FF" />
-                <path d="M25 5H26V6H25V5Z" fill="#CC00FF" />
-                <path d="M26 4H27V5H26V4Z" fill="#CC00FF" />
-                <path d="M27 3H28V4H27V3Z" fill="#CC00FF" />
-                <path d="M28 2H29V3H28V2Z" fill="#CC00FF" />
+                    fill="var(--black3-opaque)" />
+                <path d="M5 25H6V26H5V25Z" fill="var(--spacers-fg)" />
+                <path d="M6 24H7V25H6V24Z" fill="var(--spacers-fg)" />
+                <path d="M7 23H8V24H7V23Z" fill="var(--spacers-fg)" />
+                <path d="M8 22H9V23H8V22Z" fill="var(--spacers-fg)" />
+                <path d="M9 21H10V22H9V21Z" fill="var(--spacers-fg)" />
+                <path d="M10 20H11V21H10V20Z" fill="var(--spacers-fg)" />
+                <path d="M11 19H12V20H11V19Z" fill="var(--spacers-fg)" />
+                <path d="M12 18H13V19H12V18Z" fill="var(--spacers-fg)" />
+                <path d="M13 17H14V18H13V17Z" fill="var(--spacers-fg)" />
+                <path d="M14 16H15V17H14V16Z" fill="var(--spacers-fg)" />
+                <path d="M15 15H16V16H15V15Z" fill="var(--spacers-fg)" />
+                <path d="M16 14H17V15H16V14Z" fill="var(--spacers-fg)" />
+                <path d="M17 13H18V14H17V13Z" fill="var(--spacers-fg)" />
+                <path d="M18 12H19V13H18V12Z" fill="var(--spacers-fg)" />
+                <path d="M19 11H20V12H19V11Z" fill="var(--spacers-fg)" />
+                <path d="M20 10H21V11H20V10Z" fill="var(--spacers-fg)" />
+                <path d="M21 9H22V10H21V9Z" fill="var(--spacers-fg)" />
+                <path d="M22 8H23V9H22V8Z" fill="var(--spacers-fg)" />
+                <path d="M23 7H24V8H23V7Z" fill="var(--spacers-fg)" />
+                <path d="M24 6H25V7H24V6Z" fill="var(--spacers-fg)" />
+                <path d="M25 5H26V6H25V5Z" fill="var(--spacers-fg)" />
+                <path d="M26 4H27V5H26V4Z" fill="var(--spacers-fg)" />
+                <path d="M27 3H28V4H27V3Z" fill="var(--spacers-fg)" />
+                <path d="M28 2H29V3H28V2Z" fill="var(--spacers-fg)" />
             </g>
             <defs>
                 <clipPath id="clip0">
-                    <rect width="34" height="34" fill="white" />
+                    <rect width="34" height="34" fill="var(--white)" />
                 </clipPath>
             </defs>
         </svg>
@@ -544,15 +522,77 @@
 
     <div id="position-buttons">
         <div class="rleft" ><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
-                name="position"><label for="idleft" title="position spacers on the left of selected element"></label></div>
+                name="position"><label for="idleft" title="position spacers on the left of selected element">
+                    <svg class='radio-svg-default' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.03566 15.9485C0.847138 15.7544 0.84714 15.4456 1.03566 15.2516L14.1235 1.78102C14.4364 1.45904 14.9821 1.68051 14.9821 2.12945L14.9821 29.0706C14.9821 29.5195 14.4364 29.741 14.1235 29.419L1.03566 15.9485Z" 
+                        stroke="var(--black3-opaque)"/>
+                        </svg>
+                    <svg class='radio-svg-selected' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.2975 16.6462C4.90138 16.2547 4.90138 15.6151 5.2975 15.2236L12.5891 8.01776C13.2208 7.39354 14.292 7.84098 14.292 8.72904L14.292 23.1407C14.292 24.0288 13.2208 24.4762 12.5891 23.852L9.4349 20.7349L5.2975 16.6462Z" 
+                            fill="var(--spacers-fg)"/>
+                        </svg>
+            </label>
+        </div>
+
         <div class="rbottom"><input type="radio" id="idbottom" class="position" onclick="place('BOTTOM')"
-                name="position" checked="checked"><label for="idbottom" title="position spacers at bottom of selected element"></label></div>
+                name="position" checked="checked"><label for="idbottom" title="position spacers at bottom of selected element">
+                    <svg class='radio-svg-default' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.9484 15.9643C15.7544 16.1529 15.4456 16.1529 15.2516 15.9643L1.781 2.87647C1.45901 2.56363 1.68049 2.01785 2.12942 2.01785L29.0706 2.01786C29.5195 2.01786 29.741 2.56363 29.419 2.87647L15.9484 15.9643Z" 
+                        stroke="var(--black3-opaque)"/>
+                        </svg>
+                        <svg class='radio-svg-selected' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.581 11.6374C16.1896 12.0335 15.5499 12.0335 15.1585 11.6374L7.9526 4.34577C7.32838 3.71412 7.77583 2.64286 8.66388 2.64286L23.0756 2.64286C23.9636 2.64286 24.4111 3.71412 23.7869 4.34577L20.6697 7.5L16.581 11.6374Z"
+                            fill="var(--spacers-fg)"/>
+                            </svg>
+                            
+            </label>
+        </div>     
+                    
         <div class="rright"><input type="radio" id="idright" class="position" onclick="place('RIGHT')"
-                name="position"><label for="idright" title="position spacers on the right of selected element"></label></div>
+                name="position"><label for="idright" title="position spacers on the right of selected element">
+                    <svg class='radio-svg-default' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.9643 16.0515C16.1529 16.2456 16.1529 16.5544 15.9643 16.7484L2.87647 30.219C2.56363 30.541 2.01786 30.3195 2.01786 29.8706L2.01786 2.92938C2.01786 2.48045 2.56363 2.25897 2.87647 2.58096L15.9643 16.0515Z"
+                        stroke="var(--black3-opaque)"/>
+                        </svg>                    
+                    <svg class='radio-svg-selected' width="16" height="32" viewBox="0 0 16 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.6374 15.2887C12.0335 15.6802 12.0335 16.3198 11.6374 16.7113L4.34574 23.9171C3.71409 24.5413 2.64283 24.0939 2.64283 23.2058L2.64283 8.79415C2.64283 7.90609 3.71409 7.45865 4.34574 8.08287L7.49997 11.2L11.6374 15.2887Z" 
+                        fill="var(--spacers-fg)"/>
+                        </svg>
+            </label>
+        </div>
+        
         <div class="rtop"><input type="radio" class="idposition" id="idtop" onclick="place('TOP')"
-                name="position"><label for="idtop" title="position spacers on top of selected element"></label></div>
+                name="position">
+                <label for="idtop" title="position spacers on top of selected element">
+                    <!--svg  class='radio-svg-default' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 16 L16 0 L32 16 H0 16" stroke="var(--black3-opaque)"/>
+                    </svg>
+                    <svg  class='radio-svg-selected' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 14 L14 2 L28 14 H0 14" fill="var(--black3-opaque)"/>
+                    </svg-->     
+                    
+                    <svg class='radio-svg-default' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.0516 1.03566C16.2456 0.847139 16.5544 0.847141 16.7484 1.03566L30.219 14.1235C30.541 14.4364 30.3195 14.9821 29.8706 14.9821H2.92941C2.48048 14.9821 2.259 14.4364 2.58099 14.1235L16.0516 1.03566Z"
+                        stroke="var(--black3-opaque)"/>
+                        </svg>
+                    <svg class='radio-svg-selected' width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.2887 4.3626C15.6802 3.96648 16.3198 3.96648 16.7113 4.3626L23.9171 11.6542C24.5414 12.2859 24.0939 13.3571 23.2059 13.3571H8.79418C7.90612 13.3571 7.45868 12.2859 8.0829 11.6542L11.2 8.5L15.2887 4.3626Z" 
+                        fill="var(--spacers-fg)"/>
+                        </svg>
+                </label>
+        </div>
+        
+        
         <div class="rreplace"><input type="radio" id="idreplace" class="position" onclick="place('REPLACE')"
-                name="position"><label for="idreplace" title="replace selected spacers by another spacer"></label></div>
+                name="position"><label for="idreplace" title="replace selected spacers by another spacer">
+                    <svg class='radio-svg-default' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="23" height="23" stroke="var(--black3-opaque)"/>
+                        </svg>
+                    <svg class='radio-svg-selected' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3.5" y="3.5" width="17" height="17" rx="1" fill="var(--spacers-fg)"/>
+                    </svg>
+            </label>
+        </div>
     </div>
 
     <hr>
@@ -665,6 +705,7 @@
         //store the spacers value
         spacerValues = spacers;
         setSpacerPropertiesInPage(spacers);
+       // mainDiv.style.setProperty('--spacers-fg', "green");
         mainDiv.style.display = "block";
     }
 
