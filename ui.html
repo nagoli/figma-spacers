@@ -1,30 +1,6 @@
 <style>
 
-    /*  FONTS */
-    @font-face {
-        font-family: 'Inter';
-        font-weight: 400;
-        font-style: normal;
-        src: url('https://rsms.me/inter/font-files/Inter-Regular.woff2?v=3.7') format('woff2'),
-        url('https://rsms.me/inter/font-files/Inter-Regular.woff?v=3.7') format('woff');
-    }
-
-    @font-face {
-        font-family: 'Inter';
-        font-weight: 500;
-        font-style: normal;
-        src: url('https://rsms.me/inter/font-files/Inter-Medium.woff2?v=3.7') format('woff2'),
-        url('https://rsms.me/inter/font-files/Inter-Medium.woff2?v=3.7') format('woff');
-    }
-
-    @font-face {
-        font-family: 'Inter';
-        font-weight: 600;
-        font-style: normal;
-        src: url('https://rsms.me/inter/font-files/Inter-SemiBold.woff2?v=3.7') format('woff2'),
-        url('https://rsms.me/inter/font-files/Inter-SemiBold.woff2?v=3.7') format('woff');
-    }
-
+   
     :root {
 	/* COLORS */
     /* Basic foreground */
@@ -186,7 +162,7 @@
 
     .spacer-button {
         width: 40px;
-        font-size: 18px;
+        height : 40px;
         border: none ;/*1px solid rgba(222, 222, 222, 0.42);*/
         border-radius: 0;
         color: #CC00FF;
@@ -196,6 +172,20 @@
         justify-content: center;
         margin-bottom: 0px;
 
+    }
+
+    .spacer-button p{
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 14px;
+        margin: 0;
+    }
+
+    .spacer-button p span{
+        font-size: 10px;
+        font-weight: 300;
+        line-height:14px;
+        opacity: 0.6;
     }
 
     .spacer-button:hover {
@@ -494,7 +484,7 @@
 
 
 <div id="main">
-    <div class="header"> Show </div>
+    <div class="header"> Visibility </div>
    
     <div id="switches">
         <svg width="26" height="26" viewBox="0 0 34 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -550,7 +540,7 @@
     </div>
 
     <hr>
-    <div class="header"> Direction </div>
+    <div class="header"> Insert Direction </div>
 
     <div id="position-buttons">
         <div class="rleft" ><input type="radio" id="idleft" class="position" onclick="place('LEFT')"
@@ -566,7 +556,7 @@
     </div>
 
     <hr>
-    <div class="header"> Spacers </div>
+    <div class="header"> Spacers</div>
     <div id="spacers">
     </div>
 
@@ -721,7 +711,10 @@
         button.className = "spacer-button";
         button.title = "add a "+size+"px spacer beside the selected element";
         var p = document.createElement("p");
-        p.innerHTML = "" + size + "px";
+        p.innerHTML = "" + size;
+        var span = document.createElement("span");
+        span.innerHTML = "px";
+        p.appendChild(span);
         button.appendChild(p);
         return button;
     }
