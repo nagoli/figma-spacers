@@ -352,10 +352,13 @@ figma.ui.onmessage = msg => {
       hide: Boolean(hide),
     });
     var knownVersion = figma.root.getPluginData(VersionProperty);
+    if (knownVersion > VERSION){ 
+      figma.notify("Your plugin version is older than the spacers of your project \r please restart Figma to update the plugin",{timeout:15000});
+      figma.closePlugin();
+      return;
+    }
     if (knownVersion != VERSION) {
-      console.log("Change in spacers versions :");
-      console.log("Document = " + knownVersion);
-      console.log("Plugin = " + VERSION);
+      console.log("Change in spacers versions : Document = " + knownVersion + " – Plugin = " + VERSION);
       figma.root.setPluginData(VersionProperty, VERSION);
       //update all spacers with new version
       resetAllSpacers();
