@@ -655,7 +655,7 @@
     <hr>
     <div>
         <button onclick="showMain();" class="cancel"> Cancel</button>
-        <button onclick="setNewConfig();" class="ok">OK</button>
+        <button onclick="setSpacers(arrayFrom(valueInput.value)); setBackgroundColor(bgInput.value);  setForegroundColor(fgInput.value);  showMain();" class="ok">OK</button>
     </div>
 
 </div>
@@ -682,8 +682,6 @@
     const Base8 = [8, 16, 24, 32, 40, 48];
     const bgColorDefault = '#FAE3FF';
     const fgColorDefault = '#CC00FF';
-    const hexCheckRex = /^#([0-9A-F]{3}){1,2}$/i;
-    const spacersListCheckRex = /^([0-9]+,)*[0-9]+$/i;
 
     //state
     var hiddenState;
@@ -754,14 +752,14 @@
     }
 
     function setForegroundColor(hexColor){
-        if (!hexColor || !(hexCheckRex.test(hexColor))) fgColor = fgColorDefault;
+        if (!hexColor || !(/^#([0-9A-F]{3}){1,2}$/i.test(hexColor))) fgColor = fgColorDefault;
         else fgColor = hexColor;
         frameDiv.style.setProperty('--spacers-fg', fgColor);
         setPropertyInProject('fg-color',fgColor);
     }
 
     function setBackgroundColor(hexColor){
-        if (!hexColor || !(hexCheckRex.test(hexColor))) bgColor = bgColorDefault;
+        if (!hexColor || !(/^#([0-9A-F]{3}){1,2}$/i.test(hexColor))) bgColor = bgColorDefault;
         else bgColor = hexColor;
         frameDiv.style.setProperty('--spacers-bg', bgColor);
         setPropertyInProject('bg-color',bgColor);
@@ -802,39 +800,11 @@
         configDiv.style.display = "block";
     }
 
-    //set the new config and go back to main display 
-    function setNewConfig(){
-         //check values before setting new config
-
-        var bg = bgInput.value;
-        if (!(bg.startsWith('#'))) bg = '#'+bg;
-        if (!hexCheckRex.test(bg)){
-            notify("Please enter a valid background color in hexadecimal");
-            return;
-        }
-        
-        var fg = fgInput.value;
-        if (!(fg.startsWith('#'))) fg = '#'+fg;
-        if (!hexCheckRex.test(fg)){
-            notify("Please enter a valid foreground color in hexadecimal");
-            return;
-        }
-
-       
-        if (!spacersListCheckRex.test(valueInput.value)){
-            notify("Please enter a valid list of spacers (numbers separated by , )");
-            return;
-        }
-
-        //if tests pass then set
-
-        setSpacers(arrayFrom(valueInput.value)); 
-        setBackgroundColor(bg);  
-        setForegroundColor(fg);  
+    // show main ui 
+    function showMain(){
         configDiv.style.display = "none";
         mainDiv.style.display = "block";
     }
-
 
 
     // create a spacer button for a specific size
@@ -877,18 +847,6 @@
         //release focus
         parent.focus();
     }
-
-
-    // call code for defining position
-    function notify(msg) {
-        parent.postMessage({
-            pluginMessage: {
-                type: 'notify',
-                msg: msg
-            }
-        }, '*');
-    }
-
 
     // call code for defining position
     function place(position) {

@@ -393,11 +393,6 @@ figma.ui.onmessage = msg => {
     figma.root.setPluginData(HideProperty, "1");
   };
 
-  if (msg.type === 'notify') {
-    figma.notify(msg.msg);
-  };
-
-
 
 
   /**

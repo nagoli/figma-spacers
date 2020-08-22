@@ -121,7 +121,7 @@ function shapeSpacerComponent(component:ComponentNode,size:number){
 
    setSpacerForeground(component, figma.root.getPluginData(FgColorProperty));
    setSpacerBackground(component, figma.root.getPluginData(BgColorProperty));  
-   setSpacerVisibility(component, Boolean(figma.root.getPluginData(HideProperty)));
+   setSpacerVisibility(component,Boolean(figma.root.getPluginData(HideProperty)));
 }
 
 /**
@@ -184,7 +184,7 @@ function getSpacerComponentsInUse() : Array<ComponentNode>{
  * 
  * @param isHidden show or hide all spacers
  */
-function setAllSpacersVisibility(isHidden: boolean) {
+async function setAllSpacersVisibility(isHidden: boolean) {
   getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
 }
 
@@ -195,7 +195,9 @@ function setAllSpacersVisibility(isHidden: boolean) {
  */
 function setSpacerVisibility(spacer: ComponentNode, isHidden: boolean) {
   if (spacer) spacer.children.forEach(child => {
-    child.visible = !isHidden;
+    if (child.name=== ContainerName) {
+
+    }
   });
 }
 
@@ -204,7 +206,7 @@ function setSpacerVisibility(spacer: ComponentNode, isHidden: boolean) {
  * 
  * @param isHidden show or hide all spacers
  */
-function setAllSpacersForeground(hexColor: string) {
+async function setAllSpacersForeground(hexColor: string) {
   getSpacerComponentsInUse().forEach(spacer => setSpacerForeground(spacer, hexColor));
 }
 
@@ -227,7 +229,7 @@ function setSpacerForeground(spacer: ComponentNode, hexColor: string) {
  * 
  * @param isHidden show or hide all spacers
  */
-function setAllSpacersBackground(hexColor: string) {
+async function setAllSpacersBackground(hexColor: string) {
   getSpacerComponentsInUse().forEach(spacer => setSpacerBackground(spacer, hexColor));
 }
 
@@ -373,30 +375,27 @@ figma.ui.onmessage = msg => {
   
     //set fg color properties in project
     if (msg.type === 'bg-color') {
-      figma.root.setPluginData(BgColorProperty, msg.value);
-      setAllSpacersBackground(msg.value);
+      figma.root.setPluginData(BgColorProperty, msg.value.toString());
+
     };
 
   //set fg color properties in project
   if (msg.type === 'fg-color') {
-    figma.root.setPluginData(FgColorProperty, msg.value);
-    setAllSpacersForeground(msg.value);
+    figma.root.setPluginData(FgColorProperty, msg.value.toString());
   };
 
   if (msg.type === 'show-spacer-infos') {
-   setAllSpacersVisibility(false);
-   figma.root.setPluginData(HideProperty, ""); 
-   };
+    // try to improve perf but the async does not seem to work...
+   setAllSpacersVisibility(false).then(function (){
+      figma.root.setPluginData(HideProperty, ""); 
+    });
+  };
 
   if (msg.type === 'hide-spacer-infos') {
-    setAllSpacersVisibility(true);
-    figma.root.setPluginData(HideProperty, "1");
+    setAllSpacersVisibility(true).then(function (){
+      figma.root.setPluginData(HideProperty, "1");
+   });
   };
-
-  if (msg.type === 'notify') {
-    figma.notify(msg.msg);
-  };
-
 
 
 
@@ -715,12 +714,10 @@ function hexToRgb(hex : string) : RGB {
     return r + r + g + g + b + b;
   });
 
-  var fullRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  const result = fullRegex ? {
-    r: parseInt(fullRegex[1], 16)/255,
-    g: parseInt(fullRegex[2], 16)/255,
-    b: parseInt(fullRegex[3], 16)/255
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
   } : null;
-  //console.log("hex to rgb : " + hex + " --> " +result.r +","+result.g+","+result.b);
-  return result;
 }

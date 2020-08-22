@@ -34,8 +34,8 @@ figma.ui.resize(baseWidth, baseHeight+3*spacerHeight);
 const VERSION: string = '2.0';
 
 //styles
-const DefaultFgColor = { r: 0.8, g: 0, b: 1 } ;
-const DefaultBgColor = { r: 0.98, g: 0.89, b: 1 } ;
+const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
+const ContainerStyle = { type: 'SOLID', color: { r: 0.98, g: 0.89, b: 1 } };
 const Alignement = "CENTER";
 
 
@@ -94,6 +94,7 @@ function shapeSpacerComponent(component:ComponentNode,size:number){
    component.appendChild(shape);
    shape.name = ContainerName;
    shape.resize(containerSize, containerSize);
+   shape.fills = [clone(ContainerStyle)];
    shape.locked = true;
  
    //TEXT
@@ -110,6 +111,7 @@ function shapeSpacerComponent(component:ComponentNode,size:number){
      text.textAlignHorizontal = 'LEFT';
      text.textAlignVertical = 'TOP';
      text.characters = String(size);
+     text.fills = [clone(LabelStyle)];
      text.letterSpacing = { unit: "PERCENT", value: -5 };
      text.locked = true;
      text.x = (size - text.width) / 2;
@@ -118,10 +120,7 @@ function shapeSpacerComponent(component:ComponentNode,size:number){
 
    component.resize(size, size);
    component.setPluginData(SizeProperty,size.toString());
-
-   setSpacerForeground(component, figma.root.getPluginData(FgColorProperty));
-   setSpacerBackground(component, figma.root.getPluginData(BgColorProperty));  
-   setSpacerVisibility(component, Boolean(figma.root.getPluginData(HideProperty)));
+   setSpacerVisibility(component,Boolean(figma.root.getPluginData(HideProperty)));
 }
 
 /**
@@ -178,16 +177,6 @@ function getSpacerComponentsInUse() : Array<ComponentNode>{
   return components;
 }
 
-
-
-/**
- * 
- * @param isHidden show or hide all spacers
- */
-function setAllSpacersVisibility(isHidden: boolean) {
-  getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
-}
-
 /**
  * 
  * @param spacer show or hide any childre of spacer component
@@ -199,57 +188,13 @@ function setSpacerVisibility(spacer: ComponentNode, isHidden: boolean) {
   });
 }
 
-
 /**
  * 
  * @param isHidden show or hide all spacers
  */
-function setAllSpacersForeground(hexColor: string) {
-  getSpacerComponentsInUse().forEach(spacer => setSpacerForeground(spacer, hexColor));
+async function setAllSpacersVisibility(isHidden: boolean) {
+  getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
 }
-
-/**
- * 
- * @param spacer show or hide any childre of spacer component
- * @param isHidden 
- */
-function setSpacerForeground(spacer: ComponentNode, hexColor: string) {
-  var rgb = hexToRgb(hexColor);
-  if (!rgb) rgb = DefaultFgColor; 
-  if (spacer) spacer.children.forEach(child => {
-      if (child.name===LabelName ){
-        (child as TextNode).fills = [{ type: 'SOLID', color: rgb }];
-      }
-  });
-}
-
-/**
- * 
- * @param isHidden show or hide all spacers
- */
-function setAllSpacersBackground(hexColor: string) {
-  getSpacerComponentsInUse().forEach(spacer => setSpacerBackground(spacer, hexColor));
-}
-
-/**
- * 
- * @param spacer show or hide any childre of spacer component
- * @param isHidden 
- */
-function setSpacerBackground(spacer: ComponentNode, hexColor: string) {
-  var rgb = hexToRgb(hexColor);
-  if (!rgb) rgb = DefaultBgColor; 
-  if (spacer) spacer.children.forEach(child => {
-      if (child.name===ContainerName ){
-        (child as FrameNode).fills = [{ type: 'SOLID', color: rgb }];
-      }
-  });
-}
-
-
-
-
-
 
 /**************** OLD way to set visibility*/
 function OLDsetSpacerVisibility(spacer: FrameNode, isHidden: boolean) {
@@ -363,9 +308,9 @@ figma.ui.onmessage = msg => {
     //console.log("Spacers init ok");
   };
 
-  //set spacers properties in project
+  //set sapacers properties in project
   if (msg.type === 'spacers') {
-    const spacerList = msg.value.toString();
+    const spacerList = msg.spacers.toString();
     figma.root.setPluginData(SpacerListProperty, spacerList);
     const spacersPairs = Math.ceil(arrayOfNumberFrom(spacerList).length/2);
     figma.ui.resize(baseWidth, baseHeight+spacersPairs*spacerHeight);
@@ -373,30 +318,26 @@ figma.ui.onmessage = msg => {
   
     //set fg color properties in project
     if (msg.type === 'bg-color') {
-      figma.root.setPluginData(BgColorProperty, msg.value);
-      setAllSpacersBackground(msg.value);
+      figma.root.setPluginData(BgColorProperty, msg.value.toString());
     };
 
   //set fg color properties in project
   if (msg.type === 'fg-color') {
-    figma.root.setPluginData(FgColorProperty, msg.value);
-    setAllSpacersForeground(msg.value);
+    figma.root.setPluginData(FgColorProperty, msg.value.toString());
   };
 
   if (msg.type === 'show-spacer-infos') {
-   setAllSpacersVisibility(false);
-   figma.root.setPluginData(HideProperty, ""); 
-   };
+    // try to improve perf but the async does not seem to work...
+   setAllSpacersVisibility(false).then(function (){
+      figma.root.setPluginData(HideProperty, ""); 
+    });
+  };
 
   if (msg.type === 'hide-spacer-infos') {
-    setAllSpacersVisibility(true);
-    figma.root.setPluginData(HideProperty, "1");
+    setAllSpacersVisibility(true).then(function (){
+      figma.root.setPluginData(HideProperty, "1");
+   });
   };
-
-  if (msg.type === 'notify') {
-    figma.notify(msg.msg);
-  };
-
 
 
 
@@ -703,24 +644,4 @@ function isInInstance(node : SceneNode | BaseNode ) : boolean {
   if ( type === "INSTANCE") return true;
   if (type === "PAGE") return false;
   return isInInstance(node.parent);
-}
-
-/**
- * transfom hex to rgb
- */
-function hexToRgb(hex : string) : RGB {
-  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-    return r + r + g + g + b + b;
-  });
-
-  var fullRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  const result = fullRegex ? {
-    r: parseInt(fullRegex[1], 16)/255,
-    g: parseInt(fullRegex[2], 16)/255,
-    b: parseInt(fullRegex[3], 16)/255
-  } : null;
-  //console.log("hex to rgb : " + hex + " --> " +result.r +","+result.g+","+result.b);
-  return result;
 }

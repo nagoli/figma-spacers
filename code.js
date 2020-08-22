@@ -38,13 +38,15 @@ figma.ui.resize(baseWidth, baseHeight + 3 * spacerHeight);
 //version 2 = spacers as components
 const VERSION = '2.0';
 //styles
-const LabelStyle = { type: 'SOLID', color: { r: 0.8, g: 0, b: 1 } };
-const ContainerStyle = { type: 'SOLID', color: { r: 0.98, g: 0.89, b: 1 } };
+const DefaultFgColor = { r: 0.8, g: 0, b: 1 };
+const DefaultBgColor = { r: 0.98, g: 0.89, b: 1 };
 const Alignement = "CENTER";
 //property names
 const ComponentIDPropertyPrefix = 'spacer-component-';
 const ComponentUsageListProperty = 'spacer-component-list';
 const SpacerListProperty = 'spacers';
+const BgColorProperty = 'bg-color';
+const FgColorProperty = 'fg-color';
 const HideProperty = 'hide';
 const VersionProperty = 'version';
 const SizeProperty = 'size';
@@ -84,7 +86,6 @@ function shapeSpacerComponent(component, size) {
     component.appendChild(shape);
     shape.name = ContainerName;
     shape.resize(containerSize, containerSize);
-    shape.fills = [clone(ContainerStyle)];
     shape.locked = true;
     //TEXT
     var text = figma.createText();
@@ -102,7 +103,6 @@ function shapeSpacerComponent(component, size) {
         text.textAlignHorizontal = 'LEFT';
         text.textAlignVertical = 'TOP';
         text.characters = String(size);
-        text.fills = [clone(LabelStyle)];
         text.letterSpacing = { unit: "PERCENT", value: -5 };
         text.locked = true;
         text.x = (size - text.width) / 2;
@@ -110,6 +110,8 @@ function shapeSpacerComponent(component, size) {
     });
     component.resize(size, size);
     component.setPluginData(SizeProperty, size.toString());
+    setSpacerForeground(component, figma.root.getPluginData(FgColorProperty));
+    setSpacerBackground(component, figma.root.getPluginData(BgColorProperty));
     setSpacerVisibility(component, Boolean(figma.root.getPluginData(HideProperty)));
 }
 /**
@@ -164,6 +166,13 @@ function getSpacerComponentsInUse() {
 }
 /**
  *
+ * @param isHidden show or hide all spacers
+ */
+function setAllSpacersVisibility(isHidden) {
+    getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
+}
+/**
+ *
  * @param spacer show or hide any childre of spacer component
  * @param isHidden
  */
@@ -177,10 +186,47 @@ function setSpacerVisibility(spacer, isHidden) {
  *
  * @param isHidden show or hide all spacers
  */
-function setAllSpacersVisibility(isHidden) {
-    return __awaiter(this, void 0, void 0, function* () {
-        getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
-    });
+function setAllSpacersForeground(hexColor) {
+    getSpacerComponentsInUse().forEach(spacer => setSpacerForeground(spacer, hexColor));
+}
+/**
+ *
+ * @param spacer show or hide any childre of spacer component
+ * @param isHidden
+ */
+function setSpacerForeground(spacer, hexColor) {
+    var rgb = hexToRgb(hexColor);
+    if (!rgb)
+        rgb = DefaultFgColor;
+    if (spacer)
+        spacer.children.forEach(child => {
+            if (child.name === LabelName) {
+                child.fills = [{ type: 'SOLID', color: rgb }];
+            }
+        });
+}
+/**
+ *
+ * @param isHidden show or hide all spacers
+ */
+function setAllSpacersBackground(hexColor) {
+    getSpacerComponentsInUse().forEach(spacer => setSpacerBackground(spacer, hexColor));
+}
+/**
+ *
+ * @param spacer show or hide any childre of spacer component
+ * @param isHidden
+ */
+function setSpacerBackground(spacer, hexColor) {
+    var rgb = hexToRgb(hexColor);
+    if (!rgb)
+        rgb = DefaultBgColor;
+    if (spacer)
+        spacer.children.forEach(child => {
+            if (child.name === ContainerName) {
+                child.fills = [{ type: 'SOLID', color: rgb }];
+            }
+        });
 }
 /**************** OLD way to set visibility*/
 function OLDsetSpacerVisibility(spacer, isHidden) {
@@ -277,11 +323,19 @@ function resetAllSpacers() {
 // posted message.
 figma.ui.onmessage = msg => {
     //get properties from project
-    if (msg.type === 'get-properties-in-page') {
+    if (msg.type === 'get-properties-in-project') {
         //get Spacers In Page Properties
         var spacers = figma.root.getPluginData(SpacerListProperty);
         var hide = figma.root.getPluginData(HideProperty);
-        figma.ui.postMessage({ type: "set-properties-from-page", spacers: spacers ? arrayOfNumberFrom(spacers) : false, hide: Boolean(hide) });
+        var fgColor = figma.root.getPluginData(FgColorProperty);
+        var bgColor = figma.root.getPluginData(BgColorProperty);
+        figma.ui.postMessage({
+            type: "set-properties-from-project",
+            spacers: spacers ? arrayOfNumberFrom(spacers) : false,
+            bgColor: bgColor,
+            fgColor: fgColor,
+            hide: Boolean(hide),
+        });
         var knownVersion = figma.root.getPluginData(VersionProperty);
         if (knownVersion != VERSION) {
             console.log("Change in spacers versions :");
@@ -294,25 +348,38 @@ figma.ui.onmessage = msg => {
         //console.log("Spacers init ok");
     }
     ;
-    //get properties from project
-    if (msg.type === 'set-spacers-in-page') {
-        const spacerList = msg.spacers.toString();
+    //set spacers properties in project
+    if (msg.type === 'spacers') {
+        const spacerList = msg.value.toString();
         figma.root.setPluginData(SpacerListProperty, spacerList);
         const spacersPairs = Math.ceil(arrayOfNumberFrom(spacerList).length / 2);
         figma.ui.resize(baseWidth, baseHeight + spacersPairs * spacerHeight);
     }
     ;
+    //set fg color properties in project
+    if (msg.type === 'bg-color') {
+        figma.root.setPluginData(BgColorProperty, msg.value);
+        setAllSpacersBackground(msg.value);
+    }
+    ;
+    //set fg color properties in project
+    if (msg.type === 'fg-color') {
+        figma.root.setPluginData(FgColorProperty, msg.value);
+        setAllSpacersForeground(msg.value);
+    }
+    ;
     if (msg.type === 'show-spacer-infos') {
-        // try to improve perf but the async does not seem to work...
-        setAllSpacersVisibility(false).then(function () {
-            figma.root.setPluginData(HideProperty, "");
-        });
+        setAllSpacersVisibility(false);
+        figma.root.setPluginData(HideProperty, "");
     }
     ;
     if (msg.type === 'hide-spacer-infos') {
-        setAllSpacersVisibility(true).then(function () {
-            figma.root.setPluginData(HideProperty, "1");
-        });
+        setAllSpacersVisibility(true);
+        figma.root.setPluginData(HideProperty, "1");
+    }
+    ;
+    if (msg.type === 'notify') {
+        figma.notify(msg.msg);
     }
     ;
     /**
@@ -606,4 +673,22 @@ function isInInstance(node) {
     if (type === "PAGE")
         return false;
     return isInInstance(node.parent);
+}
+/**
+ * transfom hex to rgb
+ */
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+    var fullRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    const result = fullRegex ? {
+        r: parseInt(fullRegex[1], 16) / 255,
+        g: parseInt(fullRegex[2], 16) / 255,
+        b: parseInt(fullRegex[3], 16) / 255
+    } : null;
+    //console.log("hex to rgb : " + hex + " --> " +result.r +","+result.g+","+result.b);
+    return result;
 }

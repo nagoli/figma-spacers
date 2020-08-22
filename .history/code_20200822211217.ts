@@ -184,7 +184,7 @@ function getSpacerComponentsInUse() : Array<ComponentNode>{
  * 
  * @param isHidden show or hide all spacers
  */
-function setAllSpacersVisibility(isHidden: boolean) {
+async function setAllSpacersVisibility(isHidden: boolean) {
   getSpacerComponentsInUse().forEach(spacer => setSpacerVisibility(spacer, isHidden));
 }
 
@@ -384,19 +384,17 @@ figma.ui.onmessage = msg => {
   };
 
   if (msg.type === 'show-spacer-infos') {
-   setAllSpacersVisibility(false);
-   figma.root.setPluginData(HideProperty, ""); 
-   };
+    // try to improve perf but the async does not seem to work...
+   setAllSpacersVisibility(false).then(function (){
+      figma.root.setPluginData(HideProperty, ""); 
+    });
+  };
 
   if (msg.type === 'hide-spacer-infos') {
-    setAllSpacersVisibility(true);
-    figma.root.setPluginData(HideProperty, "1");
+    setAllSpacersVisibility(true).then(function (){
+      figma.root.setPluginData(HideProperty, "1");
+   });
   };
-
-  if (msg.type === 'notify') {
-    figma.notify(msg.msg);
-  };
-
 
 
 

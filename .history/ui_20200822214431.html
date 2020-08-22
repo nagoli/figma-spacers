@@ -807,30 +807,30 @@
          //check values before setting new config
 
         var bg = bgInput.value;
-        if (!(bg.startsWith('#'))) bg = '#'+bg;
+        if (!(bg.startWith('#'))) bg = '#'+bg;
         if (!hexCheckRex.test(bg)){
-            notify("Please enter a valid background color in hexadecimal");
+            figma.notify("Please enter a valid background color in hexadecimal");
             return;
         }
         
         var fg = fgInput.value;
-        if (!(fg.startsWith('#'))) fg = '#'+fg;
+        if (!(fg.startWith('#'))) fg = '#'+fg;
         if (!hexCheckRex.test(fg)){
-            notify("Please enter a valid foreground color in hexadecimal");
+            figma.notify("Please enter a valid foreground color in hexadecimal");
             return;
         }
 
        
         if (!spacersListCheckRex.test(valueInput.value)){
-            notify("Please enter a valid list of spacers (numbers separated by , )");
+            figma.notify("Please enter a valid list of spacers (numbers separated by , )");
             return;
         }
 
         //if tests pass then set
 
         setSpacers(arrayFrom(valueInput.value)); 
-        setBackgroundColor(bg);  
-        setForegroundColor(fg);  
+        setBackgroundColor(bgInput.value);  
+        setForegroundColor(fgInput.value);  
         configDiv.style.display = "none";
         mainDiv.style.display = "block";
     }
@@ -877,18 +877,6 @@
         //release focus
         parent.focus();
     }
-
-
-    // call code for defining position
-    function notify(msg) {
-        parent.postMessage({
-            pluginMessage: {
-                type: 'notify',
-                msg: msg
-            }
-        }, '*');
-    }
-
 
     // call code for defining position
     function place(position) {
