@@ -253,7 +253,7 @@ function OLDsetAllSpacersVisibility(isHidden) {
 /**
  * reset all existing spacers as Frame by creating new components and
  */
-function resetAllSpacers() {
+function resetAllSpacers(msg = "Clean Project") {
     console.log("reshape all spacers");
     //replace component based spacers
     var componentSpacers = figma.root.findAll(node => node.type === "COMPONENT" && node.name.endsWith(SpacerName));
@@ -314,9 +314,8 @@ function resetAllSpacers() {
     });
     console.log(notInInstanceCount + " spacers based on frame and not in Instances were updated");
     var total = componentCount + inInstanceCount + notInInstanceCount;
-    if (total)
-        figma.notify("Major plugin update : " + total + " spacers were updated.", { timeout: 7000 });
-    figma.notify("Major plugin update : open spacer plugin in your shared libraries to update them", { timeout: 15000 });
+    figma.notify(msg + " : " + total + " spacers were updated.", { timeout: 7000 });
+    //figma.notify(msg + " : open spacer plugin in your shared libraries to update them", {timeout:15000});
 }
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
@@ -342,11 +341,11 @@ figma.ui.onmessage = msg => {
             figma.closePlugin();
             return;
         }
-        if (knownVersion != VERSION) {
+        if (knownVersion && knownVersion != VERSION) {
             console.log("Change in spacers versions : Document = " + knownVersion + " – Plugin = " + VERSION);
             figma.root.setPluginData(VersionProperty, VERSION);
             //update all spacers with new version
-            resetAllSpacers();
+            resetAllSpacers("Major plugin update");
         }
         //console.log("Spacers init ok");
     }
@@ -383,6 +382,10 @@ figma.ui.onmessage = msg => {
     ;
     if (msg.type === 'notify') {
         figma.notify(msg.msg);
+    }
+    ;
+    if (msg.type === 'force') {
+        resetAllSpacers();
     }
     ;
     /**

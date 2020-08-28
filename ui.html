@@ -280,6 +280,28 @@
     }
 
 
+
+
+    #force {
+        cursor: pointer;
+        bottom: -10px;
+        text-align: center;
+        font-size: 11px;
+        text-decoration: underline;
+        position: absolute;
+        right: -1px;
+        display: none;
+    }
+
+    #force:hover {
+        color: var(--ui-color);
+    }
+    
+    #switches:hover input:not(:checked)~#force {
+        display: block;
+    }
+
+
     #position-buttons label {
         position: relative;
         height: 30px;
@@ -432,17 +454,6 @@
         margin-right: 2px;
     }
 
-    #configDiv .reset {
-        border: 0;
-        border: none;
-        border-radius: 0;
-        margin: 0;
-        margin-bottom: -10px;
-        padding: 0;
-        font-size: 11px;
-        height: auto;
-        line-height: 12px;
-    }
 
     #configDiv .reset {
         border: 0;
@@ -531,9 +542,9 @@
                 </clipPath>
             </defs>
         </svg>
-
+        <div id="force" onclick="post('force')" title="clean can be necessary when old spacers are pasted in a project">clean</div>
     </div>
-
+    
     <hr>
     <div class="header"> Insert Direction </div>
 
@@ -708,6 +719,7 @@
 
     //HTML elements
     var showToggle = document.getElementById("showToggle");
+    var forceLink = document.getElementById("force");
     var configDiv = document.getElementById("configDiv");
     var spacersDiv = document.getElementById("spacers");
     var mainDiv = document.getElementById("main");
@@ -800,6 +812,7 @@
     function show() {
         showToggle.checked = true;
         hiddenState = false;
+       // forceLink.style.display = "none";
         post('show-spacer-infos');
     }
 
@@ -807,6 +820,7 @@
     function hide() {
         showToggle.checked = false;
         hiddenState = true;
+        //forceLink.style.display = "block";
         post('hide-spacer-infos');
     }
 

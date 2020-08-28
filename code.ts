@@ -274,7 +274,7 @@ async function OLDsetAllSpacersVisibility(isHidden: boolean) {
 /**
  * reset all existing spacers as Frame by creating new components and 
  */
-function resetAllSpacers() {
+function resetAllSpacers(msg :string = "Clean Project") {
   console.log("reshape all spacers");
   
   //replace component based spacers
@@ -327,8 +327,8 @@ function resetAllSpacers() {
   console.log(notInInstanceCount + " spacers based on frame and not in Instances were updated");
   var total = componentCount + inInstanceCount + notInInstanceCount;
 
-  if (total) figma.notify("Major plugin update : " + total + " spacers were updated.", {timeout:7000});
-  figma.notify("Major plugin update : open spacer plugin in your shared libraries to update them", {timeout:15000});
+  figma.notify(msg + " : " + total + " spacers were updated.", {timeout:7000});
+  //figma.notify(msg + " : open spacer plugin in your shared libraries to update them", {timeout:15000});
 }
 
 
@@ -357,11 +357,11 @@ figma.ui.onmessage = msg => {
       figma.closePlugin();
       return;
     }
-    if (knownVersion != VERSION) {
+    if (knownVersion && knownVersion != VERSION) {
       console.log("Change in spacers versions : Document = " + knownVersion + " – Plugin = " + VERSION);
       figma.root.setPluginData(VersionProperty, VERSION);
       //update all spacers with new version
-      resetAllSpacers();
+      resetAllSpacers("Major plugin update");
     }
     //console.log("Spacers init ok");
   };
@@ -400,7 +400,9 @@ figma.ui.onmessage = msg => {
     figma.notify(msg.msg);
   };
 
-
+  if (msg.type === 'force') {
+    resetAllSpacers();
+  };
 
 
   /**
