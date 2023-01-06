@@ -91,7 +91,7 @@ function shapeSpacerComponent(component, size) {
     var text = figma.createText();
     component.appendChild(text);
     text.name = LabelName;
-    figma.loadFontAsync({ family: "Roboto", style: "Regular" }).then(msg => {
+    figma.loadFontAsync(text.fontName).then(msg => {
         if (containerSize < 16) {
             text.fontSize = containerSize - Math.round(containerSize * 0.2);
         }
